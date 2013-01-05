@@ -58,7 +58,7 @@ class SCActions (Actions):
             clinic='Clinic2'
         elif hour>=15 and hour<=22:
             clinic='Clinic3'
-        return clinic
+	return clinic
 
     def dateformat(self, dayadd=0):
         '''Currently not used, needs to be able to handle when the added days
@@ -71,10 +71,10 @@ class SCActions (Actions):
         date = str(month) + '/' + str(day) + '/' + str(year)
         return date
 
-    def makeapp(self, patient, datetime, fresh=None):
+    def makeapp(self, clinic, patient, datetime, fresh=None):
         '''Makes Appointment for specified user at specified time'''
         self.VistA.wait('Clinic name:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('Yes')
         self.VistA.wait('Date:')
@@ -125,10 +125,80 @@ class SCActions (Actions):
         self.VistA.write('Quit')
         self.VistA.wait('')
 
-    def canapp(self, mult=None):
+    def makeapp_bypat(self, clinic,  patient,datetime, fresh=None):
+        '''Makes Appointment for specified user at specified time'''
+        self.VistA.wait('Clinic name:')
+        self.VistA.write(patient)  # <--- by patient
+        self.VistA.wait('OK?')
+        self.VistA.write('Yes')
+	self.VistA.wait('Select Action:')
+	self.VistA.write('CL')
+	self.VistA.wait('Select Clinic:')
+	self.VistA.write(clinic)
+        self.VistA.wait('Select Action:')
+        self.VistA.write('MA')
+        self.VistA.wait('PATIENT NAME:')
+        self.VistA.write(patient)
+        self.VistA.wait('TYPE:')
+        self.VistA.write('Regular')
+        if fresh is not None:
+            self.VistA.wait('APPOINTMENTS:')
+            self.VistA.write('Yes')
+        self.VistA.wait('ETHNICITY:')
+        self.VistA.write('')
+        self.VistA.wait('RACE:')
+        self.VistA.write('')
+        self.VistA.wait('COUNTRY:')
+        self.VistA.write('')
+        self.VistA.wait('STREET ADDRESS')
+        self.VistA.write('')
+        self.VistA.wait('ZIP')
+        self.VistA.write('')
+        for x in range(0, 2):
+            self.VistA.wait('PHONE NUMBER')
+            self.VistA.write('')
+        self.VistA.wait('BAD ADDRESS')
+        self.VistA.write('')
+        self.VistA.wait('above changes?')
+        self.VistA.write('No')
+        self.VistA.wait('continue:')
+        self.VistA.write('')
+        self.VistA.wait('REQUEST?')
+        self.VistA.write('Yes')
+        self.VistA.wait('DATE/TIME')
+        self.VistA.write(datetime)
+        self.VistA.wait('CORRECT?')
+        self.VistA.write('Yes')
+        self.VistA.wait('STOPS?')
+        self.VistA.write('No')
+        self.VistA.wait('OTHER INFO:')
+        self.VistA.write('')
+        self.VistA.wait('continue:')
+        self.VistA.write('')
+        self.VistA.wait('Select Action:')
+        self.VistA.write('Quit')
+        self.VistA.wait('')
+
+    def use_sbar(self, clinic, patient):
+        '''Use the space bar to get previous clinic or patient '''
+        self.VistA.wait('Clinic name:')
+        self.VistA.write(' ')  # spacebar to test recall
+        self.VistA.wait(patient)  # check to make sure expected patient SSN is recalled
+        self.VistA.write('No')
+	self.VistA.wait(clinic) # check to make sure expected clinic is recalled
+        self.VistA.write('Yes')
+        self.VistA.wait('Date:')
+        self.VistA.write('')
+        self.VistA.wait('Date:')
+        self.VistA.write('')
+	self.VistA.wait('Select Action:')
+	self.VistA.write('Quit')
+        self.VistA.wait('')
+
+    def canapp(self, clinic, mult=None):
         '''Cancel an Appointment, if there are multiple apts on schedule, send a string to the parameter "first"'''
         self.VistA.wait('Clinic name:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('Yes')
         self.VistA.wait('Date:')
@@ -158,10 +228,10 @@ class SCActions (Actions):
         self.VistA.wait('Select Action:')
         self.VistA.write('')
 
-    def noshow(self, appnum):
+    def noshow(self, clinic, appnum):
         '''Registers a patient as a no show'''
         self.VistA.wait('Clinic name:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('Yes')
         self.VistA.wait('Date:')
@@ -183,10 +253,10 @@ class SCActions (Actions):
         self.VistA.wait('Select Action:')
         self.VistA.write('')
 
-    def checkin(self, vlist, mult=None):
+    def checkin(self, clinic, vlist, mult=None):
         '''Checks a patient in'''
         self.VistA.wait('Clinic name:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('Yes')
         self.VistA.wait('Date:')
@@ -206,10 +276,10 @@ class SCActions (Actions):
         self.VistA.wait('Select Action:')
         self.VistA.write('')
 
-    def checkout(self, vlist1, vlist2, icd, mult=None):
+    def checkout(self, clinic, vlist1, vlist2, icd, mult=None):
         '''Checks a Patient out'''
         self.VistA.wait('Clinic name:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('Yes')
         self.VistA.wait('Date:')
@@ -256,10 +326,10 @@ class SCActions (Actions):
         self.VistA.wait('Clinic:')
         self.VistA.write('')
 
-    def unschvisit(self, patient, patientname):
+    def unschvisit(self, clinic, patient, patientname):
         '''Makes a walk-in appointment. Automatically checks in'''
         self.VistA.wait('Clinic name:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('Yes')
         self.VistA.wait('Date:')
@@ -289,10 +359,10 @@ class SCActions (Actions):
         self.VistA.wait('Select Action')
         self.VistA.write('')
 
-    def chgpatient(self, patient1, patient2, patientname1, patientname2):
+    def chgpatient(self, clinic, patient1, patient2, patientname1, patientname2):
         '''Changes the patient between patient 1 and patient 2'''
         self.VistA.wait('Clinic name:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('Yes')
         self.VistA.wait('Date:')
@@ -335,17 +405,17 @@ class SCActions (Actions):
         self.VistA.wait('Select Action:')
         self.VistA.write('Quit')
 
-    def chgdaterange(self):
+    def chgdaterange(self, clinic):
         '''Changes the date range of the clinic'''
         self.VistA.wait('Clinic name:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('Yes')
         self.VistA.wait('Date:')
         self.VistA.write('')
         self.VistA.wait('Date:')
         self.VistA.write('')
-        self.VistA.wait(self.getclinic())
+        self.VistA.wait(clinic)
         self.VistA.wait('Select Action:')
         self.VistA.write('CD')
         self.VistA.wait('Date:')
@@ -361,17 +431,17 @@ class SCActions (Actions):
         self.VistA.wait('Select Action:')
         self.VistA.write('')
 
-    def expandentry(self, vlist1, vlist2, vlist3, vlist4, vlist5, mult=None):
+    def expandentry(self, clinic, vlist1, vlist2, vlist3, vlist4, vlist5, mult=None):
         '''Expands an appointment entry for more detail'''
         self.VistA.wait('Clinic name:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('Yes')
         self.VistA.wait('Date:')
         self.VistA.write('')
         self.VistA.wait('Date:')
         self.VistA.write('')
-        self.VistA.wait(self.getclinic())
+        self.VistA.wait(clinic)
         self.VistA.wait('Select Action:')
         self.VistA.write('EP')
         if mult is not None:
@@ -400,18 +470,18 @@ class SCActions (Actions):
         self.VistA.wait('Select Action:')
         self.VistA.write('')
 
-    def addedit(self, name, icd):
+    def addedit(self, clinic, name, icd):
         '''Functional but not complete. Exercises the Add/Edit menu but doesn't make any changes
         Same problem as checkout with the CPT codes and the MPI'''
         self.VistA.wait('Clinic name:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('Yes')
         self.VistA.wait('Date:')
         self.VistA.write('')
         self.VistA.wait('Date:')
         self.VistA.write('')
-        self.VistA.wait(self.getclinic())
+        self.VistA.wait(clinic)
         self.VistA.wait('Select Action:')
         self.VistA.write('AE')
         self.VistA.wait('Name:')
@@ -419,7 +489,7 @@ class SCActions (Actions):
         self.VistA.wait('exit:')
         self.VistA.write('A')
         self.VistA.wait('Clinic:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('Time:')
         time = self.schtime()
         self.VistA.write(time)
@@ -450,17 +520,17 @@ class SCActions (Actions):
         self.VistA.wait('Select Action:')
         self.VistA.write('')
 
-    def patdem(self, name, mult=None):
+    def patdem(self, clinic, name, mult=None):
         '''This edits the patients demographic information'''
         self.VistA.wait('Clinic name:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('Yes')
         self.VistA.wait('Date:')
         self.VistA.write('')
         self.VistA.wait('Date:')
         self.VistA.write('')
-        self.VistA.wait(self.getclinic())
+        self.VistA.wait(clinic)
         self.VistA.wait('Select Action:')
         self.VistA.write('PD')
         if mult is not None:
@@ -508,10 +578,10 @@ class SCActions (Actions):
         self.VistA.wait('Select Action')
         self.VistA.write('')
 
-    def teaminfo(self, patient=None):
+    def teaminfo(self, clinic, patient=None):
         '''This checks the display team info feature'''
         self.VistA.wait('Clinic name:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('Yes')
         self.VistA.wait('Date:')
@@ -529,7 +599,7 @@ class SCActions (Actions):
         self.VistA.wait('Select Action:')
         self.VistA.write('')
 
-    def enroll(self, patient):
+    def enroll(self, clinic, patient):
         '''This enrolls a patient as an inpatient in a clinic'''
         self.VistA.wait('OPTION NAME')
         self.VistA.write('Appointment Menu')
@@ -538,7 +608,7 @@ class SCActions (Actions):
         self.VistA.wait('PATIENT NAME')
         self.VistA.write(patient)
         self.VistA.wait('CLINIC:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('ENROLLMENT CLINIC')
         self.VistA.write('Yes')
         self.VistA.wait('ENROLLMENT:')
@@ -554,7 +624,7 @@ class SCActions (Actions):
         self.VistA.wait('DISCHARGE')
         self.VistA.write('')
         self.VistA.wait('CLINIC:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('Yes')
         self.VistA.wait('ENROLLMENT')
@@ -578,10 +648,10 @@ class SCActions (Actions):
         self.VistA.wait('halt')
         self.VistA.write('')
 
-    def discharge(self, patient, appnum=None):
+    def discharge(self, clinic, patient, appnum=None):
         '''Discharges a patient from the clinic'''
         self.VistA.wait('Clinic name:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('Yes')
         self.VistA.wait('Date:')
@@ -601,7 +671,7 @@ class SCActions (Actions):
         self.VistA.wait('Action:')
         self.VistA.write('')
 
-    def deletecheckout(self, appnum=None):
+    def deletecheckout(self, clinic, appnum=None):
         '''Deletes checkout from the menu
         Must be signed in as fakedoc1 (1Doc!@#$)
         Must have the SD SUPERVISOR Key assigned to Dr. Alexander'''
@@ -610,7 +680,7 @@ class SCActions (Actions):
         self.VistA.wait('Menu Option:')
         self.VistA.write('Appointment Management')
         self.VistA.wait('Clinic name')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('')
         self.VistA.wait('Date:')
@@ -633,7 +703,7 @@ class SCActions (Actions):
         self.VistA.wait('Action:')
         self.VistA.write('')
 
-    def waitlistentry(self, patient):
+    def waitlistentry(self, clinic, patient):
         '''Enters a patient into the wait list
         This assumes that SDWL PARAMETER and SDWL MENU
         keys are given to fakedoc1'''
@@ -642,7 +712,7 @@ class SCActions (Actions):
         self.VistA.wait('Option:')
         self.VistA.write('Appointment Management')
         self.VistA.wait('name:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('')
         for x in range(0, 2):
@@ -670,12 +740,12 @@ class SCActions (Actions):
         self.VistA.wait('Action:')
         self.VistA.write('')
 
-    def waitlistdisposition(self, patient):
+    def waitlistdisposition(self, clinic, patient):
         '''This verifies that the wait list disposition option is working'''
         self.VistA.wait('Option:')
         self.VistA.write('Appointment Management')
         self.VistA.wait('name:')
-        self.VistA.write(self.getclinic())
+        self.VistA.write(clinic)
         self.VistA.wait('OK?')
         self.VistA.write('')
         for x in range(0, 2):

@@ -1,15 +1,14 @@
 '''
-Created on Jun 14, 2012
-
-@author: bcaine
-This is the main Scheduling script that calls the underlying
-scheduling functional tests located in SC_Suite001
+Created on November, 2012
+@author: pbradley
+This is the main test script that calls the underlying ADT functional tests
+located in ADT_Suite001.
 '''
-import logging
 import sys
-import os
+import logging
 sys.path = ['./RAS/lib'] + ['./dataFiles'] + ['../lib/vista'] + sys.path
-import SC_Suite001
+import ADT_Suite001
+import os, errno
 import argparse
 
 LOGGING_LEVELS = {'critical': logging.CRITICAL,
@@ -40,26 +39,21 @@ def main():
     try:
         logging.debug('RESULTDIR: ' + args.resultdir)
         logging.debug('LOGGING:   ' + args.logging_level)
-        resfile = args.resultdir + '/Scheduling_results.txt'
+        resfile = args.resultdir + '/ADT_results.txt'
         if not os.path.isabs(args.resultdir):
             logging.error('EXCEPTION: Absolute Path Required for Result Directory')
             raise
         resultlog = file(resfile, 'w')
-        SC_Suite001.startmon(resultlog, args.resultdir)
-        SC_Suite001.sc_test001(resultlog, args.resultdir)
-        SC_Suite001.sc_test002(resultlog, args.resultdir)
-        SC_Suite001.sc_test003(resultlog, args.resultdir)
-        SC_Suite001.sc_test004(resultlog, args.resultdir)
-        SC_Suite001.sc_test005(resultlog, args.resultdir)
-        SC_Suite001.sc_test006(resultlog, args.resultdir)
-        SC_Suite001.sc_test007(resultlog, args.resultdir)
-        SC_Suite001.stopmon(resultlog, args.resultdir)
-        resultlog.write('finished')
+        ADT_Suite001.startmon(resultlog, args.resultdir)
+        ADT_Suite001.setup_ward(resultlog, args.resultdir)
+        ADT_Suite001.adt_test001(resultlog, args.resultdir)
+        ADT_Suite001.adt_test002(resultlog, args.resultdir)
+        ADT_Suite001.stopmon(resultlog, args.resultdir)
     except Exception, e:
-        resultlog.write('\nEXCEPTION ERROR:' + str(e))
-        logging.error('*****exception*********' + str(e))
+        resultlog.write('\nADT TEST EXCEPTION ERROR:' + str(e))
+        logging.error('*****ADT test exception*********' + str(e))
     finally:
-        logging.debug('Test Finished')
+        resultlog.write('finished')
 
 if __name__ == '__main__':
-    main()
+  main()
