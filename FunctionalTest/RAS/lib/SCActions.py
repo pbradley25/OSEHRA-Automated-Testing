@@ -58,7 +58,7 @@ class SCActions (Actions):
             clinic='Clinic2'
         elif hour>=15 and hour<=22:
             clinic='Clinic3'
-	return clinic
+        return clinic
 
     def dateformat(self, dayadd=0):
         '''Currently not used, needs to be able to handle when the added days
@@ -131,10 +131,10 @@ class SCActions (Actions):
         self.VistA.write(patient)  # <--- by patient
         self.VistA.wait('OK?')
         self.VistA.write('Yes')
-	self.VistA.wait('Select Action:')
-	self.VistA.write('CL')
-	self.VistA.wait('Select Clinic:')
-	self.VistA.write(clinic)
+        self.VistA.wait('Select Action:')
+        self.VistA.write('CL')
+        self.VistA.wait('Select Clinic:')
+        self.VistA.write(clinic)
         self.VistA.wait('Select Action:')
         self.VistA.write('MA')
         self.VistA.wait('PATIENT NAME:')
@@ -185,14 +185,14 @@ class SCActions (Actions):
         self.VistA.write(' ')  # spacebar to test recall
         self.VistA.wait(patient)  # check to make sure expected patient SSN is recalled
         self.VistA.write('No')
-	self.VistA.wait(clinic) # check to make sure expected clinic is recalled
+        self.VistA.wait(clinic) # check to make sure expected clinic is recalled
         self.VistA.write('Yes')
         self.VistA.wait('Date:')
         self.VistA.write('')
         self.VistA.wait('Date:')
         self.VistA.write('')
-	self.VistA.wait('Select Action:')
-	self.VistA.write('Quit')
+        self.VistA.wait('Select Action:')
+        self.VistA.write('Quit')
         self.VistA.wait('')
 
     def canapp(self, clinic, mult=None):
