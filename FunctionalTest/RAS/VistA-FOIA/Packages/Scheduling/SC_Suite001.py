@@ -211,7 +211,7 @@ def sc_test007(test_suite_details):
         now = datetime.datetime.now()
         hour = now.hour + 1
         SC.signon()
-        SC.checkin(clinic=tclinic, vlist=['Five', str(hour), 'CHECKED-IN:'],mult='4')
+        SC.checkin(clinic=tclinic, vlist=['Five', str(hour), 'CHECKED-IN:'], mult='4')
         SC.signon()
         SC.checkout(clinic=tclinic, vlist1=['Five', str(hour), 'Checked In'], vlist2=['305.91', 'OTHER DRUG', 'RESULTING'], icd='305.91', mult='4')
         SC.signoff()
@@ -231,7 +231,7 @@ def startmon(test_suite_details):
 
     test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=test_driver.connect_VistA(test_suite_details)
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         VistA1.startCoverage(routines=['SC*', 'SD*'])
 
         test_driver.post_test_run(test_suite_details)
@@ -255,7 +255,7 @@ def stopmon (test_suite_details):
 
     test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=test_driver.connect_VistA(test_suite_details)
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         VistA1.stopCoverage(path=(result_dir + '/' + 'Scheduling_coverage.txt'))
 
         test_driver.post_test_run(test_suite_details)

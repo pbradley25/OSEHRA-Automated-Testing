@@ -18,7 +18,7 @@ def pl_test001(resultlog, result_dir):
 
     test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=test_driver.connect_VistA(test_suite_details)
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='333224444', pfile='./FunctionalTest/dataFiles/NISTinpatientdata0.csv')
@@ -53,7 +53,7 @@ def pl_test002(resultlog, result_dir):
 
     test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=test_driver.connect_VistA(test_suite_details)
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='888776666', pfile='./FunctionalTest/dataFiles/NISTinpatientdata0.csv')
@@ -93,7 +93,7 @@ def pl_test003(resultlog, result_dir):
 
     test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=test_driver.connect_VistA(test_suite_details)
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='656771234',
@@ -134,7 +134,7 @@ def pl_test004(resultlog, result_dir):
 
     test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=test_driver.connect_VistA(test_suite_details)
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1)
         pl.signon()
         pl.createsellist(listname="List001", clinic='VISTA')
@@ -199,7 +199,7 @@ def pl_test005(resultlog, result_dir):
         pl1.catad(listname='List002', catname='cat022', icd='304.90')
         pl1.sellistad(listname='List002', catname='cat011')
         pl1.sellistad(listname='List002', catname='cat022')
-        
+
         test_driver.testname = test_driver.testname + "_02"
         VistA2 = test_driver.connect_VistA(test_suite_details)
         pl2 = PLActions(VistA2, user='fakedoc1', code='1Doc!@#$')
@@ -239,7 +239,7 @@ def pl_test006 (resultlog, result_dir):
 
     test_driver.pre_test_run(test_suite_details)
     try:
-        VistA=test_driver.connect_VistA(test_suite_details)
+        VistA = test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA, user='fakenurse1', code='1Nur!@#$')
         pl.signon()
         pl.createibform('LAB', 'FORM1', 'Group1', ['428.0', '410.90', '401.9'])
@@ -273,7 +273,7 @@ def pl_test007 (resultlog, result_dir):
 
     test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=test_driver.connect_VistA(test_suite_details)
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='655447777', pfile='./FunctionalTest/dataFiles/NISTinpatientdata0.csv')
@@ -312,7 +312,7 @@ def pl_test008 (resultlog, result_dir):
                       comment='test', onsetdate='t', status='Active', acutechronic='A',
                       service='N')
         pl1.signoff()
-        
+
         test_driver.testname = test_driver.testname + "_02"
         VistA2 = test_driver.connect_VistA(test_suite_details)
         pl2 = PLActions(VistA2, user='fakedoc1', code='1Doc!@#$')
@@ -383,7 +383,7 @@ def pl_test010(resultlog, result_dir):
 
     test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=test_driver.connect_VistA(test_suite_details)
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='323554545', pfile='./FunctionalTest/dataFiles/probdata0.csv')
@@ -408,7 +408,7 @@ def pl_test011(resultlog, result_dir):
 
     test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=test_driver.connect_VistA(test_suite_details)
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='656451234', pfile='./FunctionalTest/dataFiles/probdata0.csv')
@@ -436,41 +436,41 @@ def pl_test012(resultlog, result_dir):
     try:
         test_driver.testname = test_driver.testname + "_01"
         VistA1 = test_driver.connect_VistA(test_suite_details)
-        pl=PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
+        pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
-        pl.addcsv( ssn='656451234', pfile='./FunctionalTest/dataFiles/probdata0.csv')
-        pl.detview(ssn='656451234', probnum='2', vlist1=['ACTIVE', 'ALEXANDER','444.21'], vlist2=['hurts'])
-        pl.rem( ssn='656451234')
-        pl.rem( ssn='656451234')
-        pl.checkempty( ssn='656451234')
+        pl.addcsv(ssn='656451234', pfile='./FunctionalTest/dataFiles/probdata0.csv')
+        pl.detview(ssn='656451234', probnum='2', vlist1=['ACTIVE', 'ALEXANDER', '444.21'], vlist2=['hurts'])
+        pl.rem(ssn='656451234')
+        pl.rem(ssn='656451234')
+        pl.checkempty(ssn='656451234')
         pl.signoff()
-        
+
         test_driver.testname = test_driver.testname + "_02"
         VistA2 = test_driver.connect_VistA(test_suite_details)
-        p2=PLActions(VistA2, user='fakeclerk1', code='1Cle!@#$')
+        p2 = PLActions(VistA2, user='fakeclerk1', code='1Cle!@#$')
         p2.signon()
         p2.dataentry(ssn='656451234', provider='Alexander', clinic='', problem='305.91', comment='Test', onsetdate='t', status='a', acutechronic='A', service='n')
         p2.signoff()
-        
+
         test_driver.testname = test_driver.testname + "_03"
         VistA3 = test_driver.connect_VistA(test_suite_details)
-        p3=PLActions(VistA3, user='fakedoc1', code='1Doc!@#$')
+        p3 = PLActions(VistA3, user='fakedoc1', code='1Doc!@#$')
         p3.signon()
         p3.verifyproblem(ssn='656451234', problem='305.91')
         p3.signoff()
-        
+
         test_driver.testname = test_driver.testname + "_04"
         VistA4 = test_driver.connect_VistA(test_suite_details)
-        p4=PLActions(VistA4, user='fakedoc1', code='1Doc!@#$')
+        p4 = PLActions(VistA4, user='fakedoc1', code='1Doc!@#$')
         p4.signon()
         p4.selectnewpatient(ssn1='656451234', name1='SIX,', ss2='323554545', name2='NINE,')
         p4.signoff()
-        
+
         test_driver.testname = test_driver.testname + "_05"
         VistA5 = test_driver.connect_VistA(test_suite_details)
-        p5=PLActions(VistA5, user='fakedoc1', code='1Doc!@#$')
+        p5 = PLActions(VistA5, user='fakedoc1', code='1Doc!@#$')
         p5.signon()
-        p5.addcsv( ssn='656451234', pfile='./FunctionalTest/dataFiles/probdata0.csv')
+        p5.addcsv(ssn='656451234', pfile='./FunctionalTest/dataFiles/probdata0.csv')
         p5.printproblemlist(ssn='656451234', vlist=['PROBLEM LIST', '305.91'])
         p5.signoff()
 
@@ -483,28 +483,28 @@ def pl_test012(resultlog, result_dir):
         test_driver.finally_handling(test_suite_details)
 
 def pl_test013(resultlog, result_dir):
-    #Tests the remainder of the selection list Build menu options
+    # Tests the remainder of the selection list Build menu options
     testname = sys._getframe().f_code.co_name
     test_driver = TestHelper.TestDriver(testname)
 
     test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=test_driver.connect_VistA(test_suite_details)
-        pl=PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
+        VistA1 = test_driver.connect_VistA(test_suite_details)
+        pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
-        pl.createsellist( listname="List001", clinic='VISTA')
-        pl.createsellist( listname="List002", clinic='VISTA')
-        pl.createcat( listname='List001', catname='cat001')
-        pl.createcat( listname='List001', catname='cat002')
-        pl.catad( listname='List001', catname='cat001', icd='787.1')
-        pl.catad( listname='List001', catname='cat001', icd='786.50')
-        pl.catad( listname='List001', catname='cat001', icd='100.0')
-        pl.catad( listname='List001', catname='cat002', icd='780.50')
-        pl.catad( listname='List001', catname='cat002', icd='292.0')
-        pl.catad( listname='List001', catname='cat002', icd='304.90')
+        pl.createsellist(listname="List001", clinic='VISTA')
+        pl.createsellist(listname="List002", clinic='VISTA')
+        pl.createcat(listname='List001', catname='cat001')
+        pl.createcat(listname='List001', catname='cat002')
+        pl.catad(listname='List001', catname='cat001', icd='787.1')
+        pl.catad(listname='List001', catname='cat001', icd='786.50')
+        pl.catad(listname='List001', catname='cat001', icd='100.0')
+        pl.catad(listname='List001', catname='cat002', icd='780.50')
+        pl.catad(listname='List001', catname='cat002', icd='292.0')
+        pl.catad(listname='List001', catname='cat002', icd='304.90')
         pl.sellistad(listname='List001', catname='cat001')
         pl.sellistad(listname='List001', catname='cat002')
-        pl.resequencecat(listname='List001', catnames=['cat001','cat002'])
+        pl.resequencecat(listname='List001', catnames=['cat001', 'cat002'])
         pl.categorydisp(listname='List001', catname='cat001')
         pl.changesellist(list1='List001', list2='List002')
         pl.sellistrm(listname='List001')
@@ -531,7 +531,7 @@ def startmon(resultlog, result_dir):
 
     test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=test_driver.connect_VistA(test_suite_details)
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         VistA1.startCoverage(routines=['GMPL*'])
 
         test_driver.post_test_run(test_suite_details)
@@ -547,7 +547,7 @@ def startmon(resultlog, result_dir):
         VistA1.write('h\r')
         test_driver.finally_handling(test_suite_details)
     test_driver.end_method_handling(test_suite_details)
-        
+
 def stopmon (resultlog, result_dir):
     ''' STOP MONITOR'''
     testname = sys._getframe().f_code.co_name
@@ -556,7 +556,7 @@ def stopmon (resultlog, result_dir):
     test_driver.pre_test_run(test_suite_details)
     try:
         # Connect to VistA
-        VistA1=test_driver.connect_VistA(test_suite_details)
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         VistA1.stopCoverage(path=(result_dir + '/' + 'ProblemList_coverage.txt'))
 
         test_driver.post_test_run(test_suite_details)
@@ -572,7 +572,7 @@ def stopmon (resultlog, result_dir):
         VistA1.write('h\r')
         test_driver.finally_handling(test_suite_details)
     test_driver.end_method_handling(test_suite_details)
-    
+
 '''
 def test_driver.connect_VistA(testname, result_dir):
     # Connect to VistA
