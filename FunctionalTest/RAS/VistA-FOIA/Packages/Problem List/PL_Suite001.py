@@ -9,17 +9,16 @@ import sys
 sys.path = ['./FunctionalTest/RAS/lib'] + ['./dataFiles'] + ['./lib/vista'] + sys.path
 from PLActions import PLActions
 from ORActions import ORActions
-import datetime
 import TestHelper
-import logging
 
 def pl_test001(resultlog, result_dir):
     ''' NIST Inpatient Test '''
     testname = sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1=test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='333224444', pfile='./FunctionalTest/dataFiles/NISTinpatientdata0.csv')
@@ -38,20 +37,23 @@ def pl_test001(resultlog, result_dir):
         for i in range(4):
             pl.rem(ssn='333224444')
         pl.signoff()
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
     else:
-        resultlog.write('Pass\n')
+        test_driver.try_else_handling(test_suite_details)
+    finally:
+        test_driver.finally_handling(test_suite_details)
 
 def pl_test002(resultlog, result_dir):
     ''' Restore Removed Problems '''
     testname = sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', '
-                    + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1=test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='888776666', pfile='./FunctionalTest/dataFiles/NISTinpatientdata0.csv')
@@ -75,19 +77,23 @@ def pl_test002(resultlog, result_dir):
                      evalue='Essential Hypertension')
         pl.rem(ssn='888776666')
         pl.signoff()
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
     else:
-        resultlog.write('Pass\n')
+        test_driver.try_else_handling(test_suite_details)
+    finally:
+        test_driver.finally_handling(test_suite_details)
 
 def pl_test003(resultlog, result_dir):
     ''' Change Problem Data '''
     testname = sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1=test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='656771234',
@@ -112,19 +118,23 @@ def pl_test003(resultlog, result_dir):
             pl.rem(ssn='656771234')
         pl.checkempty(ssn='656771234')
         pl.signoff()
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
     else:
-        resultlog.write('Pass\n')
+        test_driver.try_else_handling(test_suite_details)
+    finally:
+        test_driver.finally_handling(test_suite_details)
 
 def pl_test004(resultlog, result_dir):
     ''' Create Problem Selection List, add/modify/remove categories and problems '''
     testname = sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1=test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1)
         pl.signon()
         pl.createsellist(listname="List001", clinic='VISTA')
@@ -155,22 +165,26 @@ def pl_test004(resultlog, result_dir):
         pl.sellistrfu(listname='List001', username='Alexander')
         pl.sellistdl(listname='List001')
         pl.signoff()
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
     else:
-        resultlog.write('Pass\n')
+        test_driver.try_else_handling(test_suite_details)
+    finally:
+        test_driver.finally_handling(test_suite_details)
 
 def pl_test005(resultlog, result_dir):
     ''' Create Problem Selection List, assign to user, and add problem '''
     '''Separate VistA Instances to allow concurrent logins in case of
     future use of tstart and trollback when these features are available'''
     testname = sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', '
-                    + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=connect_VistA(testname+'_01', result_dir)
+        test_driver.testname = test_driver.testname + "_01"
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         pl1 = PLActions(VistA1)
         pl1.signon()
         pl1.createsellist(listname="List002", clinic='')
@@ -185,7 +199,9 @@ def pl_test005(resultlog, result_dir):
         pl1.catad(listname='List002', catname='cat022', icd='304.90')
         pl1.sellistad(listname='List002', catname='cat011')
         pl1.sellistad(listname='List002', catname='cat022')
-        VistA2 = connect_VistA(testname+'_02', result_dir)
+        
+        test_driver.testname = test_driver.testname + "_02"
+        VistA2 = test_driver.connect_VistA(test_suite_details)
         pl2 = PLActions(VistA2, user='fakedoc1', code='1Doc!@#$')
         pl2.signon()
         pl2.versellist(ssn='345623902', clinic='',
@@ -207,20 +223,23 @@ def pl_test005(resultlog, result_dir):
         pl1.sellistdl(listname='List002')
         pl2.signoff()
         pl1.signoff()
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
     else:
-        resultlog.write('Pass\n')
+        test_driver.try_else_handling(test_suite_details)
+    finally:
+        test_driver.finally_handling(test_suite_details)
 
 def pl_test006 (resultlog, result_dir):
     ''' Create Selection List from IB Encounter Form'''
     testname = sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', '
-                    + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA=connect_VistA(testname, result_dir)
+        VistA=test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA, user='fakenurse1', code='1Nur!@#$')
         pl.signon()
         pl.createibform('LAB', 'FORM1', 'Group1', ['428.0', '410.90', '401.9'])
@@ -238,20 +257,23 @@ def pl_test006 (resultlog, result_dir):
         pl.sellistrfu(listname='List003', username='Alexander')
         pl.sellistdl(listname='List003')
         pl.signoff()
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
     else:
-        resultlog.write('Pass\n')
+        test_driver.try_else_handling(test_suite_details)
+    finally:
+        test_driver.finally_handling(test_suite_details)
 
 def pl_test007 (resultlog, result_dir):
     ''' Add problems and View Patients by Problems (PL menu items 4 & 5)'''
     testname = sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', '
-                    + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1=test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='655447777', pfile='./FunctionalTest/dataFiles/NISTinpatientdata0.csv')
@@ -264,51 +286,61 @@ def pl_test007 (resultlog, result_dir):
             pl.rem('543236666')
             pl.rem('345678233')
         pl.signoff()
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
     else:
-        resultlog.write('Pass\n')
+        test_driver.try_else_handling(test_suite_details)
+    finally:
+        test_driver.finally_handling(test_suite_details)
 
 def pl_test008 (resultlog, result_dir):
     ''' Add problem via data entry as clerk and change as doctor'''
     '''Multiple VistA instances to allow concurrent logins for when
     tstart and trollback become available and implemented'''
     testname = sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', '
-                    + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=connect_VistA(testname+'_01', result_dir)
+        test_driver.testname = test_driver.testname + "_01"
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         pl1 = PLActions(VistA1, user='fakeclerk1', code='1Cle!@#$')
         pl1.signon()
         pl1.dataentry(ssn='666551234', provider='Alexander', clinic='', problem='chest pain',
                       comment='test', onsetdate='t', status='Active', acutechronic='A',
                       service='N')
         pl1.signoff()
-        VistA2 = connect_VistA(testname+'_02', result_dir)
+        
+        test_driver.testname = test_driver.testname + "_02"
+        VistA2 = test_driver.connect_VistA(test_suite_details)
         pl2 = PLActions(VistA2, user='fakedoc1', code='1Doc!@#$')
         pl2.signon()
         pl2.editsimple(ssn='666551234', probnum='1', itemnum='1', chgval='786.50')
         pl2.verplist(ssn='666551234', vlist=['Unspecified chest pain'])
         pl2.rem('666551234')
         pl2.signoff()
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
     else:
-        resultlog.write('Pass\n')
+        test_driver.try_else_handling(test_suite_details)
+    finally:
+        test_driver.finally_handling(test_suite_details)
 
 def pl_test009 (resultlog, result_dir):
     ''' Verify Problem List through Order Entry package'''
     '''Multiple VistA instances to allow concurrent logins for when
     tstart and trollback become available and implemented'''
     testname = sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', '
-                    + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1 = connect_VistA(testname+'_01', result_dir)
+        test_driver.testname = test_driver.testname + "_01"
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='323678904', pfile='./FunctionalTest/dataFiles/NISTinpatientdata0.csv')
@@ -317,7 +349,9 @@ def pl_test009 (resultlog, result_dir):
                                             'Acute myocardial',
                                             'Congestive Heart Failure'])
         pl.signoff()
-        VistA2 = connect_VistA(testname+'_02', result_dir)
+
+        test_driver.testname = test_driver.testname + "_02"
+        VistA2 = test_driver.connect_VistA(test_suite_details)
         oentry = ORActions(VistA2)
         oentry.signon()
         oentry.verproblems(ssn='323678904', vlist=['Essential Hypertension',
@@ -325,26 +359,31 @@ def pl_test009 (resultlog, result_dir):
                                             'Acute myocardial',
                                             'Congestive Heart Failure'])
         oentry.signoff()
-        VistA3 = connect_VistA(testname+'_03', result_dir)
+
+        test_driver.testname = test_driver.testname + "_03"
+        VistA3 = test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA3, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         for i in range(4):
             pl.rem('323678904')
         pl.signoff()
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
     else:
-        resultlog.write('Pass\n')
+        test_driver.try_else_handling(test_suite_details)
+    finally:
+        test_driver.finally_handling(test_suite_details)
 
 def pl_test010(resultlog, result_dir):
     ''' Add problems to Problem List and then Remove them. '''
     testname = sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', '
-                    + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1=test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='323554545', pfile='./FunctionalTest/dataFiles/probdata0.csv')
@@ -353,20 +392,23 @@ def pl_test010(resultlog, result_dir):
         pl.rem(ssn='323554545')
         pl.checkempty(ssn='323554545')
         pl.signoff()
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
     else:
-        resultlog.write('Pass\n')
+        test_driver.try_else_handling(test_suite_details)
+    finally:
+        test_driver.finally_handling(test_suite_details)
 
 def pl_test011(resultlog, result_dir):
     ''' Add a problem, add comments, and then remove to/from Problem List. '''
     testname = sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', '
-                    + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1=test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='656451234', pfile='./FunctionalTest/dataFiles/probdata0.csv')
@@ -376,20 +418,24 @@ def pl_test011(resultlog, result_dir):
         pl.rem(ssn='656451234')
         pl.checkempty(ssn='656451234')
         pl.signoff()
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
     else:
-        resultlog.write('Pass\n')
+        test_driver.try_else_handling(test_suite_details)
+    finally:
+        test_driver.finally_handling(test_suite_details)
 
 def pl_test012(resultlog, result_dir):
     '''Problem List Menu Testing'''
-    testname=sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', '
-                    + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    testname = sys._getframe().f_code.co_name
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=connect_VistA(testname+'_01', result_dir)
+        test_driver.testname = test_driver.testname + "_01"
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         pl=PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv( ssn='656451234', pfile='./FunctionalTest/dataFiles/probdata0.csv')
@@ -398,41 +444,52 @@ def pl_test012(resultlog, result_dir):
         pl.rem( ssn='656451234')
         pl.checkempty( ssn='656451234')
         pl.signoff()
-        VistA2=connect_VistA(testname+'_02', result_dir)
+        
+        test_driver.testname = test_driver.testname + "_02"
+        VistA2 = test_driver.connect_VistA(test_suite_details)
         p2=PLActions(VistA2, user='fakeclerk1', code='1Cle!@#$')
         p2.signon()
         p2.dataentry(ssn='656451234', provider='Alexander', clinic='', problem='305.91', comment='Test', onsetdate='t', status='a', acutechronic='A', service='n')
         p2.signoff()
-        VistA3=connect_VistA(testname+'_03', result_dir)
+        
+        test_driver.testname = test_driver.testname + "_03"
+        VistA3 = test_driver.connect_VistA(test_suite_details)
         p3=PLActions(VistA3, user='fakedoc1', code='1Doc!@#$')
         p3.signon()
         p3.verifyproblem(ssn='656451234', problem='305.91')
         p3.signoff()
-        VistA4=connect_VistA(testname+'_04', result_dir)
+        
+        test_driver.testname = test_driver.testname + "_04"
+        VistA4 = test_driver.connect_VistA(test_suite_details)
         p4=PLActions(VistA4, user='fakedoc1', code='1Doc!@#$')
         p4.signon()
         p4.selectnewpatient(ssn1='656451234', name1='SIX,', ss2='323554545', name2='NINE,')
         p4.signoff()
-        VistA5=connect_VistA(testname+'_05', result_dir)
+        
+        test_driver.testname = test_driver.testname + "_05"
+        VistA5 = test_driver.connect_VistA(test_suite_details)
         p5=PLActions(VistA5, user='fakedoc1', code='1Doc!@#$')
         p5.signon()
         p5.addcsv( ssn='656451234', pfile='./FunctionalTest/dataFiles/probdata0.csv')
         p5.printproblemlist(ssn='656451234', vlist=['PROBLEM LIST', '305.91'])
         p5.signoff()
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
     else:
-        resultlog.write('Pass\n')
+        test_driver.try_else_handling(test_suite_details)
+    finally:
+        test_driver.finally_handling(test_suite_details)
 
 def pl_test013(resultlog, result_dir):
     #Tests the remainder of the selection list Build menu options
-    testname=sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', '
-                    + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    testname = sys._getframe().f_code.co_name
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1=test_driver.connect_VistA(test_suite_details)
         pl=PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.createsellist( listname="List001", clinic='VISTA')
@@ -458,52 +515,66 @@ def pl_test013(resultlog, result_dir):
         pl.sellistdl(listname='List001')
         pl.sellistdl(listname='List002')
         pl.signoff()
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
     else:
-        resultlog.write('Pass\n')
+        test_driver.try_else_handling(test_suite_details)
+    finally:
+        test_driver.finally_handling(test_suite_details)
 
 def startmon(resultlog, result_dir):
     '''Starts Coverage Monitor'''
-    testname=sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', '
-                    + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    testname = sys._getframe().f_code.co_name
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1=test_driver.connect_VistA(test_suite_details)
         VistA1.startCoverage(routines=['GMPL*'])
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname+ ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
+    else:
+        test_driver.try_else_handling(test_suite_details)
     finally:
         '''
         Close Vista
         '''
         VistA1.write('^\r^\r^\r')
         VistA1.write('h\r')
-
+        test_driver.finally_handling(test_suite_details)
+    test_driver.end_method_handling(test_suite_details)
+        
 def stopmon (resultlog, result_dir):
     ''' STOP MONITOR'''
     testname = sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', '
-                    + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
         # Connect to VistA
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1=test_driver.connect_VistA(test_suite_details)
         VistA1.stopCoverage(path=(result_dir + '/' + 'ProblemList_coverage.txt'))
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
+    else:
+        test_driver.try_else_handling(test_suite_details)
     finally:
         '''
         Close Vista
         '''
         VistA1.write('^\r^\r^\r')
         VistA1.write('h\r')
-
-def connect_VistA(testname, result_dir):
+        test_driver.finally_handling(test_suite_details)
+    test_driver.end_method_handling(test_suite_details)
+    
+'''
+def test_driver.connect_VistA(testname, result_dir):
     # Connect to VistA
     logging.debug('Connect_VistA')
     from OSEHRAHelper import ConnectToMUMPS,PROMPT
@@ -515,3 +586,4 @@ def connect_VistA(testname, result_dir):
             pass
     VistA.wait(PROMPT)
     return VistA
+'''

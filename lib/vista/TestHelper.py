@@ -152,7 +152,6 @@ class TestSuiteDriver(object):
     def pre_test_suite_run(self, test_suite_details):
         logging.info('Start ATF Test Suite \'' + test_suite_details.test_suite_name + '\'')
 
-
     def post_test_suite_run(self, test_suite_details):
         logging.info('End ATF Test Suite \'' + test_suite_details.test_suite_name + '\'')
 
