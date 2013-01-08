@@ -35,10 +35,10 @@ except ImportError, no_pexpect:
   pass
 
 #---------------------------------------------------------------------------
-#Initial Global Variables to use over the course of connecting
+# Initial Global Variables to use over the course of connecting
 
-#connection=False
-#log =False
+# connection=False
+# log =False
 
 #---------------------------------------------------------------------------
 class PROMPT(object):
@@ -131,10 +131,10 @@ class ConnectWinCache(ConnectMUMPS):
         logging.debug(rbuf)
         return 1
 
-  def wait_re(self,command,timeout=30):
+  def wait_re(self, command, timeout=30):
     if command is PROMPT:
       command = self.prompt
-    output = self.connection.expect(command,None)
+    output = self.connection.expect(command, None)
     self.match = output[1]
     self.before = output[2]
     if output[0] == -1 and output[1] == None:
@@ -186,7 +186,7 @@ class ConnectWinCache(ConnectMUMPS):
     self.wait('Routine number')
     self.write('*')
     self.wait('FileName')
-    self.write(newpath + '/Coverage/' + filename.replace('.log', '.cmcov').replace('.txt','.cmcov'))
+    self.write(newpath + '/Coverage/' + filename.replace('.log', '.cmcov').replace('.txt', '.cmcov'))
     self.wait('continue')
     self.write('')
     self.wait('choice')
@@ -216,7 +216,7 @@ class ConnectLinuxCache(ConnectMUMPS):
     else:
         return 1
 
-  def wait_re(self,command,timeout=15):
+  def wait_re(self, command, timeout=15):
     if not timeout: timeout = -1
     self.connection.expect(command, timeout)
 
@@ -262,7 +262,7 @@ class ConnectLinuxCache(ConnectMUMPS):
     self.wait('Routine number')
     self.write('*')
     self.wait('FileName')
-    self.write(newpath + '/Coverage/' + filename.replace('.log', '.cmcov').replace('.txt','.cmcov'))
+    self.write(newpath + '/Coverage/' + filename.replace('.log', '.cmcov').replace('.txt', '.cmcov'))
     self.wait('continue')
     self.write('')
     self.wait('choice')
@@ -294,7 +294,7 @@ class ConnectLinuxGTM(ConnectMUMPS):
     else:
         return 1
 
-  def wait_re(self,command,timeout=None):
+  def wait_re(self, command, timeout=None):
     if not timeout: timeout = -1
     self.connection.expect(command, timeout)
 
@@ -326,7 +326,7 @@ class ConnectLinuxGTM(ConnectMUMPS):
     self.wait('Format')
     self.write('ZWR')
     self.wait('device')
-    self.write(path + '/Coverage/' + filename.replace('.log', '.mcov').replace('.txt','.mcov'))
+    self.write(path + '/Coverage/' + filename.replace('.log', '.mcov').replace('.txt', '.mcov'))
 
 class ConnectRemoteSSH(ConnectMUMPS):
   """
@@ -357,7 +357,7 @@ class ConnectRemoteSSH(ConnectMUMPS):
     interact = SSHClientInteraction(client, timeout=10, display=False)
     self.connection = interact
     self.connection.logfile_read = file(logfile, 'w')
-    self.client = client #apparently there is a deconstructor which disconnects (probably sends a FYN packet) when client is gone
+    self.client = client  # apparently there is a deconstructor which disconnects (probably sends a FYN packet) when client is gone
 
   def write(self, command):
     time.sleep(.01)
@@ -373,7 +373,7 @@ class ConnectRemoteSSH(ConnectMUMPS):
     else:
       command = self.escapeSpecialChars(command)
       if command == '':
-        command = '.*' #fix for paramiko expect, it does not work with wait('')
+        command = '.*'  # fix for paramiko expect, it does not work with wait('')
 
     rbuf = self.connection.expect(command, tout)
     if rbuf == -1:
@@ -471,14 +471,14 @@ class ConnectRemoteSSH(ConnectMUMPS):
     return escaped_str
 def ConnectToMUMPS(logfile, instance='CACHE', namespace='VISTA', location='127.0.0.1', remote_conn_details=None):
 
-    #self.namespace = namespace
-    #self.location = location
-    #print "You are using " + sys.platform
-    #remote connections
+    # self.namespace = namespace
+    # self.location = location
+    # print "You are using " + sys.platform
+    # remote connections
     if remote_conn_details is not None:
         return ConnectRemoteSSH(logfile, instance, namespace, location, remote_conn_details)
 
-    #local connections
+    # local connections
     if sys.platform == 'win32':
       return ConnectWinCache(logfile, instance, namespace, location)
     elif sys.platform == 'linux2':

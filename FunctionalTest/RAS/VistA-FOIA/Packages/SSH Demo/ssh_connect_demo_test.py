@@ -5,9 +5,9 @@ Simple demo which will connect via ssh to vista.vainnovation.us
 '''
 import os
 import sys
-#apparently these are not needed... at least not on windows. Will need to retest this on linux
-#sys.path = ['./FunctionalTest/RAS/lib'] + ['./lib/vista'] + sys.path
-#sys.path = ['./'] + ['../lib/vista'] + sys.path
+# apparently these are not needed... at least not on windows. Will need to retest this on linux
+# sys.path = ['./FunctionalTest/RAS/lib'] + ['./lib/vista'] + sys.path
+# sys.path = ['./'] + ['../lib/vista'] + sys.path
 
 import ssh_connect_demo_suite
 import TestHelper
@@ -19,10 +19,10 @@ def main():
     try:
         test_suite_driver.pre_test_suite_run(test_suite_details)
 
-        #Begin Tests
+        # Begin Tests
         ssh_connect_demo_suite.dive_into_menus(test_suite_details)
         ssh_connect_demo_suite.demo_screen_man(test_suite_details)
-        #End Tests
+        # End Tests
 
         test_suite_driver.post_test_suite_run(test_suite_details)
     except Exception, e:

@@ -9,7 +9,6 @@ import argparse
 import os
 import errno
 import datetime
-import getpass
 import ConfigParser
 
 import RemoteConnection
@@ -151,7 +150,6 @@ class TestSuiteDriver(object):
                            namespace, remote_conn_details)
 
     def pre_test_suite_run(self, test_suite_details):
-        logging.info('ATF Version: ' + ATF.GIT_TAG)
         logging.info('Start ATF Test Suite \'' + test_suite_details.test_suite_name + '\'')
 
 

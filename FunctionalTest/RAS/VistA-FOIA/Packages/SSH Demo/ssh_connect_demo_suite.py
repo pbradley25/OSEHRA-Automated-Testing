@@ -27,12 +27,12 @@ def dive_into_menus(test_suite_details):
         vista.wait('Select Clinician Menu Option:')
         vista.write('RR')
         vista.wait('Select Patient:')
-        #vista.write('0089')
-        #vista.wait('CHOOSE 1-2:')
-        #vista.write('1')
-        #vista.wait('Select Item(s):')
-        #vista.write('1')
-        #vista.wait('Select Health Summary Type:')
+        # vista.write('0089')
+        # vista.wait('CHOOSE 1-2:')
+        # vista.write('1')
+        # vista.wait('Select Item(s):')
+        # vista.write('1')
+        # vista.wait('Select Health Summary Type:')
 
         vista.write('^')
         vista.wait(':')
@@ -69,7 +69,7 @@ def demo_screen_man(test_suite_details):
         vista.wait('Select Patient: Change View')
         vista.write('FD')
         vista.wait('Select PATIENT NAME:')
-        vista.write('0849') #0849
+        vista.write('0849')  # 0849
         vista.wait('Select: Next Screen')
         vista.write('Q')
         vista.wait('Select Patient: Change View')

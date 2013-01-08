@@ -1,6 +1,6 @@
 #
 # Paramiko Expect
-# 
+#
 # Written by Fotis Gimian
 # http://github.com/fgimian
 #
@@ -14,11 +14,6 @@
 import sys
 import re
 import types
-import socket
-#import termios
-#import tty
-import select
-import paramiko
 
 class SSHClientInteraction:
     """This class allows an expect-like interface to Paramiko which allows coders
@@ -53,7 +48,7 @@ class SSHClientInteraction:
 
     def __del__(self):
         """The destructor for our SSHClientInteraction class."""
-        self.close() #--jspivey, commenting this out to fix bug on our side #10/5.. adding it back in
+        self.close()  # --jspivey, commenting this out to fix bug on our side #10/5.. adding it back in
 
     def close(self):
         """Attempts to close the channel for clean completion"""
@@ -61,19 +56,19 @@ class SSHClientInteraction:
             self.channel.close()
         except:
             pass
-        
+
     def log(self, lines):
-        
+
         if self.display is False:
             return
-        
+
         sys.stdout.write('#####\n')
         for line in lines:
             sys.stdout.write(__name__ + '.' + sys._getframe(1).f_code.co_name + '-- ' + line + '\n')
         sys.stdout.write('#####\n')
         sys.stdout.flush()
 
-    #jspivey- TODO: implement timeout
+    # jspivey- TODO: implement timeout
     def expect(self, re_strings='', timeout=None):
         """This function takes in a regular expression (or regular expressions)
         that represent the last line of output from the server.  The function
@@ -96,18 +91,18 @@ class SSHClientInteraction:
         """
 
         # Set the channel timeout
-        self.channel.settimeout(self.timeout) #jspivey-- not sure this is appropriate
-        
-        
-        #debugging...
+        self.channel.settimeout(self.timeout)  # jspivey-- not sure this is appropriate
+
+
+        # debugging...
         self.log([])
         self.log(['Displaying previous buffer...',
                   self.current_output_clean,
                   'Current expect regex(s): ' + str(re_strings)])
 
         # Create an empty output buffer
-        #self.current_output = '' #jspivey-- want to preserve the original buffer, but remove from it when a match is found
-        
+        # self.current_output = '' #jspivey-- want to preserve the original buffer, but remove from it when a match is found
+
 
         # This function needs all regular expressions to be in the form of a list, so
         # if the user provided a string, let's convert it to a 1 item list.
@@ -117,7 +112,7 @@ class SSHClientInteraction:
         # Loop until one of the expressions is matched or loop forever if nothing is expected (usually used for exit)
         while len(re_strings) == 0 or \
               not [re_string for re_string in re_strings if re.match('.*' + re_string + '.*' , self.current_output, re.DOTALL)]:
-              #not [re_string for re_string in re_strings if re.match('.*\n' + re_string + '$' , self.current_output, re.DOTALL)]:
+              # not [re_string for re_string in re_strings if re.match('.*\n' + re_string + '$' , self.current_output, re.DOTALL)]:
 
             # Read some of the output
             buf = self.channel.recv(self.buffer_size)
@@ -135,7 +130,7 @@ class SSHClientInteraction:
                 sys.stdout.write('live buffer recv: ')
                 sys.stdout.write(buf)
                 sys.stdout.flush()
-                
+
             if self.logfile_read is not None:
                 self.logfile_read.write (buf)
                 self.logfile_read.flush()
@@ -146,15 +141,15 @@ class SSHClientInteraction:
         # Grab the first pattern that was matched
         if len(re_strings) != 0:
             found_pattern = [(re_index, re_string) for re_index, re_string in enumerate(re_strings) if re.match('.*' + re_string + '.*', self.current_output, re.DOTALL)]
-            #found_pattern = [(re_index, re_string) for re_index, re_string in enumerate(re_strings) if re.match('.*\n' + re_string + '$', self.current_output, re.DOTALL)]
+            # found_pattern = [(re_index, re_string) for re_index, re_string in enumerate(re_strings) if re.match('.*\n' + re_string + '$', self.current_output, re.DOTALL)]
 
         self.current_output_clean = self.current_output
 
         # Clean the output up by removing the sent command
         if len(self.current_send_string) != 0:
             self.current_output_clean = self.current_output_clean.replace(self.current_send_string + '\n', '')
-            
-            
+
+
         self.log(['Buffer after match found...',
                   self.current_output_clean
                 ])
@@ -165,35 +160,35 @@ class SSHClientInteraction:
         # Clean the output up by removing the expect output from the end if requested and
         # save the details of the matched pattern
         if len(re_strings) != 0:
-            #jspivey-- this would be a bug because of greedy matching
-            #jspivey-- is found_pattern[0][1] even correct?
-            self.current_output_clean = re.sub('.*' + found_pattern[0][1], '', self.current_output_clean, 0, re.DOTALL) 
-            #self.current_output_clean = re.sub(found_pattern[0][1] + '$', '', self.current_output_clean)
-            
+            # jspivey-- this would be a bug because of greedy matching
+            # jspivey-- is found_pattern[0][1] even correct?
+            self.current_output_clean = re.sub('.*' + found_pattern[0][1], '', self.current_output_clean, 0, re.DOTALL)
+            # self.current_output_clean = re.sub(found_pattern[0][1] + '$', '', self.current_output_clean)
+
             '''--jspivey the clean_output_buffer is old code, not even referenced... 
             The real persistent output buffer is 'current_output'
             '''
             self.current_output = self.current_output_clean
-            
-            self.log(['matched pattern: ' +found_pattern[0][1],
+
+            self.log(['matched pattern: ' + found_pattern[0][1],
                      'regex list index: ' + str(found_pattern[0][0]),
                      'buffer after cropping...',
                      self.current_output_clean])
-            #print 'removing pattern: ' +found_pattern[0][1]
-            #print 'Cropped buffer result:'
-            #print self.current_output_clean
-            #print '\n'
+            # print 'removing pattern: ' +found_pattern[0][1]
+            # print 'Cropped buffer result:'
+            # print self.current_output_clean
+            # print '\n'
             self.last_match = found_pattern[0][1]
-            return found_pattern[0][0] #jspivey-- why return [0][0]?
+            return found_pattern[0][0]  # jspivey-- why return [0][0]?
         else:
             # We would socket timeout before getting here, but for good measure, let's send back a -1
             return -1
 
     def send(self, send_string):
         """Saves and sends the send string provided"""
-        
-        self.log(['sending command: ' +send_string])
-        
+
+        self.log(['sending command: ' + send_string])
+
         self.current_send_string = send_string
         self.channel.send(send_string)
 

@@ -15,7 +15,7 @@ class RemoteConnectionDetails(object):
         Constructor
         '''
         self.remote_address = remote_address
-        #self.remote_os = remote_os
+        # self.remote_os = remote_os
         self.default_namespace = default_namespace
 
         self.username = username
