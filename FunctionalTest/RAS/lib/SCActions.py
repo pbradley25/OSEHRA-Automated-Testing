@@ -1,7 +1,7 @@
 '''
 Created on Jun 14, 2012
 
-@author: bcaine
+@author: bcaine, pbradley
 '''
 from Actions import Actions
 import TestHelper
@@ -179,7 +179,7 @@ class SCActions (Actions):
         self.VistA.write('Quit')
         self.VistA.wait('')
 
-    def use_sbar(self, clinic, patient):
+    def use_sbar(self, clinic, patient, fresh=None):
         '''Use the space bar to get previous clinic or patient '''
         self.VistA.wait('Clinic name:')
         self.VistA.write(' ')  # spacebar to test recall
@@ -190,6 +190,39 @@ class SCActions (Actions):
         self.VistA.wait('Date:')
         self.VistA.write('')
         self.VistA.wait('Date:')
+        self.VistA.write('')
+        self.VistA.wait('Select Action:')
+        self.VistA.write('MA')
+        self.VistA.wait('Select PATIENT NAME:')
+        self.VistA.write(' ') # spacebar to test recall
+        self.VistA.wait(patient) # check to make sure expected patient SSN is recalled
+        self.VistA.wait('TYPE:')
+        self.VistA.write('Regular')
+        if fresh is not None:
+            self.VistA.wait('APPOINTMENTS:')
+            self.VistA.write('Yes')
+        self.VistA.wait('ETHNICITY:')
+        self.VistA.write('')
+        self.VistA.wait('RACE:')
+        self.VistA.write('')
+        self.VistA.wait('COUNTRY:')
+        self.VistA.write('')
+        self.VistA.wait('STREET ADDRESS')
+        self.VistA.write('')
+        self.VistA.wait('ZIP')
+        self.VistA.write('')
+        for x in range(0, 2):
+            self.VistA.wait('PHONE NUMBER')
+            self.VistA.write('')
+        self.VistA.wait('BAD ADDRESS')
+        self.VistA.write('')
+        self.VistA.wait('above changes?')
+        self.VistA.write('No')
+        self.VistA.wait('continue:')
+        self.VistA.write('')
+        self.VistA.wait('REQUEST?')
+        self.VistA.write('Yes')
+        self.VistA.wait('DATE/TIME')
         self.VistA.write('')
         self.VistA.wait('Select Action:')
         self.VistA.write('Quit')

@@ -1,7 +1,7 @@
 '''
 Created on Jun 14, 2012
 
-@author: bcaine
+@author: bcaine, pbradley
 '''
 import sys
 sys.path = ['./FunctionalTest/RAS/lib'] + ['./dataFiles'] + ['./lib/vista'] + sys.path
@@ -181,7 +181,7 @@ def sc_test007(resultlog, result_dir):
         tclinic = SC.getclinic()
         SC.makeapp_bypat(clinic=tclinic, patient='656454321', datetime=time)
         SC.signon()
-        SC.use_sbar(clinic=tclinic, patient='656454321')
+        SC.use_sbar(clinic=tclinic, patient='656454321',fresh='No')
         time = SC.schtime(plushour=1)
         now = datetime.datetime.now()
         hour = now.hour + 1
