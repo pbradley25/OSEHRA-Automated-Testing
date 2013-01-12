@@ -256,7 +256,7 @@ def stopmon (test_suite_details):
     test_driver.pre_test_run(test_suite_details)
     try:
         VistA1 = test_driver.connect_VistA(test_suite_details)
-        VistA1.stopCoverage(path=(result_dir + '/' + 'Scheduling_coverage.txt'))
+        VistA1.stopCoverage(path=(test_suite_details.result_dir + '/' + 'Scheduling_coverage.txt'))
 
         test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:

@@ -11,7 +11,7 @@ from PLActions import PLActions
 from ORActions import ORActions
 import TestHelper
 
-def pl_test001(resultlog, result_dir):
+def pl_test001(test_suite_details):
     ''' NIST Inpatient Test '''
     testname = sys._getframe().f_code.co_name
     test_driver = TestHelper.TestDriver(testname)
@@ -20,6 +20,15 @@ def pl_test001(resultlog, result_dir):
     try:
         VistA1 = test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
+        ''' 
+        If you want to use the config file to load the codes in you can use this code snippet
+        but it would be best to let the method connect_Vista in TestHelper do this, as is the
+        case with the tests RASR generates by default.
+        
+        p1 = PLActions(VistA1,
+               user=TestHelper.fetch_access_code(test_suite_details, testname),
+               code=TestHelper.fetch_verify_code(test_suite_details, testname))
+        '''
         pl.signon()
         pl.addcsv(ssn='333224444', pfile='./FunctionalTest/dataFiles/NISTinpatientdata0.csv')
         pl.editinactivate(ssn='333224444', probnum='4', resdate='08/29/2010')
@@ -46,7 +55,7 @@ def pl_test001(resultlog, result_dir):
     finally:
         test_driver.finally_handling(test_suite_details)
 
-def pl_test002(resultlog, result_dir):
+def pl_test002(test_suite_details):
     ''' Restore Removed Problems '''
     testname = sys._getframe().f_code.co_name
     test_driver = TestHelper.TestDriver(testname)
@@ -86,7 +95,7 @@ def pl_test002(resultlog, result_dir):
     finally:
         test_driver.finally_handling(test_suite_details)
 
-def pl_test003(resultlog, result_dir):
+def pl_test003(test_suite_details):
     ''' Change Problem Data '''
     testname = sys._getframe().f_code.co_name
     test_driver = TestHelper.TestDriver(testname)
@@ -127,7 +136,7 @@ def pl_test003(resultlog, result_dir):
     finally:
         test_driver.finally_handling(test_suite_details)
 
-def pl_test004(resultlog, result_dir):
+def pl_test004(test_suite_details):
     ''' Create Problem Selection List, add/modify/remove categories and problems '''
     testname = sys._getframe().f_code.co_name
     test_driver = TestHelper.TestDriver(testname)
@@ -174,7 +183,7 @@ def pl_test004(resultlog, result_dir):
     finally:
         test_driver.finally_handling(test_suite_details)
 
-def pl_test005(resultlog, result_dir):
+def pl_test005(test_suite_details):
     ''' Create Problem Selection List, assign to user, and add problem '''
     '''Separate VistA Instances to allow concurrent logins in case of
     future use of tstart and trollback when these features are available'''
@@ -183,7 +192,7 @@ def pl_test005(resultlog, result_dir):
 
     test_driver.pre_test_run(test_suite_details)
     try:
-        test_driver.testname = test_driver.testname + "_01"
+        test_driver.testname = testname + "_01"
         VistA1 = test_driver.connect_VistA(test_suite_details)
         pl1 = PLActions(VistA1)
         pl1.signon()
@@ -200,7 +209,7 @@ def pl_test005(resultlog, result_dir):
         pl1.sellistad(listname='List002', catname='cat011')
         pl1.sellistad(listname='List002', catname='cat022')
 
-        test_driver.testname = test_driver.testname + "_02"
+        test_driver.testname = testname + "_02"
         VistA2 = test_driver.connect_VistA(test_suite_details)
         pl2 = PLActions(VistA2, user='fakedoc1', code='1Doc!@#$')
         pl2.signon()
@@ -232,7 +241,7 @@ def pl_test005(resultlog, result_dir):
     finally:
         test_driver.finally_handling(test_suite_details)
 
-def pl_test006 (resultlog, result_dir):
+def pl_test006 (test_suite_details):
     ''' Create Selection List from IB Encounter Form'''
     testname = sys._getframe().f_code.co_name
     test_driver = TestHelper.TestDriver(testname)
@@ -266,7 +275,7 @@ def pl_test006 (resultlog, result_dir):
     finally:
         test_driver.finally_handling(test_suite_details)
 
-def pl_test007 (resultlog, result_dir):
+def pl_test007 (test_suite_details):
     ''' Add problems and View Patients by Problems (PL menu items 4 & 5)'''
     testname = sys._getframe().f_code.co_name
     test_driver = TestHelper.TestDriver(testname)
@@ -295,7 +304,7 @@ def pl_test007 (resultlog, result_dir):
     finally:
         test_driver.finally_handling(test_suite_details)
 
-def pl_test008 (resultlog, result_dir):
+def pl_test008 (test_suite_details):
     ''' Add problem via data entry as clerk and change as doctor'''
     '''Multiple VistA instances to allow concurrent logins for when
     tstart and trollback become available and implemented'''
@@ -304,7 +313,7 @@ def pl_test008 (resultlog, result_dir):
 
     test_driver.pre_test_run(test_suite_details)
     try:
-        test_driver.testname = test_driver.testname + "_01"
+        test_driver.testname = testname + "_01"
         VistA1 = test_driver.connect_VistA(test_suite_details)
         pl1 = PLActions(VistA1, user='fakeclerk1', code='1Cle!@#$')
         pl1.signon()
@@ -313,7 +322,7 @@ def pl_test008 (resultlog, result_dir):
                       service='N')
         pl1.signoff()
 
-        test_driver.testname = test_driver.testname + "_02"
+        test_driver.testname = testname + "_02"
         VistA2 = test_driver.connect_VistA(test_suite_details)
         pl2 = PLActions(VistA2, user='fakedoc1', code='1Doc!@#$')
         pl2.signon()
@@ -330,7 +339,7 @@ def pl_test008 (resultlog, result_dir):
     finally:
         test_driver.finally_handling(test_suite_details)
 
-def pl_test009 (resultlog, result_dir):
+def pl_test009 (test_suite_details):
     ''' Verify Problem List through Order Entry package'''
     '''Multiple VistA instances to allow concurrent logins for when
     tstart and trollback become available and implemented'''
@@ -339,7 +348,7 @@ def pl_test009 (resultlog, result_dir):
 
     test_driver.pre_test_run(test_suite_details)
     try:
-        test_driver.testname = test_driver.testname + "_01"
+        test_driver.testname = testname + "_01"
         VistA1 = test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
@@ -350,7 +359,7 @@ def pl_test009 (resultlog, result_dir):
                                             'Congestive Heart Failure'])
         pl.signoff()
 
-        test_driver.testname = test_driver.testname + "_02"
+        test_driver.testname = testname + "_02"
         VistA2 = test_driver.connect_VistA(test_suite_details)
         oentry = ORActions(VistA2)
         oentry.signon()
@@ -360,7 +369,7 @@ def pl_test009 (resultlog, result_dir):
                                             'Congestive Heart Failure'])
         oentry.signoff()
 
-        test_driver.testname = test_driver.testname + "_03"
+        test_driver.testname = testname + "_03"
         VistA3 = test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA3, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
@@ -376,7 +385,7 @@ def pl_test009 (resultlog, result_dir):
     finally:
         test_driver.finally_handling(test_suite_details)
 
-def pl_test010(resultlog, result_dir):
+def pl_test010(test_suite_details):
     ''' Add problems to Problem List and then Remove them. '''
     testname = sys._getframe().f_code.co_name
     test_driver = TestHelper.TestDriver(testname)
@@ -401,7 +410,7 @@ def pl_test010(resultlog, result_dir):
     finally:
         test_driver.finally_handling(test_suite_details)
 
-def pl_test011(resultlog, result_dir):
+def pl_test011(test_suite_details):
     ''' Add a problem, add comments, and then remove to/from Problem List. '''
     testname = sys._getframe().f_code.co_name
     test_driver = TestHelper.TestDriver(testname)
@@ -427,14 +436,14 @@ def pl_test011(resultlog, result_dir):
     finally:
         test_driver.finally_handling(test_suite_details)
 
-def pl_test012(resultlog, result_dir):
+def pl_test012(test_suite_details):
     '''Problem List Menu Testing'''
     testname = sys._getframe().f_code.co_name
     test_driver = TestHelper.TestDriver(testname)
 
     test_driver.pre_test_run(test_suite_details)
     try:
-        test_driver.testname = test_driver.testname + "_01"
+        test_driver.testname = testname + "_01"
         VistA1 = test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
@@ -452,21 +461,21 @@ def pl_test012(resultlog, result_dir):
         p2.dataentry(ssn='656451234', provider='Alexander', clinic='', problem='305.91', comment='Test', onsetdate='t', status='a', acutechronic='A', service='n')
         p2.signoff()
 
-        test_driver.testname = test_driver.testname + "_03"
+        test_driver.testname = testname + "_03"
         VistA3 = test_driver.connect_VistA(test_suite_details)
         p3 = PLActions(VistA3, user='fakedoc1', code='1Doc!@#$')
         p3.signon()
         p3.verifyproblem(ssn='656451234', problem='305.91')
         p3.signoff()
 
-        test_driver.testname = test_driver.testname + "_04"
+        test_driver.testname = testname + "_04"
         VistA4 = test_driver.connect_VistA(test_suite_details)
         p4 = PLActions(VistA4, user='fakedoc1', code='1Doc!@#$')
         p4.signon()
         p4.selectnewpatient(ssn1='656451234', name1='SIX,', ss2='323554545', name2='NINE,')
         p4.signoff()
 
-        test_driver.testname = test_driver.testname + "_05"
+        test_driver.testname = testname + "_05"
         VistA5 = test_driver.connect_VistA(test_suite_details)
         p5 = PLActions(VistA5, user='fakedoc1', code='1Doc!@#$')
         p5.signon()
@@ -482,7 +491,7 @@ def pl_test012(resultlog, result_dir):
     finally:
         test_driver.finally_handling(test_suite_details)
 
-def pl_test013(resultlog, result_dir):
+def pl_test013(test_suite_details):
     # Tests the remainder of the selection list Build menu options
     testname = sys._getframe().f_code.co_name
     test_driver = TestHelper.TestDriver(testname)
@@ -524,7 +533,7 @@ def pl_test013(resultlog, result_dir):
     finally:
         test_driver.finally_handling(test_suite_details)
 
-def startmon(resultlog, result_dir):
+def startmon(test_suite_details):
     '''Starts Coverage Monitor'''
     testname = sys._getframe().f_code.co_name
     test_driver = TestHelper.TestDriver(testname)
@@ -548,7 +557,7 @@ def startmon(resultlog, result_dir):
         test_driver.finally_handling(test_suite_details)
     test_driver.end_method_handling(test_suite_details)
 
-def stopmon (resultlog, result_dir):
+def stopmon (test_suite_details):
     ''' STOP MONITOR'''
     testname = sys._getframe().f_code.co_name
     test_driver = TestHelper.TestDriver(testname)
@@ -557,7 +566,7 @@ def stopmon (resultlog, result_dir):
     try:
         # Connect to VistA
         VistA1 = test_driver.connect_VistA(test_suite_details)
-        VistA1.stopCoverage(path=(result_dir + '/' + 'ProblemList_coverage.txt'))
+        VistA1.stopCoverage(path=(test_suite_details.result_dir + '/' + 'ProblemList_coverage.txt'))
 
         test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:

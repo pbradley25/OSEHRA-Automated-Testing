@@ -21,7 +21,7 @@ class PLActions (Actions):
         else:
             self.VistA.wait('')
             self.VistA.write('D ^ZU')
-            self.VistA.wait('ACCESS CODE:')
+            self.VistA.wait('ACCESS CODE:') #TODO: access code logic should be moved to TestHelper.py's connect_VistA function
             self.VistA.write(self.acode)
             self.VistA.wait('VERIFY CODE:')
             self.VistA.write(self.vcode)

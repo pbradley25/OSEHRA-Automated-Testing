@@ -6,7 +6,6 @@ Created on Sep 28, 2012
 import sys
 sys.path = ['./FunctionalTest/RAS/lib'] + ['./dataFiles'] + ['./lib/vista'] + sys.path
 
-from RCActions import RCActions
 import TestHelper
 
 def dive_into_menus(test_suite_details):
@@ -16,10 +15,6 @@ def dive_into_menus(test_suite_details):
     test_driver.pre_test_run(test_suite_details)
     try:
         vista = test_driver.connect_VistA(test_suite_details)
-        rc = RCActions(vista,
-                       user=TestHelper.fetch_access_code(test_suite_details, testname),
-                       code=TestHelper.fetch_verify_code(test_suite_details, testname))
-        rc.signon()
         vista.wait('Select Training Menu Option:')
         vista.write('OE')
         vista.wait('Select CPRS Manager Menu Option:')
@@ -40,7 +35,7 @@ def dive_into_menus(test_suite_details):
         vista.wait(':')
         vista.write('^')
         vista.wait(':')
-        rc.signoff()
+        vista.write('^')
 
         test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
@@ -58,10 +53,6 @@ def demo_screen_man(test_suite_details):
     test_driver.pre_test_run(test_suite_details)
     try:
         vista = test_driver.connect_VistA(test_suite_details)
-        rc = RCActions(vista,
-                       user=TestHelper.fetch_access_code(test_suite_details, testname),
-                       code=TestHelper.fetch_verify_code(test_suite_details, testname))
-        rc.signon()
         vista.wait('Select TERMINAL TYPE NAME:')
         vista.write('')
         vista.wait('Select Clinician Menu Option:')
@@ -75,7 +66,7 @@ def demo_screen_man(test_suite_details):
         vista.wait('Select Patient: Change View')
         vista.write('^')
         vista.wait('Select Clinician Menu Option:')
-        rc.signoff()
+        vista.write('^')
 
         test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:

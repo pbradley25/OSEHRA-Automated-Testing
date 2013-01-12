@@ -3,6 +3,7 @@ Created on Mar 2, 2012
 
 @author: pbradley
 '''
+import sys
 import csv
 import logging
 import argparse
@@ -10,6 +11,7 @@ import os
 import errno
 import datetime
 import ConfigParser
+import traceback
 
 import RemoteConnection
 
@@ -66,26 +68,22 @@ class TestSuiteDriver(object):
 
         usage = "usage: %prog [options] arg"
         parser = argparse.ArgumentParser()
-        parser.add_argument('resultdir', help='Result Directory')
-        '''
-        parser.add_argument('-s', '--remote-server', help='remote server address')
-        parser.add_argument('-u', '--remote-username', help='remote ssh username')
-        parser.add_argument('-p', '--remote-password', help='remote ssh password')
-        '''
-        parser.add_argument('-l', '--logging-level', help='Logging level', required=True)
-        parser.add_argument('-f', '--logging-file', help='Logging file name')
-        #TODO: edit ctest to refer to these parms below
-        parser.add_argument('-i', '--instance', help='cache instance type', choices=["TRYCACHE", "GTM"], default='')
+        parser.add_argument('resultdir', help='Result Directory') #perhaps a default relative directory can be given, then tests can be ran without parms
+        parser.add_argument('-l', '--logging-level', help='Logging level', default='info')
+        #not needed, filename should just be a default convention
+        #parser.add_argument('-f', '--logging-file', help='Logging file name') 
+        #these parms are configured on a test suite level, therefore they are not globally scoped for an entire test run
+        #parser.add_argument('-i', '--instance', help='cache instance type', choices=["TRYCACHE", "GTM"], default='')
         parser.add_argument('-n', '--namespace', help='cache namespace', default='')
         args = parser.parse_args()
-
+ 
         logging_level = LOGGING_LEVELS.get(args.logging_level, logging.NOTSET)
-        logging.basicConfig(level=logging_level, filename=args.logging_file, format='%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-        logging.info('RESULT DIR arg: ' + str(args.resultdir))
-        logging.info('LOGGING FILE arg: ' + str(args.logging_file))
-        logging.info('LOGGING LEVEL arg:   ' + str(args.logging_level))
-        logging.info('INSTANCE arg:   ' + str(args.instance))
-        logging.info('NAMESPACE arg:   ' + str(args.namespace))
+        logging.basicConfig(level=logging_level, filename=args.resultdir+'/loggerOut.txt', format='%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+        logging.info('RESULT DIR arg: ' + str(args.resultdir)) #note, this gets printed each time a test suite runs. counter-intuitive since it is the same cli arguement each time
+        #logging.info('LOGGING FILE arg: ' + str(args.logging_file))
+        logging.info('LOGGING LEVEL arg: ' + str(args.logging_level))
+        #logging.info('INSTANCE arg: ' + str(args.instance))
+        logging.info('NAMESPACE arg: ' + str(args.namespace))
 
         package_name = self.test_file[self.test_file.rfind('Packages')+9:self.test_file.rfind(test_suite_name)-1]
         
@@ -96,21 +94,11 @@ class TestSuiteDriver(object):
             raise IOError
         if config.getboolean('RemoteDetails', 'RemoteConnect'):
             remote_server = config.get('RemoteDetails', 'ServerLocation')
-            '''
-            uid = getpass.getpass(prompt="SSH username:") #prints to stderr if stdout isn't present, this causes ctest to fail
-            pwd = getpass.getpass(prompt="SSH password:")
-            '''
-            '''
-            uid = config.get('RemoteDetails', 'SSHUsername')
-            pwd = config.get('RemoteDetails', 'SSHPassword')
-            '''
+            
             #get ssh username/password from local user's config file
-            
-            
             userConfig = read_suite_config_file()
             uid = userConfig.get(package_name+'-'+test_suite_name, 'SSHUsername')
             pwd = userConfig.get(package_name+'-'+test_suite_name, 'SSHPassword')
-            #
             
             default_namespace = config.getboolean('RemoteDetails', 'UseDefaultNamespace')
             instance = config.get('RemoteDetails', 'Instance')
@@ -128,10 +116,13 @@ class TestSuiteDriver(object):
                 default_namespace)
         else:
             remote_conn_details = None
+            ''' #no longer using parms to set instance/namespace
             if args.instance == 'TRYCACHE':
                 instance = 'cache'
             else:
                 instance = args.instance
+            '''
+            instance = 'notused'
             namespace = args.namespace
 
         if not os.path.isdir(args.resultdir):
@@ -155,17 +146,23 @@ class TestSuiteDriver(object):
     def post_test_suite_run(self, test_suite_details):
         logging.info('End ATF Test Suite \'' + test_suite_details.test_suite_name + '\'')
 
-    def exception_handling(self, test_suite_details, e):
-        test_suite_details.result_log.write('\nEXCEPTION ERROR:' + str(e))
-        logging.error('*******exception*******' + str(e))
+    def exception_handling(self, test_suite_details, e): #An exception occurred while running the tests in the suite
+        logging.error('Exception in Test Suite \'' + test_suite_details.test_suite_name + '\'\n')
+        logging.error('Exception Name: ' +str(e)+ '\n')
+        logging.error(traceback.format_exc()+ '\n')
+        
+        #This will force ctest to recognize this test as a failure by printing output to std err
+        sys.stderr.write('Exception ' +str(e)+ ' in test suite \'' + test_suite_details.test_suite_name + '\'\n')
 
-    def try_else_handling(self, test_suite_details):
-        outstr = 'All tests in test suite \'' + test_suite_details.test_suite_name + '\'' + ' completed without exception.'
+    def try_else_handling(self, test_suite_details): #All tests in suite passed
+        outstr = 'All tests in test suite \'' + test_suite_details.test_suite_name + '\'' + ' completed without interruption from a major exception.'
         logging.info(outstr)
-        test_suite_details.result_log.write(outstr + '\n')
+        #test_suite_details.result_log.write(outstr + '\n')
 
     def finally_handling(self, test_suite_details):
-        test_suite_details.result_log.write('finished')
+        outstr = 'Test Suite \'' +test_suite_details.test_suite_name+'\' finished'
+        test_suite_details.result_log.write('\n' + outstr + '\n')
+        logging.info(outstr)
 
     def end_method_handling(self, test_suite_details):
         pass
@@ -194,14 +191,15 @@ class TestDriver(object):
     def post_test_run(self, test_suite_details):
         pass
 
-    def exception_handling(self, test_suite_details, e):
-        test_suite_details.result_log.write(e.value)
-        logging.error(self.testname + ' EXCEPTION ERROR: Unexpected test result')
-
-    def try_else_handling(self, test_suite_details):
-        outstr = 'Test ' + self.testname + ' Passed'
-        logging.debug(outstr)
-        test_suite_details.result_log.write(outstr + '\n')
+    def exception_handling(self, test_suite_details, e): #test method throw an exception
+        test_suite_details.result_log.write(e.value+ '\n')
+        logging.error(self.testname + ': exception \'' +str(e)+ '\' in Test \'' +self.testname +'\'')
+        
+        #This will force ctest to recognize this test as a failure by printing output to std err
+        sys.stderr.write('Exception in test \'' +self.testname+ '\' ' +str(e)+ ' in test suite \'' + test_suite_details.test_suite_name + '\'\n')
+        
+    def try_else_handling(self, test_suite_details): #test method passed
+        test_suite_details.result_log.write(' Passed\n')
 
     def finally_handling(self, test_suite_details):
         pass
@@ -209,10 +207,9 @@ class TestDriver(object):
     def end_method_handling(self, test_suite_details):
         pass
 
-    def connect_VistA(self, test_suite_details, testname):
+    def connect_VistA(self, test_suite_details):
         '''
-        Generic method to connect to VistA. Inteded to be reused by the ATF
-        Recorder.
+        Generic method to connect to VistA. Intended to be used by the ATF Recorder.
         '''
         if test_suite_details.remote_conn_details:
             location = test_suite_details.remote_conn_details.remote_address
@@ -230,11 +227,12 @@ class TestDriver(object):
             except IndexError, no_namechange:
                 pass
             VistA.wait(PROMPT)
-            
-        VistA.wait('ACCESS CODE:')
-        VistA.write(fetch_access_code(test_suite_details, testname))
-        VistA.wait('VERIFY CODE:')
-        VistA.write(fetch_verify_code(test_suite_details, testname))
+        
+        if test_suite_details.remote_conn_details:
+            VistA.wait('ACCESS CODE:')
+            VistA.write(fetch_access_code(test_suite_details, self.testname))
+            VistA.wait('VERIFY CODE:')
+            VistA.write(fetch_verify_code(test_suite_details, self.testname))
             
         return VistA
 

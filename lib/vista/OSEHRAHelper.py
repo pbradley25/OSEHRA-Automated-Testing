@@ -22,6 +22,7 @@ import time
 import re
 import logging
 import paramiko
+import socket
 
 filedir = os.path.dirname(os.path.abspath(__file__))
 pexpectdir = os.path.normpath(os.path.join(filedir, "../pexpect/"))
@@ -115,10 +116,11 @@ class ConnectWinCache(ConnectMUMPS):
     self.type = 'cache'
 
   def write(self, command):
-    self.connection.write(command + '\r')
     logging.debug('connection.write:' + command)
+    self.connection.write(command + '\r')
 
   def wait(self, command, tout=15):
+    logging.debug('connection.expect: ' + str(command))
     if command is PROMPT:
       command = self.namespace + '>'
     rbuf = self.connection.read_until(command, tout)
@@ -132,6 +134,7 @@ class ConnectWinCache(ConnectMUMPS):
         return 1
 
   def wait_re(self, command, timeout=30):
+    logging.debug('connection.expect: ' + str(command))
     if command is PROMPT:
       command = self.prompt
     output = self.connection.expect(command, None)
@@ -145,6 +148,7 @@ class ConnectWinCache(ConnectMUMPS):
       return output
 
   def multiwait(self, options, tout=15):
+    logging.debug('connection.expect: ' + str(options))
     if isinstance(options, list):
       index = self.connection.expect(options)
       if index == -1:
@@ -204,9 +208,11 @@ class ConnectLinuxCache(ConnectMUMPS):
     self.type = 'cache'
 
   def write(self, command):
+    logging.debug('connection.write:' + command)
     self.connection.send(command + '\r')
 
   def wait(self, command, tout=15):
+    logging.debug('connection.expect: ' + str(command))
     if command is PROMPT:
       command = self.namespace + '>'
     rbuf = self.connection.expect_exact(command, tout)
@@ -217,10 +223,12 @@ class ConnectLinuxCache(ConnectMUMPS):
         return 1
 
   def wait_re(self, command, timeout=15):
+    logging.debug('connection.expect: ' + str(command))
     if not timeout: timeout = -1
     self.connection.expect(command, timeout)
 
   def multiwait(self, options, tout=15):
+    logging.debug('connection.expect: ' + str(options))
     if isinstance(options, list):
       index = self.connection.expect(options)
       if index == -1:
@@ -280,10 +288,11 @@ class ConnectLinuxGTM(ConnectMUMPS):
     self.type = 'GTM'
 
   def write(self, command):
+    logging.debug('connection.write:' + command)
     self.connection.send(command + '\r')
-    logging.debug('WRITE: ' + command)
 
   def wait(self, command, tout=15):
+    logging.debug('connection.expect: ' + str(command))
     if command is PROMPT:
       command = self.prompt
     rbuf = self.connection.expect_exact(command, tout)
@@ -295,10 +304,12 @@ class ConnectLinuxGTM(ConnectMUMPS):
         return 1
 
   def wait_re(self, command, timeout=None):
+    logging.debug('connection.expect: ' + str(command))
     if not timeout: timeout = -1
     self.connection.expect(command, timeout)
 
   def multiwait(self, options, tout=15):
+    logging.debug('connection.expect: ' + str(options))
     if isinstance(options, list):
       index = self.connection.expect(options)
       if index == -1:
@@ -375,7 +386,11 @@ class ConnectRemoteSSH(ConnectMUMPS):
       if command == '':
         command = '.*'  # fix for paramiko expect, it does not work with wait('')
 
-    rbuf = self.connection.expect(command, tout)
+    try:
+        rbuf = self.connection.expect(command, tout)
+    except socket.timeout:
+        rbuf = -1
+
     if rbuf == -1:
         logging.debug('ERROR: expected: ' + command)
         print 'ERROR: expected: ' + command
