@@ -82,12 +82,14 @@ def setup_ward(test_suite_details):
         adt.signon()
         adt.adt_setup()
         adt.signoff()
-    except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
-    else:
-        resultlog.write('Pass\n')
 
+        test_driver.post_test_run(test_suite_details)
+    except TestHelper.TestError, e:
+        test_driver.exception_handling(test_suite_details, e)
+    else:
+        test_driver.try_else_handling(test_suite_details)
+    finally:
+        test_driver.finally_handling(test_suite_details)
 
 def startmon(test_suite_details):
     '''Starts Coverage Monitor'''
@@ -97,6 +99,7 @@ def startmon(test_suite_details):
     test_driver.pre_test_run(test_suite_details)
     try:
         # Connect to VistA
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         VistA1.startCoverage(routines=['GMPL*'])
 
         test_driver.post_test_run(test_suite_details)

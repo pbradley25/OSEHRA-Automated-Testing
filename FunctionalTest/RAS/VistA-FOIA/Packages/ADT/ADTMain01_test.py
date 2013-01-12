@@ -2,12 +2,12 @@
 Created on November, 2012
 @author: pbradley
 This is the main test script that calls the underlying ADT functional tests
-located in ADT_Suite001.
+located in ADTMain01_suite.
 '''
 import os
 import sys
 sys.path = ['./RAS/lib'] + ['./dataFiles'] + ['../lib/vista'] + sys.path
-import ADT_Suite001
+import ADTMain01_suite
 import TestHelper
 
 def main():
@@ -18,11 +18,11 @@ def main():
         test_suite_driver.pre_test_suite_run(test_suite_details)
 
         # Begin Tests
-        ADT_Suite001.startmon(resultlog, args.resultdir)
-        ADT_Suite001.setup_ward(resultlog, args.resultdir)
-        ADT_Suite001.adt_test001(resultlog, args.resultdir)
-        ADT_Suite001.adt_test002(resultlog, args.resultdir)
-        ADT_Suite001.stopmon(resultlog, args.resultdir)
+        ADTMain01_suite.startmon(test_suite_details)
+        ADTMain01_suite.setup_ward(test_suite_details)
+        ADTMain01_suite.adt_test001(test_suite_details)
+        ADTMain01_suite.adt_test002(test_suite_details)
+        ADTMain01_suite.stopmon(test_suite_details)
         # End Tests
 
         test_suite_driver.post_test_suite_run(test_suite_details)
