@@ -8,17 +8,16 @@ Created on November 2012
 import sys
 sys.path = ['./FunctionalTest/RAS/lib'] + ['./dataFiles'] + ['./lib/vista'] + sys.path
 from ADTActions import ADTActions
-import datetime
 import TestHelper
-import logging
 
-def adt_test001(resultlog, result_dir):
+def adt_test001(test_suite_details):
     ''' Admit 4 patients, verify, then discharge them '''
     testname = sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         adt = ADTActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         adt.signon()
         adt.admit_a_patient(ssn='888776666', bed='1-B')
@@ -34,19 +33,23 @@ def adt_test001(resultlog, result_dir):
         adt.discharge_patient(ssn='656771234')
         adt.discharge_patient(ssn='345623902')
         adt.signoff()
-    except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
-    else:
-        resultlog.write('Pass\n')
 
-def adt_test002(resultlog, result_dir):
+        test_driver.post_test_run(test_suite_details)
+    except TestHelper.TestError, e:
+        test_driver.exception_handling(test_suite_details, e)
+    else:
+        test_driver.try_else_handling(test_suite_details)
+    finally:
+        test_driver.finally_handling(test_suite_details)
+
+def adt_test002(test_suite_details):
     ''' Schedule, Unschedule, Transfer Patient '''
     testname = sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         adt = ADTActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         adt.signon()
         adt.admit_a_patient(ssn='333224444', bed='1-A')
@@ -58,20 +61,23 @@ def adt_test002(resultlog, result_dir):
         adt.cancel_scheduled_admission(ssn='888776666')
         adt.cancel_scheduled_admission(ssn='656771234')
         adt.signoff()
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
     else:
-        resultlog.write('Pass\n')
+        test_driver.try_else_handling(test_suite_details)
+    finally:
+        test_driver.finally_handling(test_suite_details)
 
-
-def setup_ward(resultlog, result_dir):
+def setup_ward(test_suite_details):
     ''' Set up ward for ADT testing '''
     testname = sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1 = test_driver.connect_VistA(test_suite_details)
         adt = ADTActions(VistA1)
         adt.signon()
         adt.adt_setup()
@@ -83,47 +89,58 @@ def setup_ward(resultlog, result_dir):
         resultlog.write('Pass\n')
 
 
-def startmon(resultlog, result_dir):
+def startmon(test_suite_details):
     '''Starts Coverage Monitor'''
-    testname=sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', '
-                    + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
-    print "startmon1"
+    testname = sys._getframe().f_code.co_name
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
-        VistA1=connect_VistA(testname, result_dir)
-        print "startmon2"
+        # Connect to VistA
         VistA1.startCoverage(routines=['GMPL*'])
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname+ ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
+    else:
+        test_driver.try_else_handling(test_suite_details)
     finally:
         '''
         Close Vista
         '''
         VistA1.write('^\r^\r^\r')
         VistA1.write('h\r')
+        test_driver.finally_handling(test_suite_details)
+    test_driver.end_method_handling(test_suite_details)
 
-def stopmon (resultlog, result_dir):
+
+def stopmon (test_suite_details):
     ''' STOP MONITOR'''
     testname = sys._getframe().f_code.co_name
-    resultlog.write('\n' + testname + ', '
-                    + str(datetime.datetime.today()) + ': ')
-    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    test_driver = TestHelper.TestDriver(testname)
+
+    test_driver.pre_test_run(test_suite_details)
     try:
         # Connect to VistA
         VistA1=connect_VistA(testname, result_dir)
-        VistA1.stopCoverage(path=(result_dir + '/' + 'ADT_coverage.txt'))
+        VistA1.stopCoverage(path=(test_suite_details.result_dir + '/' + 'ADT_coverage.txt'))
+
+        test_driver.post_test_run(test_suite_details)
     except TestHelper.TestError, e:
-        resultlog.write(e.value)
-        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+        test_driver.exception_handling(test_suite_details, e)
+    else:
+        test_driver.try_else_handling(test_suite_details)
     finally:
         '''
         Close Vista
         '''
         VistA1.write('^\r^\r^\r')
         VistA1.write('h\r')
+        test_driver.finally_handling(test_suite_details)
+    test_driver.end_method_handling(test_suite_details)
 
+
+'''
 def connect_VistA(testname, result_dir):
     # Connect to VistA
     print "connect_VistA"
@@ -138,3 +155,4 @@ def connect_VistA(testname, result_dir):
             pass
     VistA.wait(PROMPT)
     return VistA
+'''
