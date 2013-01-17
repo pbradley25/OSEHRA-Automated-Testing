@@ -181,7 +181,7 @@ def sc_test007(resultlog, result_dir):
         tclinic = SC.getclinic()
         SC.makeapp_bypat(clinic=tclinic, patient='656454321', datetime=time)
         SC.signon()
-        SC.use_sbar(clinic=tclinic, patient='656454321',fresh='No')
+        SC.use_sbar(clinic=tclinic, patient='656454321', fresh='No')
         time = SC.schtime(plushour=1)
         now = datetime.datetime.now()
         hour = now.hour + 1
@@ -196,6 +196,54 @@ def sc_test007(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
+def sc_test008(resultlog, result_dir):
+    '''Make future appointments and verify, and use CLINICX and check use of case sensitivity (cLiNiCx, ClInIcX, etc.)'''
+    testname = sys._getframe().f_code.co_name
+    resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    try:
+        VistA = connect_VistA(testname, result_dir)
+        SC = SCActions(VistA, scheduling='Scheduling')
+        time = SC.schtime()
+        SC.signon()
+        tclinic = SC.getclinic()
+        SC.makeapp_bypat(clinic='cLiNiCx', patient='323678904', datetime='t+5@8PM')
+        SC.signon()
+        SC.verapp_bypat(patient='323678904', vlist=['THIRTEEN,PATIENT M', 'Clinicx', 'Future'],)
+        SC.signoff()        
+    except TestHelper.TestError, e:
+        resultlog.write('\nEXCEPTION ERROR:' + str(e))
+        logging.error('*****exception*********' + str(e))
+    else:
+        resultlog.write('Pass\n')
+
+def sc_test009(resultlog, result_dir):
+    '''Make appts with variable length. Make appt in distant future for EWL'''
+    testname = sys._getframe().f_code.co_name
+    resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    try:
+        VistA = connect_VistA(testname, result_dir)
+        SC = SCActions(VistA, scheduling='Scheduling')
+        time = SC.schtime()
+        SC.signon()
+        tclinic = SC.getclinic()
+        SC.makeapp_var(clinic='CLInicA', patient='323678904', datetime='t+7@7AM', fresh='No')
+        SC.signon()
+        SC.verapp_bypat(patient='323678904', vlist=['THIRTEEN,PATIENT M', 'Clinica', '7:00', 'Future'],)
+        SC.signon()
+        SC.makeapp_var(clinic='CLInicA', patient='323678904', datetime='t+122@6AM', fresh='No')
+        SC.signon()
+        SC.makeapp_var(clinic='CLInicA', patient='323678904', datetime='t+10@4AM', fresh='No', nextaval='No')
+        SC.signon()
+        SC.verapp_bypat(patient='323678904', vlist=['THIRTEEN,PATIENT M', 'Clinica', '4:00', 'Future'],)
+        SC.signoff()        
+    except TestHelper.TestError, e:
+        resultlog.write('\nEXCEPTION ERROR:' + str(e))
+        logging.error('*****exception*********' + str(e))
+    else:
+        resultlog.write('Pass\n')
+                       
 def startmon(resultlog, result_dir):
     '''Starts Coverage Monitor'''
     testname=sys._getframe().f_code.co_name

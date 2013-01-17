@@ -57,7 +57,7 @@ class SCActions (Actions):
         elif hour>=7 and hour<=14:
             clinic='Clinic2'
         elif hour>=15 and hour<=22:
-            clinic='Clinic3'
+            clinic='CLINICX'
         return clinic
 
     def dateformat(self, dayadd=0):
@@ -179,6 +179,90 @@ class SCActions (Actions):
         self.VistA.write('Quit')
         self.VistA.wait('')
 
+    def makeapp_var(self, clinic,  patient, datetime, fresh=None, nextaval=None):
+        '''Makes Appointment for clinic that supports variable length appts (CLInicA)'''
+        self.VistA.wait('Clinic name:')
+        self.VistA.write(patient)  # <--- by patient
+        self.VistA.wait('OK?')
+        self.VistA.write('Yes')
+        self.VistA.wait('Select Action:')
+        self.VistA.write('CL')
+        self.VistA.wait('Select Clinic:')
+        self.VistA.write(clinic)
+        self.VistA.wait('Select Action:')
+        self.VistA.write('MA')
+        self.VistA.wait('PATIENT NAME:')
+        self.VistA.write(patient)
+        self.VistA.wait('TYPE:')
+        self.VistA.write('Regular')
+        if fresh is not None:
+            self.VistA.wait('APPOINTMENTS:')
+            self.VistA.write('Yes')
+        self.VistA.wait('ETHNICITY:')
+        self.VistA.write('')
+        self.VistA.wait('RACE:')
+        self.VistA.write('')
+        self.VistA.wait('COUNTRY:')
+        self.VistA.write('')
+        self.VistA.wait('STREET ADDRESS')
+        self.VistA.write('')
+        self.VistA.wait('ZIP')
+        self.VistA.write('')
+        for x in range(0, 2):
+            self.VistA.wait('PHONE NUMBER')
+            self.VistA.write('')
+        self.VistA.wait('BAD ADDRESS')
+        self.VistA.write('')
+        self.VistA.wait('above changes?')
+        self.VistA.write('No')
+        self.VistA.wait('continue:')
+        self.VistA.write('')
+        self.VistA.wait('REQUEST?')
+        if nextaval is not None:
+            self.VistA.write('No')
+            self.VistA.wait('APPOINTMENT')
+        else:
+            self.VistA.write('Yes')
+            self.VistA.wait('DATE/TIME')
+        self.VistA.write(datetime)
+        if 't+122' in datetime:
+            self.VistA.wait('Add to EWL')
+            self.VistA.write('Yes')
+            self.VistA.wait('continue')
+            self.VistA.write('')
+            self.VistA.wait('Select Action:')
+            self.VistA.write('Quit')
+            self.VistA.wait('')
+        else:
+            self.VistA.wait('LENGTH OF APPOINTMENT')
+            self.VistA.write('15')
+            self.VistA.wait('increment minutes per hour')
+            self.VistA.wait('LENGTH OF APPOINTMENT')
+            self.VistA.write('60')
+            self.VistA.wait('CORRECT?')
+            self.VistA.write('Yes')
+            self.VistA.wait('STOPS?')
+            self.VistA.write('No')
+            self.VistA.wait('OTHER INFO:')
+            self.VistA.write('')
+            self.VistA.wait('continue:')
+            self.VistA.write('')
+            self.VistA.wait('Select Action:')
+            self.VistA.write('Quit')
+            self.VistA.wait('')
+
+    def verapp_bypat(self, patient, vlist):
+        '''Verify previous Appointment for specified user at specified time'''
+        self.VistA.wait('Clinic name:')
+        self.VistA.write(patient)  # <--- by patient
+        self.VistA.wait('OK?')
+        self.VistA.write('Yes')
+        for vitem in vlist:
+            self.VistA.wait(vitem)
+        self.VistA.wait('Select Action:')
+        self.VistA.write('Quit')
+        self.VistA.wait('')
+        
     def use_sbar(self, clinic, patient, fresh=None):
         '''Use the space bar to get previous clinic or patient '''
         self.VistA.wait('Clinic name:')
