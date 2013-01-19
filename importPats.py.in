@@ -5,7 +5,7 @@ Created on Apr 4, 2012
 '''
 import sys
 import logging
-sys.path = ['${VISTA_SOURCE_DIR}/lib/vista'] + ['${VISTA_SOURCE_DIR}/FunctionalTest/dataFiles'] + ['${VISTA_SOURCE_DIR}/FunctionalTest/RAS/lib'] + sys.path
+sys.path = ['${VISTA_SOURCE_DIR}/lib/vista'] + ['${VISTA_SOURCE_DIR}/FunctionalTest/RAS/lib'] + sys.path
 from PATActions import PATActions
 import datetime
 import TestHelper
@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO,
                     datefmt='%Y-%m-%d %H:%M:%S')
 try:
     from OSEHRAHelper import ConnectToMUMPS,PROMPT
-    VistA1=ConnectToMUMPS(logfile='./importUsers_A.txt',instance='',namespace='')
+    VistA1=ConnectToMUMPS(logfile='${VISTA_BINARY_DIR}/Testing/Log/importPats_A.txt',instance='',namespace='')
     if VistA1.type=='cache':
         try:
             VistA1.ZN('VISTA')

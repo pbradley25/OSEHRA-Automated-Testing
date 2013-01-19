@@ -188,17 +188,17 @@ def pl_test005(resultlog, result_dir):
         VistA2 = connect_VistA(testname+'_02', result_dir)
         pl2 = PLActions(VistA2, user='fakedoc1', code='1Doc!@#$')
         pl2.signon()
-        pl2.versellist(ssn='345623902', clinic='',
+        pl2.versellist(ssn='354623902', clinic='',
                       vlist=['List002', 'cat011', 'Heartburn', 'chest pain',
                              'Leptospirosis', 'cat022', 'Sleep Disturbance',
                              'Drug withdrawal', 'drug dependence'])
-        pl2.add(ssn='345623902', clinic='', probnum='1',
+        pl2.add(ssn='354623902', clinic='', probnum='1',
                    comment='this is a test', onsetdate='t',
                    status='Active', acutechronic='A', service='N',
                    evalue='Heartburn')
-        pl2.verify(ssn='345623902', probnum='1', itemnum='1',
+        pl2.verify(ssn='354623902', probnum='1', itemnum='1',
                       evalue='Heartburn')
-        pl2.rem(ssn='345623902')
+        pl2.rem(ssn='354623902')
         pl1.sellistrm(listname='List002')
         pl1.sellistrm(listname='List002')
         pl1.catdl(listname='List002', catname='cat011')
@@ -347,11 +347,11 @@ def pl_test010(resultlog, result_dir):
         VistA1=connect_VistA(testname, result_dir)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
-        pl.addcsv(ssn='323554545', pfile='./FunctionalTest/dataFiles/probdata0.csv')
-        pl.verplist(ssn='323554545', vlist=['drug abuse', 'Arterial embolism'])
-        pl.rem(ssn='323554545')
-        pl.rem(ssn='323554545')
-        pl.checkempty(ssn='323554545')
+        pl.addcsv(ssn='323123456', pfile='./FunctionalTest/dataFiles/probdata0.csv')
+        pl.verplist(ssn='323123456', vlist=['drug abuse', 'Arterial embolism'])
+        pl.rem(ssn='323123456')
+        pl.rem(ssn='323123456')
+        pl.checkempty(ssn='323123456')
         pl.signoff()
     except TestHelper.TestError, e:
         resultlog.write(e.value)
@@ -411,7 +411,7 @@ def pl_test012(resultlog, result_dir):
         VistA4=connect_VistA(testname+'_04', result_dir)
         p4=PLActions(VistA4, user='fakedoc1', code='1Doc!@#$')
         p4.signon()
-        p4.selectnewpatient(ssn1='656451234', name1='SIX,', ss2='323554545', name2='NINE,')
+        p4.selectnewpatient(ssn1='656451234', name1='SIX,', ss2='323123456', name2='NINE,')
         p4.signoff()
         VistA5=connect_VistA(testname+'_05', result_dir)
         p5=PLActions(VistA5, user='fakedoc1', code='1Doc!@#$')

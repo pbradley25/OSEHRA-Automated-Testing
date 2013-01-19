@@ -109,7 +109,7 @@ def sc_test004(resultlog, result_dir):
                        vlist3=['NEXT AVAILABLE', 'NO', '0'], vlist4=['1933', 'MALE', 'UNANSWERED'],
                        vlist5=['Combat Veteran:', 'No check out information'], mult='2')
         SC.signon()
-        SC.addedit(clinic=tclinic, name='345623902', icd='305.91')
+        SC.addedit(clinic=tclinic, name='354623902', icd='305.91')
         SC.signoff()
     except TestHelper.TestError, e:
         resultlog.write('\nEXCEPTION ERROR:' + str(e))
@@ -156,8 +156,8 @@ def sc_test006(resultlog, result_dir):
         SC = SCActions(VistA, user='fakedoc1', code='1Doc!@#$')
         SC.signon()
         tclinic = SC.getclinic()
-        SC.waitlistentry(clinic=tclinic, patient='323554545')
-        SC.waitlistdisposition(clinic=tclinic, patient='323554545')
+        SC.waitlistentry(clinic=tclinic, patient='323123456')
+        SC.waitlistdisposition(clinic=tclinic, patient='323123456')
         SC.signoff()
     except TestHelper.TestError, e:
         resultlog.write('\nEXCEPTION ERROR:' + str(e))

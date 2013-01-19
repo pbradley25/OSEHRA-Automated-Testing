@@ -295,7 +295,7 @@ option(VISTA_SETUP_SITE "Prepopulate the database with sample data including use
 if(VISTA_SETUP_SITE)
   set(logfile "${VISTA_BINARY_DIR}/Testing/Log/PostImport.log")
   configure_file("${VISTA_SOURCE_DIR}/PostImportSetupScript.py.in" "${VISTA_BINARY_DIR}/PostImportSetupScript.py")
-  configure_file("${VISTA_SOURCE_DIR}/importUsers.py.in" "${VISTA_BINARY_DIR}/importUsers.py")
+  configure_file("${VISTA_SOURCE_DIR}/importPats.py.in" "${VISTA_BINARY_DIR}/importPats.py")
   configure_file("${VISTA_SOURCE_DIR}/ClinicSetup.py.in" "${VISTA_BINARY_DIR}/ClinicSetup.py")
 endif()
 if((SIK_SYSTEM_TESTING OR RAS_SYSTEM_TESTING) AND VISTA_SETUP_SITE)
