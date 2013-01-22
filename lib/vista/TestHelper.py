@@ -221,7 +221,7 @@ class TestDriver(object):
                                location=location,
                                remote_conn_details=test_suite_details.remote_conn_details)
 
-        if VistA.type is None and VistA.type=='cache' and test_suite_details.namespace is not None:
+        if VistA.type is not None and VistA.type =='cache' and test_suite_details.namespace is not None:
             try:
                 VistA.ZN(test_suite_details.namespace)
             except IndexError, no_namechange:
