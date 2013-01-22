@@ -221,9 +221,9 @@ class TestDriver(object):
                                location=location,
                                remote_conn_details=test_suite_details.remote_conn_details)
 
-        if not test_suite_details.remote_conn_details or not test_suite_details.remote_conn_details.default_namespace:
+        if VistA.type is None and VistA.type=='cache' and test_suite_details.namespace is not None:
             try:
-                VistA.ZN(VistA.namespace)
+                VistA.ZN(test_suite_details.namespace)
             except IndexError, no_namechange:
                 pass
             VistA.wait(PROMPT)

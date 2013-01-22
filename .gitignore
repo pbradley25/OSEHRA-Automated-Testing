@@ -1,4 +1,5 @@
 *.pyc
+*.py~
 #IDE files
 *.project
 *.pydevproject
