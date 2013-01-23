@@ -255,7 +255,7 @@ class SCActions (Actions):
             self.VistA.write('Quit')
             self.VistA.wait('')
 
-    def verapp_bypat(self, patient, vlist):
+    def verapp_bypat(self, patient, vlist, ALvlist=None, EPvlist=None):
         '''Verify previous Appointment for specified user at specified time'''
         self.VistA.wait('Clinic name:')
         self.VistA.write(patient)  # <--- by patient
@@ -263,10 +263,84 @@ class SCActions (Actions):
         self.VistA.write('Yes')
         for vitem in vlist:
             self.VistA.wait(vitem)
+        if ALvlist is not None:
+            self.VistA.wait('Select Action:')
+            self.VistA.write('AL')
+            self.VistA.wait('Select List:')
+            self.VistA.write('TA')
+            for vitem in ALvlist:
+                self.VistA.wait(vitem)
+        if EPvlist is not None:
+            self.VistA.wait('Select Action:')
+            self.VistA.write('EP')
+            self.VistA.wait('Select Appointment(s):')
+            self.VistA.write('1')
+            for vitem in EPvlist:
+                self.VistA.wait(vitem)
+            self.VistA.wait('Select Action:')
+            self.VistA.write('^')
         self.VistA.wait('Select Action:')
         self.VistA.write('Quit')
         self.VistA.wait('')
         
+    def ver_actions(self, clinic, patient, PRvlist, DXvlist, CPvlist ):   
+        ''' verify action in menu, patient must be checked out'''
+        self.VistA.wait('Clinic name:')
+        self.VistA.write(clinic)
+        self.VistA.wait('OK?')
+        self.VistA.write('Yes')
+        self.VistA.wait('Date:')
+        self.VistA.write('')
+        self.VistA.wait('Date:')
+        self.VistA.write('')
+        # RT
+        self.VistA.wait('Select Action:')
+        self.VistA.write('RT')
+        for vitem in ['Chart Request','Fill Next Clinic Request', 'Profile of Charts', 'Recharge a Chart']:
+            self.VistA.wait(vitem)
+        self.VistA.wait('Select Record Tracking Option:')
+        self.VistA.write('^')
+        # PR
+        self.VistA.wait('Select Action:')
+        self.VistA.write('PR')
+        self.VistA.wait('CHOOSE 1-2:')
+        self.VistA.write('1')
+        self.VistA.wait('Select Appointment(s):')
+        self.VistA.write('1')
+        for vitem in PRvlist:
+            self.VistA.wait(vitem)
+        self.VistA.wait('Enter PROVIDER:')
+        self.VistA.write('')
+        self.VistA.wait('for this ENCOUNTER')
+        self.VistA.write('')
+        self.VistA.wait('Enter PROVIDER:')
+        self.VistA.write('')
+        # DX
+        self.VistA.wait('Select Action:')
+        self.VistA.write('DX')
+        self.VistA.wait('Select Appointment(s):')
+        self.VistA.write('1')
+        for vitem in DXvlist:
+            self.VistA.wait(vitem)
+        self.VistA.wait('Enter Diagnosis :')
+        self.VistA.write('')
+        self.VistA.wait('Problem List')
+        self.VistA.write('no')        
+        # CP
+        self.VistA.wait('Select Action:')
+        self.VistA.write('CP')        
+        self.VistA.wait('Select Appointment(s):')
+        self.VistA.write('1')
+        for vitem in CPvlist:
+            self.VistA.wait(vitem)
+        self.VistA.wait('Enter PROCEDURE')
+        self.VistA.write('')            
+        # PC
+        self.VistA.wait('Select Action:')    
+        self.VistA.write('PC')
+        self.VistA.wait('is locked')    
+        self.VistA.write('')
+                    
     def use_sbar(self, clinic, patient, fresh=None):
         '''Use the space bar to get previous clinic or patient '''
         self.VistA.wait('Clinic name:')

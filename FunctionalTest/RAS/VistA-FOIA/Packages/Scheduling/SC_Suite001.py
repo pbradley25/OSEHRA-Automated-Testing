@@ -29,7 +29,8 @@ def sc_test001(resultlog, result_dir):
         SC.signon()
         SC.checkin(clinic=tclinic, vlist=['Three', str(hour), 'CHECKED-IN:'])
         SC.signon()
-        SC.checkout(clinic=tclinic, vlist1=['Three', str(hour), 'Checked In'], vlist2=['305.91', 'OTHER DRUG', 'RESULTING'], icd='305.91')
+        SC.checkout(clinic=tclinic, vlist1=['Three', str(hour), 'Checked In'], 
+                    vlist2=['305.91', 'OTHER DRUG', 'RESULTING'], icd='305.91')
         SC.signoff()
     except TestHelper.TestError, e:
         resultlog.write('\nEXCEPTION ERROR:' + str(e))
@@ -59,7 +60,8 @@ def sc_test002(resultlog, result_dir):
         SC.signon()
         SC.canapp(clinic=tclinic, mult='1')
         SC.signon()
-        SC.chgpatient(clinic=tclinic, patient1='345678233', patient2='345238901', patientname1='Twelve', patientname2='Ten')
+        SC.chgpatient(clinic=tclinic, patient1='345678233', patient2='345238901', 
+                      patientname1='Twelve', patientname2='Ten')
         SC.signoff()
     except TestHelper.TestError, e:
         resultlog.write('\nEXCEPTION ERROR:' + str(e))
@@ -105,7 +107,8 @@ def sc_test004(resultlog, result_dir):
         SC.signon()
         SC.patdem(clinic=tclinic, name='Ten', mult='2')
         SC.signon()
-        SC.expandentry(clinic=tclinic, vlist1=['TEN', 'SCHEDULED', '30'], vlist2=['Event', 'Date', 'User', 'TESTMASTER'],
+        SC.expandentry(clinic=tclinic, vlist1=['TEN', 'SCHEDULED', '30'], 
+                       vlist2=['Event', 'Date', 'User', 'TESTMASTER'],
                        vlist3=['NEXT AVAILABLE', 'NO', '0'], vlist4=['1933', 'MALE', 'UNANSWERED'],
                        vlist5=['Combat Veteran:', 'No check out information'], mult='2')
         SC.signon()
@@ -135,7 +138,8 @@ def sc_test005(resultlog, result_dir):
         SC.signon()
         SC.discharge(clinic=tclinic, patient='543236666', appnum='3')
         SC.signon()
-        SC.checkout(clinic=tclinic, vlist1=['One', 'No Action'], vlist2=['305.91', 'RESULTING'], icd='305.91', mult='3')
+        SC.checkout(clinic=tclinic, vlist1=['One', 'No Action'], 
+                    vlist2=['305.91', 'RESULTING'], icd='305.91', mult='3')
         SC = SCActions(VistA, user='fakedoc1', code='1Doc!@#$')
         SC.signon()
         SC.deletecheckout(clinic=tclinic, appnum='3')
@@ -188,7 +192,13 @@ def sc_test007(resultlog, result_dir):
         SC.signon()
         SC.checkin(clinic=tclinic, vlist=['Five', str(hour), 'CHECKED-IN:'],mult='4')
         SC.signon()
-        SC.checkout(clinic=tclinic, vlist1=['Five', str(hour), 'Checked In'], vlist2=['305.91', 'OTHER DRUG', 'RESULTING'], icd='305.91', mult='4')
+        SC.checkout(clinic=tclinic, vlist1=['Five', str(hour), 'Checked In'], 
+                    vlist2=['305.91', 'OTHER DRUG', 'RESULTING'], icd='305.91', mult='4')
+        SC.signon()
+        SC.ver_actions(clinic=tclinic, patient='4444', 
+                       PRvlist=['THREE,PATIENT C', 'ALEXANDER,ROBERT'],
+                       DXvlist=['305.91', 'OTHER DRUG', 'RESULTING'],
+                       CPvlist=['THREE,PATIENT C'])
         SC.signoff()
     except TestHelper.TestError, e:
         resultlog.write('\nEXCEPTION ERROR:' + str(e))
@@ -236,7 +246,9 @@ def sc_test009(resultlog, result_dir):
         SC.signon()
         SC.makeapp_var(clinic='CLInicA', patient='323678904', datetime='t+10@4AM', fresh='No', nextaval='No')
         SC.signon()
-        SC.verapp_bypat(patient='323678904', vlist=['THIRTEEN,PATIENT M', 'Clinica', '4:00', 'Future'],)
+        SC.verapp_bypat(patient='323678904', vlist=['THIRTEEN,PATIENT M', 'Clinica', '4:00', 'Future'],
+                        ALvlist=['THIRTEEN,PATIENT M','Clinicx', 'Clinica', 'Clinica'], 
+                        EPvlist=['THIRTEEN,PATIENT M','CLINICX', '8904', 'FUTURE', 'SCHEDULED', 'REGULAR'])
         SC.signoff()        
     except TestHelper.TestError, e:
         resultlog.write('\nEXCEPTION ERROR:' + str(e))
