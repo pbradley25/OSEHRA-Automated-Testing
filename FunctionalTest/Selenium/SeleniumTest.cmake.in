@@ -1,0 +1,4 @@
+execute_process(COMMAND "@PYTHON_EXECUTABLE@" "@selenium_test@" "@TEST_RESULTS_DIR@" -l info -f "SeleniumResults.txt" WORKING_DIRECTORY "@SELENIUM_APP_PATH@" ERROR_VARIABLE FunctionalError)
+if(FunctionalError)
+  message(FATAL_ERROR "${FunctionalError}")
+endif()
