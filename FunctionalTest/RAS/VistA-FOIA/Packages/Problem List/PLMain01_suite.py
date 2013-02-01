@@ -21,10 +21,7 @@ def pl_test001(test_suite_details):
         VistA1 = test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         ''' 
-        If you want to use the config file to load the codes in you can use this code snippet
-        but it would be best to let the method connect_Vista in TestHelper do this, as is the
-        case with the tests RASR generates by default.
-        
+        template to use for getting A/V code from ~./ATF/roles.cfg file.
         p1 = PLActions(VistA1,
                user=TestHelper.fetch_access_code(test_suite_details, testname),
                code=TestHelper.fetch_verify_code(test_suite_details, testname))
