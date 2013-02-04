@@ -42,13 +42,13 @@ set(BUILD_TESTING "ON" CACHE INTERNAL "Always build testing")
 option(USE_XINDEX_WARNINGS_AS_FAILURES "Use warnings as a failure condition for XINDEX tests?" OFF)
 option(BUILD_REPORTS "Build Reports." OFF)
 option(CLEAN_DATABASE "Overwrite the database file during build phase of testing? To remove this option, delete the CMake Cache" OFF)
-if(${CMAKE_VERSION} VERSION_GREATER 2.8.8)
+#if(${CMAKE_VERSION} VERSION_GREATER 2.8.8)
   option(USE_COVERAGE "Create a coverage map of VistA based off the testing" OFF)
   if(USE_COVERAGE)
     message(WARNING "Selecting the coverage option may cause the tests to run slower as there are more tasks to perform during a given test.
     This will also create new text files during the run.")
   endif()
-endif()
+#endif()
 # how much time to allocate in seconds for the process of importing globals
 set(GLOBALS_IMPORT_TIMEOUT 3600 CACHE STRING "Timeout in seconds for importing globals")
 

@@ -129,20 +129,27 @@ class SCActions (Actions):
         self.VistA.write('Quit')
         self.VistA.wait('')
 
-    def makeapp_bypat(self, clinic,  patient,datetime, fresh=None):
+    def makeapp_bypat(self, clinic,  patient,datetime, fresh=None, CLfirst=None):
         '''Makes Appointment for specified user at specified time'''
         self.VistA.wait('Clinic name:')
         self.VistA.write(patient)  # <--- by patient
         self.VistA.wait('OK?')
         self.VistA.write('Yes')
         self.VistA.wait('Select Action:')
-        self.VistA.write('CL')
-        self.VistA.wait('Select Clinic:')
-        self.VistA.write(clinic)
-        self.VistA.wait('Select Action:')
-        self.VistA.write('MA')
-        self.VistA.wait('PATIENT NAME:')
-        self.VistA.write(patient)
+        if CLfirst is not None:
+            self.VistA.write('CL')
+            self.VistA.wait('Select Clinic:')
+            self.VistA.write(clinic)
+            self.VistA.wait('Select Action:')
+            self.VistA.write('MA')
+            self.VistA.wait('PATIENT NAME:')
+            self.VistA.write(patient)
+        elif:
+            self.VistA.write('MA')
+            self.VistA.wait('PATIENT NAME:')
+            self.VistA.write(patient)
+            self.VistA.wait('Select Clinic:')
+            self.VistA.write(clinic)
         self.VistA.wait('TYPE:')
         self.VistA.write('Regular')
         if fresh is not None:

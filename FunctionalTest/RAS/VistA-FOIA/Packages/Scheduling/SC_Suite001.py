@@ -219,7 +219,11 @@ def sc_test008(resultlog, result_dir):
         tclinic = SC.getclinic()
         SC.makeapp_bypat(clinic='cLiNiCx', patient='323678904', datetime='t+5@8PM')
         SC.signon()
-        SC.verapp_bypat(patient='323678904', vlist=['THIRTEEN,PATIENT M', 'Clinicx', 'Future'],)
+        SC.verapp_bypat(patient='323678904', vlist=['THIRTEEN,PATIENT M', 'Clinicx', 'Future'])
+        SC.signoff()        
+        SC.makeapp_bypat(clinic='cLiNiCx', patient='323559876', datetime='t+6@8PM', CLfirst='Yes')
+        SC.signon()
+        SC.verapp_bypat(patient='323559876', vlist=['SIXTEEN,PATIENT M', 'Clinicx', 'Future'])
         SC.signoff()        
     except TestHelper.TestError, e:
         resultlog.write('\nEXCEPTION ERROR:' + str(e))
