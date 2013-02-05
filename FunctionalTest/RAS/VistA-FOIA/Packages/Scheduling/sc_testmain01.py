@@ -55,6 +55,7 @@ def main():
         SC_Suite001.sc_test007(resultlog, args.resultdir)
         SC_Suite001.sc_test008(resultlog, args.resultdir)
         SC_Suite001.sc_test009(resultlog, args.resultdir)
+        SC_Suite001.sc_test010(resultlog, args.resultdir)
         SC_Suite001.stopmon(resultlog, args.resultdir)
         resultlog.write('finished')
     except Exception, e:

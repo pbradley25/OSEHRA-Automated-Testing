@@ -259,7 +259,65 @@ def sc_test009(resultlog, result_dir):
         logging.error('*****exception*********' + str(e))
     else:
         resultlog.write('Pass\n')
-                       
+
+def sc_test010(resultlog, result_dir):
+    '''Make appts and save demographics'''
+    testname = sys._getframe().f_code.co_name
+    resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    try:
+        VistA = connect_VistA(testname, result_dir)
+        SC = SCActions(VistA, scheduling='Scheduling')
+        time = SC.schtime()
+        SC.signon()
+        tclinic = SC.getclinic()
+        SC.set_demographics(clinic='CLInicA', patient='323123456', datetime='t+7@7AM', 
+                        dgrph = [['ETHNICITY','N'],
+                                 ['RACE','Black'],
+                                 ['new RACE INFORMATION','Yes'],
+                                 ['RACE',''],
+                                 ['COUNTRY',''],
+                                 ['STREET ADDRESS','123 SMITH STREET'],
+                                 ['STREET ADDRESS',''],
+                                 ['ZIP','20005'],
+                                 ['CITY','WASHINGTON'],
+                                 ['PHONE NUMBER','2021112222'],
+                                 ['PHONE NUMBER',''],
+                                 ['BAD ADDRESS INDICATOR',''],
+                                 ['save the above changes','yes'],
+                                 ['Press ENTER to continue','']],
+                        CLfirst=None)
+        SC.signon()
+        SC.get_demographics(patient='323123456',
+                        vlist = [['COUNTRY: UNITED STATES',''],
+                                 ['123 SMITH STREET','123 SMITH STREET'],
+                                 ['STREET ADDRESS',''],
+                                 ['20005',''],
+                                 ['CITY: WASHINGTON',''],
+                                 ['2021112222',''],
+                                 ['PHONE NUMBER',''],
+                                 ['BAD ADDRESS INDICATOR',''],
+                                 ['save the above changes','no'],
+                                 ['Press ENTER to continue',''],
+                                 ['SEX: MALE',''],
+                                 ['Select ETHNICITY INFORMATION: NOT HISPANIC OR LATINO',''],
+                                 ['ETHNICITY: NOT HISPANIC OR LATINO',''],
+                                 ['Select RACE INFORMATION: BLACK OR AFRICAN AMERICAN',''],
+                                 ['RACE: BLACK OR AFRICAN AMERICAN',''],
+                                 ['Select RACE INFORMATION',''],
+                                 ['MARITAL STATUS','MARRIED'],
+                                 ['RELIGIOUS PREFERENCE',''],
+                                 ['ADDRESS ACTIVE',''],
+                                 ['PHONE NUMBER',''],
+                                 ['PAGER NUMBER',''],
+                                 ['EMAIL ADDRESS','']])
+        SC.signoff()        
+    except TestHelper.TestError, e:
+        resultlog.write('\nEXCEPTION ERROR:' + str(e))
+        logging.error('*****exception*********' + str(e))
+    else:
+        resultlog.write('Pass\n')
+                             
 def startmon(resultlog, result_dir):
     '''Starts Coverage Monitor'''
     testname=sys._getframe().f_code.co_name

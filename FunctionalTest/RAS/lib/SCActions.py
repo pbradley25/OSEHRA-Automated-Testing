@@ -265,6 +265,71 @@ class SCActions (Actions):
             self.VistA.write('Quit')
             self.VistA.wait('')
 
+
+    def set_demographics(self, clinic, patient, datetime, dgrph, CLfirst=None):
+        self.VistA.wait('Clinic name:')
+        self.VistA.write(patient)  # <--- by patient
+        self.VistA.wait('OK')
+        self.VistA.write('Yes')
+        self.VistA.wait('Select Action:')
+        if CLfirst is not None:
+            self.VistA.write('CL')
+            self.VistA.wait('Select Clinic:')
+            self.VistA.write(clinic)
+            self.VistA.wait('Select Action:')
+            self.VistA.write('MA')
+            self.VistA.wait('PATIENT NAME:')
+            self.VistA.write(patient)
+        else:
+            self.VistA.write('MA')
+            self.VistA.wait('Select CLINIC:')
+            self.VistA.write(clinic)
+        self.VistA.wait('TYPE:')
+        self.VistA.write('Regular')
+        for wwset in dgrph:
+            self.VistA.wait(wwset[0])
+            self.VistA.write(wwset[1])
+        self.VistA.wait('REQUEST?')
+        self.VistA.write('yes')
+        self.VistA.wait('DATE/TIME:')
+        self.VistA.write(datetime)
+        rval = self.VistA.multiwait(['LENGTH OF APPOINTMENT','CORRECT'])
+        if rval == 0:
+            self.VistA.write('')
+            self.VistA.wait('CORRECT')
+            self.VistA.write('Yes')
+        elif rval == 1:
+            self.VistA.write('Yes')        
+        self.VistA.wait('STOPS')
+        self.VistA.write('No')
+        self.VistA.wait('OTHER INFO:')
+        self.VistA.write('')
+        self.VistA.wait('continue:')
+        self.VistA.write('')
+        if CLfirst is not None:
+            self.VistA.wait('Select Action:')
+        else:
+            self.VistA.wait('Select CLINIC:')
+            self.VistA.write('')            
+            self.VistA.wait('Select Action:')
+        self.VistA.write('Quit')
+        self.VistA.wait('')
+
+    def get_demographics(self, patient, vlist):
+        self.VistA.wait('Clinic name:')
+        self.VistA.write(patient)  # <--- by patient
+        self.VistA.wait('OK')
+        self.VistA.write('Yes')
+        self.VistA.wait('Select Action:')        
+        self.VistA.write('PD')
+        for wwset in vlist:
+            self.VistA.wait(wwset[0])
+            self.VistA.write(wwset[1])        
+        self.VistA.wait('Select Action:')
+        self.VistA.write('Quit')
+        self.VistA.wait('')       
+        
+
     def verapp_bypat(self, patient, vlist, ALvlist=None, EPvlist=None):
         '''Verify previous Appointment for specified user at specified time'''
         self.VistA.wait('Clinic name:')
@@ -972,3 +1037,4 @@ class SCActions (Actions):
         self.VistA.write('')
         self.VistA.wait('Select Action:')
         self.VistA.write('')
+

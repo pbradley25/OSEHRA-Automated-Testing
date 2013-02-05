@@ -423,7 +423,7 @@ class ADTActions (Actions):
         self.VistA.wait('Right Margin')
         self.VistA.write('80')
         for vitem in vlist:
-            self.VistA.wait(vitem)
+            self.VistA.w)
         self.VistA.wait('Option:')
         self.VistA.write('')
 
