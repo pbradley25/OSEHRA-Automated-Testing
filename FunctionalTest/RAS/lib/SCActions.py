@@ -116,6 +116,8 @@ class SCActions (Actions):
         self.VistA.wait('REQUEST')
         self.VistA.write('Yes')
         self.VistA.wait('DATE/TIME')
+        self.VistA.write('t+5')
+        self.VistA.wait('DATE/TIME')
         self.VistA.write(datetime)
         self.VistA.wait('CORRECT')
         self.VistA.write('Yes')
