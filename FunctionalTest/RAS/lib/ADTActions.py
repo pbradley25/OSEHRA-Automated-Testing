@@ -350,7 +350,7 @@ class ADTActions (Actions):
         self.VistA.write('No')
         self.VistA.wait('ADMISSION:')
         self.VistA.write('VA MEDICAL CENTER')
-        self.VistA.wait('ILL//')
+        self.VistA.wait('CONDITION: SERIOUSLY ILL//')
         self.VistA.write('')
         self.VistA.wait('PATIENT:')
         self.VistA.write('')
@@ -423,7 +423,7 @@ class ADTActions (Actions):
         self.VistA.wait('Right Margin')
         self.VistA.write('80')
         for vitem in vlist:
-            self.VistA.w)
+            self.VistA.wait(vitem)
         self.VistA.wait('Option:')
         self.VistA.write('')
 

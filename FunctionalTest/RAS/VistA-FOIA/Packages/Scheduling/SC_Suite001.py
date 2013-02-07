@@ -110,7 +110,7 @@ def sc_test004(resultlog, result_dir):
         SC.expandentry(clinic=tclinic, vlist1=['TEN', 'SCHEDULED', '30'], 
                        vlist2=['Event', 'Date', 'User', 'TESTMASTER'],
                        vlist3=['NEXT AVAILABLE', 'NO', '0'], vlist4=['1933', 'MALE', 'UNANSWERED'],
-                       vlist5=['Combat Veteran:', 'No check out information'], mult='2')
+                       vlist5=['Combat Veteran:', 'No check out information'], mult='3')
         SC.signon()
         SC.addedit(clinic=tclinic, name='354623902', icd='305.91')
         SC.signoff()
@@ -139,7 +139,7 @@ def sc_test005(resultlog, result_dir):
         SC.discharge(clinic=tclinic, patient='543236666', appnum='3')
         SC.signon()
         SC.checkout(clinic=tclinic, vlist1=['One', 'No Action'], 
-                    vlist2=['305.91', 'RESULTING'], icd='305.91', mult='3')
+                    vlist2=['305.91', 'RESULTING'], icd='305.91', mult='4')
         SC = SCActions(VistA, user='fakedoc1', code='1Doc!@#$')
         SC.signon()
         SC.deletecheckout(clinic=tclinic, appnum='3')
@@ -190,10 +190,10 @@ def sc_test007(resultlog, result_dir):
         now = datetime.datetime.now()
         hour = now.hour + 1
         SC.signon()
-        SC.checkin(clinic=tclinic, vlist=['Five', str(hour), 'CHECKED-IN:'],mult='4')
+        SC.checkin(clinic=tclinic, vlist=['Five', str(hour), 'CHECKED-IN:'],mult='5')
         SC.signon()
         SC.checkout(clinic=tclinic, vlist1=['Five', str(hour), 'Checked In'], 
-                    vlist2=['305.91', 'OTHER DRUG', 'RESULTING'], icd='305.91', mult='4')
+                    vlist2=['305.91', 'OTHER DRUG', 'RESULTING'], icd='305.91', mult='5')
         SC.signon()
         SC.ver_actions(clinic=tclinic, patient='4444', 
                        PRvlist=['THREE,PATIENT C', 'ALEXANDER,ROBERT'],
@@ -223,7 +223,12 @@ def sc_test008(resultlog, result_dir):
         SC.signon()        
         SC.makeapp_bypat(clinic='cLiNiCx', patient='222559876', datetime='t+6@8PM', CLfirst='Yes')
         SC.signon()
-        SC.verapp_bypat(patient='222559876', vlist=['SIXTEEN,PATIENT P', 'Clinicx', 'Future'])
+        SC.verapp_bypat(patient='222559876', vlist=['SIXTEEN,PATIENT P', 'Clinicx', 'Future'], 
+                        CInum=['1','1'], COnum=['1','2'])
+        SC.signon()
+        SC.verapp(clinic='cLiNiCx', 
+                  vlist=['Thirteen,Patient M', 'Future', 'Sixteen,Patient P', 'Future'], 
+                  CInum=['2','7'], COnum=['2','7'])
         SC.signoff()        
     except TestHelper.TestError, e:
         resultlog.write('\nEXCEPTION ERROR:' + str(e))

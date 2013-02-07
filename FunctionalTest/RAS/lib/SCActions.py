@@ -116,6 +116,8 @@ class SCActions (Actions):
         self.VistA.wait('REQUEST')
         self.VistA.write('Yes')
         self.VistA.wait('DATE/TIME')
+        self.VistA.write('t+5') 
+        self.VistA.wait('DATE/TIME') 
         self.VistA.write(datetime)
         self.VistA.wait('CORRECT')
         self.VistA.write('Yes')
@@ -330,12 +332,16 @@ class SCActions (Actions):
         self.VistA.wait('')       
         
 
-    def verapp_bypat(self, patient, vlist, ALvlist=None, EPvlist=None):
+    def verapp_bypat(self, patient, vlist, ALvlist=None, EPvlist=None, COnum=None, CInum=None):
         '''Verify previous Appointment for specified user at specified time'''
         self.VistA.wait('Clinic name:')
         self.VistA.write(patient)  # <--- by patient
         self.VistA.wait('OK')
         self.VistA.write('Yes')
+        self.VistA.wait('Select Action:')
+        self.VistA.write('AL')
+        self.VistA.wait('Select List:')
+        self.VistA.write('TA')
         for vitem in vlist:
             self.VistA.wait(vitem)
         if ALvlist is not None:
@@ -354,10 +360,75 @@ class SCActions (Actions):
                 self.VistA.wait(vitem)
             self.VistA.wait('Select Action:')
             self.VistA.write('^')
+        if COnum is not None:
+            self.VistA.wait('Select Action:')
+            self.VistA.write('CO')
+            if COnum[0] is not '1':
+                self.VistA.wait('Select Appointment(s):')
+                self.VistA.write(COnum[1])
+            self.VistA.wait('It is too soon to check out this appointment')
+            self.VistA.write('')
+        if CInum is not None:
+            self.VistA.wait('Select Action:')
+            self.VistA.write('CI')
+            if CInum[0] is not '1':
+                self.VistA.wait('Select Appointment(s):')
+                self.VistA.write(CInum[1])
+            self.VistA.wait('It is too soon to check in this appointment')
+            self.VistA.write('')
         self.VistA.wait('Select Action:')
         self.VistA.write('Quit')
         self.VistA.wait('')
         
+
+    def verapp(self, clinic, vlist, COnum=None, CInum=None):
+        '''Verify previous Appointments by clinic and with CI/CO check '''
+        self.VistA.wait('Clinic name:')
+        self.VistA.write(clinic)
+        self.VistA.wait('OK')
+        self.VistA.write('Yes')
+        self.VistA.wait('Date:')
+        self.VistA.write('')
+        self.VistA.wait('Date:')
+        self.VistA.write('')
+        self.VistA.wait('Select Action:')
+        self.VistA.write('CD')
+        self.VistA.wait('Select Beginning Date:')
+        self.VistA.write('')
+        self.VistA.wait('Ending Date:')
+        self.VistA.write('t+100')
+        self.VistA.wait('Select Action:')
+        self.VistA.write('AL')
+        self.VistA.wait('Select List:')
+        self.VistA.write('TA')
+        for vitem in vlist:
+            self.VistA.wait(vitem)
+        if COnum is not None:
+            self.VistA.wait('Select Action:')
+            self.VistA.write('CO')
+            if COnum[0] is not '1':
+                self.VistA.wait('Select Appointment(s):')
+                self.VistA.write(COnum[1])
+            rval = self.VistA.multiwait(['It is too soon to check out this appointment',
+                                         'You can not check out this appointment'])    
+            if rval == 0:
+                self.VistA.write('')
+            elif rval == 1:
+                self.VistA.write('')
+            else:
+                self.VistA.wait('SPECIALERROR') # this should cause a timeout
+        if CInum is not None:
+            self.VistA.wait('Select Action:')
+            self.VistA.write('CI')
+            if CInum[0] is not '1':
+                self.VistA.wait('Select Appointment(s):')
+                self.VistA.write(CInum[1])
+            self.VistA.wait('It is too soon to check in this appointment')
+            self.VistA.write('')
+        self.VistA.wait('Select Action:')
+        self.VistA.write('Quit')
+        self.VistA.wait('')            
+            
     def ver_actions(self, clinic, patient, PRvlist, DXvlist, CPvlist ):   
         ''' verify action in menu, patient must be checked out'''
         self.VistA.wait('Clinic name:')
@@ -368,8 +439,15 @@ class SCActions (Actions):
         self.VistA.write('')
         self.VistA.wait('Date:')
         self.VistA.write('')
-        # RT
+        # EC
         self.VistA.wait('Select Action:')
+        self.VistA.write('EC')
+        self.VistA.wait('Select Appointment(s)')
+        self.VistA.write('2')
+        self.VistA.wait('Enter RETURN to continue')
+        self.VistA.write('')
+        self.VistA.wait('Select Action:')
+        # RT
         self.VistA.write('RT')
         for vitem in ['Chart Request','Fill Next Clinic Request', 'Profile of Charts', 'Recharge a Chart']:
             self.VistA.wait(vitem)
@@ -534,6 +612,10 @@ class SCActions (Actions):
         self.VistA.wait('Date:')
         self.VistA.write('')
         self.VistA.wait('Select Action:')
+        self.VistA.write('AL')
+        self.VistA.wait('Select List:')
+        self.VistA.write('TA')
+        self.VistA.wait('Select Action:')
         self.VistA.write('CI')
         if mult is not None:
             self.VistA.wait('Appointment')
@@ -556,6 +638,10 @@ class SCActions (Actions):
         self.VistA.write('')
         self.VistA.wait('Date:')
         self.VistA.write('')
+        self.VistA.wait('Select Action:')
+        self.VistA.write('AL')
+        self.VistA.wait('Select List:')
+        self.VistA.write('TA')
         self.VistA.wait('Select Action:')
         self.VistA.write('CO')
         if mult is not None:
@@ -712,6 +798,10 @@ class SCActions (Actions):
         self.VistA.wait('Date:')
         self.VistA.write('')
         self.VistA.wait(clinic)
+        self.VistA.wait('Select Action:')
+        self.VistA.write('AL')
+        self.VistA.wait('Select List:')
+        self.VistA.write('TA')
         self.VistA.wait('Select Action:')
         self.VistA.write('EP')
         if mult is not None:
