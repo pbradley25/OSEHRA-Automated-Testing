@@ -362,6 +362,10 @@ class SCActions (Actions):
             self.VistA.write('^')
         if COnum is not None:
             self.VistA.wait('Select Action:')
+            self.VistA.write('AL')
+            self.VistA.wait('Select List:')
+            self.VistA.write('FU')
+            self.VistA.wait('Select Action:')
             self.VistA.write('CO')
             if COnum[0] is not '1':
                 self.VistA.wait('Select Appointment(s):')
@@ -369,6 +373,10 @@ class SCActions (Actions):
             self.VistA.wait('It is too soon to check out this appointment')
             self.VistA.write('')
         if CInum is not None:
+            self.VistA.wait('Select Action:')
+            self.VistA.write('AL')
+            self.VistA.wait('Select List:')
+            self.VistA.write('FU')
             self.VistA.wait('Select Action:')
             self.VistA.write('CI')
             if CInum[0] is not '1':
@@ -405,6 +413,10 @@ class SCActions (Actions):
             self.VistA.wait(vitem)
         if COnum is not None:
             self.VistA.wait('Select Action:')
+            self.VistA.write('AL')
+            self.VistA.wait('Select List:')
+            self.VistA.write('FU')
+            self.VistA.wait('Select Action:')
             self.VistA.write('CO')
             if COnum[0] is not '1':
                 self.VistA.wait('Select Appointment(s):')
@@ -416,8 +428,12 @@ class SCActions (Actions):
             elif rval == 1:
                 self.VistA.write('')
             else:
-                self.VistA.wait('SPECIALERROR') # this should cause a timeout
+                self.VistA.wait('SPECIALERROR, rval: ' + str(rval)) # this should cause a timeout
         if CInum is not None:
+            self.VistA.wait('Select Action:')
+            self.VistA.write('AL')
+            self.VistA.wait('Select List:')
+            self.VistA.write('FU')
             self.VistA.wait('Select Action:')
             self.VistA.write('CI')
             if CInum[0] is not '1':

@@ -503,11 +503,14 @@ def stopmon (resultlog, result_dir):
         VistA1.write('^\r^\r^\r')
         VistA1.write('h\r')
 
+def timeStamped(fname, fmt='%Y-%m-%d-%H-%M-%S_{fname}'):
+    return datetime.datetime.now().strftime(fmt).format(fname=fname)
+
 def connect_VistA(testname, result_dir):
     # Connect to VistA
     logging.debug('Connect_VistA')
     from OSEHRAHelper import ConnectToMUMPS,PROMPT
-    VistA = ConnectToMUMPS(logfile=result_dir + '/' + testname + '.txt', instance='', namespace='')
+    VistA = ConnectToMUMPS(logfile=result_dir + '/' + timeStamped(testname + '.txt'), instance='', namespace='')
     if VistA.type=='cache':
         try:
             VistA.ZN('VISTA')

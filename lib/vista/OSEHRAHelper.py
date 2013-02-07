@@ -143,7 +143,7 @@ class ConnectWinCache(ConnectMUMPS):
 
   def multiwait(self, options, tout=15):
     if isinstance(options, list):
-      index = self.connection.expect(options)
+      index = self.connection.expect(options, tout)
       if index == -1:
         logging.debug('ERROR: expected: ' + options)
         raise TestHelper.TestError('ERROR: expected: ' + options)
@@ -219,7 +219,7 @@ class ConnectLinuxCache(ConnectMUMPS):
 
   def multiwait(self, options, tout=15):
     if isinstance(options, list):
-      index = self.connection.expect(options)
+      index = self.connection.expect(options, tout)
       if index == -1:
         logging.debug('ERROR: expected: ' + options)
         raise TestHelper.TestError('ERROR: expected: ' + options)
@@ -297,7 +297,7 @@ class ConnectLinuxGTM(ConnectMUMPS):
 
   def multiwait(self, options, tout=15):
     if isinstance(options, list):
-      index = self.connection.expect(options)
+      index = self.connection.expect(options, tout)
       if index == -1:
         logging.debug('ERROR: expected: ' + options)
         raise TestHelper.TestError('ERROR: expected: ' + options)

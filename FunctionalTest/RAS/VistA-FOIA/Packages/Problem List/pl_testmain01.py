@@ -10,12 +10,18 @@ sys.path = ['./RAS/lib'] + ['./dataFiles'] + ['../lib/vista'] + sys.path
 import PL_Suite001
 import os, errno
 import argparse
+import datetime
 
 LOGGING_LEVELS = {'critical': logging.CRITICAL,
                   'error': logging.ERROR,
                   'warning': logging.WARNING,
                   'info': logging.INFO,
                   'debug': logging.DEBUG}
+
+
+def timeStamped(fname, fmt='%Y-%m-%d-%H-%M-%S_{fname}'):
+    return datetime.datetime.now().strftime(fmt).format(fname=fname)
+
 
 def main():
     usage = "usage: %prog [options] arg"
@@ -39,7 +45,7 @@ def main():
     try:
         logging.debug('RESULTDIR: ' + args.resultdir)
         logging.debug('LOGGING:   ' + args.logging_level)
-        resfile = args.resultdir + '/ProblemList_results.txt'
+        resfile = args.resultdir + '/' + timeStamped('ProblemList_results.txt')
         if not os.path.isabs(args.resultdir):
             logging.error('EXCEPTION: Absolute Path Required for Result Directory')
             raise

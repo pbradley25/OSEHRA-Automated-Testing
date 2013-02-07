@@ -228,7 +228,7 @@ def sc_test008(resultlog, result_dir):
         SC.signon()
         SC.verapp(clinic='cLiNiCx', 
                   vlist=['Thirteen,Patient M', 'Future', 'Sixteen,Patient P', 'Future'], 
-                  CInum=['2','7'], COnum=['2','7'])
+                  CInum=['2','1'], COnum=['2','2'])
         SC.signoff()        
     except TestHelper.TestError, e:
         resultlog.write('\nEXCEPTION ERROR:' + str(e))
@@ -362,10 +362,13 @@ def stopmon (resultlog, result_dir):
         VistA1.write('^\r^\r^\r')
         VistA1.write('h\r')
 
+def timeStamped(fname, fmt='%Y-%m-%d-%H-%M-%S_{fname}'):
+    return datetime.datetime.now().strftime(fmt).format(fname=fname)
+
 def connect_VistA(testname, result_dir):
     # Connect to VistA
     from OSEHRAHelper import ConnectToMUMPS, PROMPT
-    VistA = ConnectToMUMPS(logfile=result_dir + '/' + testname + '.txt', instance='', namespace='')
+    VistA = ConnectToMUMPS(logfile=result_dir + '/' + timeStamped(testname + '.txt'), instance='', namespace='')
     if VistA.type == 'cache':
         try:
             VistA.ZN('VISTA')
