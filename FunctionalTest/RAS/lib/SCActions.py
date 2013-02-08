@@ -33,7 +33,9 @@ class SCActions (Actions):
 
     def schtime(self, plushour=1):
         '''Calculates a time for the next hour'''
-        now = datetime.datetime.now()
+        ttime  = datetime.datetime.now() + datetime.timedelta(hours=1)
+        return ttime.strftime("%H%p")
+        '''
         hour = now.hour + plushour
         if hour == 12:
             am_pm = 'PM'
@@ -46,7 +48,7 @@ class SCActions (Actions):
         else:
             am_pm = 'AM'
         time = 't@' + str(hour) + am_pm
-        return time
+        return time'''
 
     def getclinic(self):
         '''Determines which clinic to use based on the time of day'''
