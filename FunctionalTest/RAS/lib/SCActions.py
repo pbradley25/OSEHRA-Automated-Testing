@@ -33,33 +33,19 @@ class SCActions (Actions):
 
     def schtime(self, plushour=1):
         '''Calculates a time for the next hour'''
-        ttime  = datetime.datetime.now() + datetime.timedelta(hours=1)
-        return ttime.strftime("%H%p")
-        '''
-        hour = now.hour + plushour
-        if hour == 12:
-            am_pm = 'PM'
-        elif hour == 24:
-            hour=0
-            am_pm = 'AM'
-        elif hour > 12 and (hour is not 24):
-            am_pm = 'PM'
-            hour = hour - 12
-        else:
-            am_pm = 'AM'
-        time = 't@' + str(hour) + am_pm
-        return time'''
+        ttime = datetime.datetime.now() + datetime.timedelta(hours=1)
+        return ttime.strftime("%I%p").lstrip('0')
 
     def getclinic(self):
         '''Determines which clinic to use based on the time of day'''
         now = datetime.datetime.now()
         hour = now.hour
-        if (hour>=23 and hour<=24) or (hour>=0 and hour<=6):
-            clinic='Clinic1'
-        elif hour>=7 and hour<=14:
-            clinic='Clinic2'
-        elif hour>=15 and hour<=22:
-            clinic='CLINICX'
+        if (hour >= 23 and hour <= 24) or (hour >= 0 and hour <= 6):
+            clinic = 'Clinic1'
+        elif hour >= 7 and hour <= 14:
+            clinic = 'Clinic2'
+        elif hour >= 15 and hour <= 22:
+            clinic = 'CLINICX'
         return clinic
 
     def dateformat(self, dayadd=0):
@@ -118,8 +104,8 @@ class SCActions (Actions):
         self.VistA.wait('REQUEST')
         self.VistA.write('Yes')
         self.VistA.wait('DATE/TIME')
-        self.VistA.write('t+5') 
-        self.VistA.wait('DATE/TIME') 
+        self.VistA.write('t+5')
+        self.VistA.wait('DATE/TIME')
         self.VistA.write(datetime)
         self.VistA.wait('CORRECT')
         self.VistA.write('Yes')
@@ -133,7 +119,7 @@ class SCActions (Actions):
         self.VistA.write('Quit')
         self.VistA.wait('')
 
-    def makeapp_bypat(self, clinic,  patient,datetime, fresh=None, CLfirst=None):
+    def makeapp_bypat(self, clinic, patient, datetime, fresh=None, CLfirst=None):
         '''Makes Appointment for specified user at specified time'''
         self.VistA.wait('Clinic name:')
         self.VistA.write(patient)  # <--- by patient
@@ -192,12 +178,12 @@ class SCActions (Actions):
             self.VistA.wait('Select Action:')
         else:
             self.VistA.wait('Select CLINIC:')
-            self.VistA.write('')            
+            self.VistA.write('')
             self.VistA.wait('Select Action:')
         self.VistA.write('Quit')
         self.VistA.wait('')
 
-    def makeapp_var(self, clinic,  patient, datetime, fresh=None, nextaval=None):
+    def makeapp_var(self, clinic, patient, datetime, fresh=None, nextaval=None):
         '''Makes Appointment for clinic that supports variable length appts (CLInicA)'''
         self.VistA.wait('Clinic name:')
         self.VistA.write(patient)  # <--- by patient
@@ -297,13 +283,13 @@ class SCActions (Actions):
         self.VistA.write('yes')
         self.VistA.wait('DATE/TIME:')
         self.VistA.write(datetime)
-        rval = self.VistA.multiwait(['LENGTH OF APPOINTMENT','CORRECT'])
+        rval = self.VistA.multiwait(['LENGTH OF APPOINTMENT', 'CORRECT'])
         if rval == 0:
             self.VistA.write('')
             self.VistA.wait('CORRECT')
             self.VistA.write('Yes')
         elif rval == 1:
-            self.VistA.write('Yes')        
+            self.VistA.write('Yes')
         self.VistA.wait('STOPS')
         self.VistA.write('No')
         self.VistA.wait('OTHER INFO:')
@@ -314,7 +300,7 @@ class SCActions (Actions):
             self.VistA.wait('Select Action:')
         else:
             self.VistA.wait('Select CLINIC:')
-            self.VistA.write('')            
+            self.VistA.write('')
             self.VistA.wait('Select Action:')
         self.VistA.write('Quit')
         self.VistA.wait('')
@@ -324,15 +310,15 @@ class SCActions (Actions):
         self.VistA.write(patient)  # <--- by patient
         self.VistA.wait('OK')
         self.VistA.write('Yes')
-        self.VistA.wait('Select Action:')        
+        self.VistA.wait('Select Action:')
         self.VistA.write('PD')
         for wwset in vlist:
             self.VistA.wait(wwset[0])
-            self.VistA.write(wwset[1])        
+            self.VistA.write(wwset[1])
         self.VistA.wait('Select Action:')
         self.VistA.write('Quit')
-        self.VistA.wait('')       
-        
+        self.VistA.wait('')
+
 
     def verapp_bypat(self, patient, vlist, ALvlist=None, EPvlist=None, COnum=None, CInum=None):
         '''Verify previous Appointment for specified user at specified time'''
@@ -389,7 +375,7 @@ class SCActions (Actions):
         self.VistA.wait('Select Action:')
         self.VistA.write('Quit')
         self.VistA.wait('')
-        
+
 
     def verapp(self, clinic, vlist, COnum=None, CInum=None):
         '''Verify previous Appointments by clinic and with CI/CO check '''
@@ -424,13 +410,13 @@ class SCActions (Actions):
                 self.VistA.wait('Select Appointment(s):')
                 self.VistA.write(COnum[1])
             rval = self.VistA.multiwait(['It is too soon to check out this appointment',
-                                         'You can not check out this appointment'])    
+                                         'You can not check out this appointment'])
             if rval == 0:
                 self.VistA.write('')
             elif rval == 1:
                 self.VistA.write('')
             else:
-                self.VistA.wait('SPECIALERROR, rval: ' + str(rval)) # this should cause a timeout
+                self.VistA.wait('SPECIALERROR, rval: ' + str(rval))  # this should cause a timeout
         if CInum is not None:
             self.VistA.wait('Select Action:')
             self.VistA.write('AL')
@@ -445,9 +431,9 @@ class SCActions (Actions):
             self.VistA.write('')
         self.VistA.wait('Select Action:')
         self.VistA.write('Quit')
-        self.VistA.wait('')            
-            
-    def ver_actions(self, clinic, patient, PRvlist, DXvlist, CPvlist ):   
+        self.VistA.wait('')
+
+    def ver_actions(self, clinic, patient, PRvlist, DXvlist, CPvlist):
         ''' verify action in menu, patient must be checked out'''
         self.VistA.wait('Clinic name:')
         self.VistA.write(clinic)
@@ -467,7 +453,7 @@ class SCActions (Actions):
         self.VistA.wait('Select Action:')
         # RT
         self.VistA.write('RT')
-        for vitem in ['Chart Request','Fill Next Clinic Request', 'Profile of Charts', 'Recharge a Chart']:
+        for vitem in ['Chart Request', 'Fill Next Clinic Request', 'Profile of Charts', 'Recharge a Chart']:
             self.VistA.wait(vitem)
         self.VistA.wait('Select Record Tracking Option:')
         self.VistA.write('^')
@@ -496,29 +482,29 @@ class SCActions (Actions):
         self.VistA.wait('Enter Diagnosis :')
         self.VistA.write('')
         self.VistA.wait('Problem List')
-        self.VistA.write('no')        
+        self.VistA.write('no')
         # CP
         self.VistA.wait('Select Action:')
-        self.VistA.write('CP')        
+        self.VistA.write('CP')
         self.VistA.wait('Select Appointment(s):')
         self.VistA.write('1')
         for vitem in CPvlist:
             self.VistA.wait(vitem)
         self.VistA.wait('Enter PROCEDURE')
-        self.VistA.write('')            
-        # PC
-        self.VistA.wait('Select Action:')    
-        self.VistA.write('PC')
-        self.VistA.wait('is locked')    
         self.VistA.write('')
-                    
+        # PC
+        self.VistA.wait('Select Action:')
+        self.VistA.write('PC')
+        self.VistA.wait('is locked')
+        self.VistA.write('')
+
     def use_sbar(self, clinic, patient, fresh=None):
         '''Use the space bar to get previous clinic or patient '''
         self.VistA.wait('Clinic name:')
         self.VistA.write(' ')  # spacebar to test recall
         self.VistA.wait(patient)  # check to make sure expected patient SSN is recalled
         self.VistA.write('No')
-        self.VistA.wait(clinic) # check to make sure expected clinic is recalled
+        self.VistA.wait(clinic)  # check to make sure expected clinic is recalled
         self.VistA.write('Yes')
         self.VistA.wait('Date:')
         self.VistA.write('')
@@ -527,8 +513,8 @@ class SCActions (Actions):
         self.VistA.wait('Select Action:')
         self.VistA.write('MA')
         self.VistA.wait('Select PATIENT NAME:')
-        self.VistA.write(' ') # spacebar to test recall
-        self.VistA.wait(patient) # check to make sure expected patient SSN is recalled
+        self.VistA.write(' ')  # spacebar to test recall
+        self.VistA.wait(patient)  # check to make sure expected patient SSN is recalled
         self.VistA.wait('TYPE:')
         self.VistA.write('Regular')
         if fresh is not None:
@@ -574,7 +560,7 @@ class SCActions (Actions):
         self.VistA.wait('Select Action:')
         self.VistA.write('CA')
         if mult is not None:
-            #If there are more than 1 appointments
+            # If there are more than 1 appointments
             self.VistA.wait('Select Appointment')
             self.VistA.write(mult)
         self.VistA.wait('linic:')
@@ -1103,7 +1089,7 @@ class SCActions (Actions):
         self.VistA.wait('Patient')
         self.VistA.write('Yes')
         self.VistA.wait('response:')
-        #TODO: Explore all three options (PCMM TEAM ASSIGNMENT, SERVICE/SPECIALTY, SPECIFIC CLINIC
+        # TODO: Explore all three options (PCMM TEAM ASSIGNMENT, SERVICE/SPECIALTY, SPECIFIC CLINIC
         self.VistA.write('1')
         self.VistA.wait('Institution:')
         self.VistA.write('1327')
@@ -1135,7 +1121,7 @@ class SCActions (Actions):
         self.VistA.write(patient)
         self.VistA.wait('Quit')
         self.VistA.write('Yes')
-        #TODO: For deeper coverage, execute all 6 disposition reasons
+        # TODO: For deeper coverage, execute all 6 disposition reasons
         self.VistA.wait('response:')
         self.VistA.write('D')
         self.VistA.wait('removed from Wait List')

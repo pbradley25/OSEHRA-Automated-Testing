@@ -42,16 +42,10 @@ set(BUILD_TESTING "ON" CACHE INTERNAL "Always build testing")
 option(USE_XINDEX_WARNINGS_AS_FAILURES "Use warnings as a failure condition for XINDEX tests?" OFF)
 option(BUILD_REPORTS "Build Reports." OFF)
 option(CLEAN_DATABASE "Overwrite the database file during build phase of testing? To remove this option, delete the CMake Cache" OFF)
-#if(${CMAKE_VERSION} VERSION_GREATER 2.8.8)
-  option(USE_COVERAGE "Create a coverage map of VistA based off the testing" OFF)
-  if(USE_COVERAGE)
-    message(WARNING "Selecting the coverage option may cause the tests to run slower as there are more tasks to perform during a given test.
-    This will also create new text files during the run.")
-  endif()
-#endif()
+
 # how much time to allocate in seconds for the process of importing globals
 set(GLOBALS_IMPORT_TIMEOUT 3600 CACHE STRING "Timeout in seconds for importing globals")
-
+set(TEST_RESULTS_DIR "${VISTA_BINARY_DIR}/Testing/Temporary/" CACHE PATH "Path to results directory Defaults to /Testing/Temporary/ within the Binary Dir.")
 #-----------------------------------------------------------------------------
 # Find InterSystems Cache
 if(WIN32)
@@ -175,17 +169,6 @@ if(ccontrol)
     endif()
   endif()
 
-  if(EXISTS ${VISTA_BINARY_DIR}/cache_coverage.cmcov)
-    file(REMOVE ${VISTA_BINARY_DIR}/cache_coverage.cmcov)
-  endif()
-  if(USE_COVERAGE)
-    message(WARNING "
-Before running, check that gmHeap ( Configuration -> Advanced Memory Settings) is set to a proper value.
-The 'Memory Check' option from the main menu of ^%SYS.MONLBL will tell you if enough memory has allocated.  The value used during testing was 85000")
-    file(WRITE ${VISTA_BINARY_DIR}/cache_coverage.cmcov "packages:${OSEHRA_PATH}/Packages\r\ncoverage_dir:${VISTA_BINARY_DIR}/Testing/Temporary/Coverage")
-    file(MAKE_DIRECTORY "${VISTA_BINARY_DIR}/Testing/Temporary/Coverage")
-  endif()
-
 endif()
 
 #if gtmprofile.sh is found, the linux programs and GT.M testing evironment is used.
@@ -206,15 +189,6 @@ if(GTMPROFILE)
   #Configures a .sh file to completely set up the environment variables beyond what sourcing the gtmprofile will
   configure_file(${VISTA_SOURCE_DIR}/GTMEnvironment.sh.in ${VISTA_BINARY_DIR}/GTMEnvironment.sh @ONLY)
 
-  if(EXISTS ${VISTA_BINARY_DIR}/gtm_coverage.mcov)
-    file(REMOVE ${VISTA_BINARY_DIR}/gtm_coverage.mcov)
-    endif()
-
-    #Option to include tracing for coverage purposes
-  if (USE_COVERAGE)
-    file(WRITE ${VISTA_BINARY_DIR}/gtm_coverage.mcov "packages:${OSEHRA_PATH}/Packages\r\ncoverage_dir:${VISTA_BINARY_DIR}/Testing/Temporary/Coverage")
-    file(MAKE_DIRECTORY "${VISTA_BINARY_DIR}/Testing/Temporary/Coverage")
-  endif()
 
   # Creates the reports folder with style guides for submitting to the OSEHR journal if the option is selected.
   if( BUILD_REPORTS )
@@ -262,6 +236,7 @@ endforeach()
 
 IF(CLEAN_DATABASE)
   set(VISTA_SITE_NAME "DEMO.OSEHRA.ORG" CACHE STRING "Name to set for the site address when initializing VistA instance.  Default is 'DEMO.OSEHRA.ORG'")
+  set(SYSTEM_TEMP_DIR "@" CACHE PATH "Absolute path to the system temp directory.  The default of '@' will cause the system to use the working directory of the process as the temp directory.  This path has a limit of 50 characters.  Avoid Windows paths with a '~' ")
   set(RoutineImportFile "${VISTA_BINARY_DIR}/routines.ro")
   configure_file(${VISTA_SOURCE_DIR}/ImportRG.cmake.in ${VISTA_BINARY_DIR}/ImportRG.cmake @ONLY)
   set(logfile "${VISTA_BINARY_DIR}/Testing/Log/RoutineImport.log")
@@ -300,6 +275,34 @@ if(VISTA_SETUP_SITE)
 endif()
 if((SIK_SYSTEM_TESTING OR RAS_SYSTEM_TESTING) AND VISTA_SETUP_SITE)
   add_subdirectory(FunctionalTest)
+endif()
+
+#---------------------------------------------------------------------------------#
+##### SECTION TO GENERATE FILES FOR COVERAGE (Using CMake V 2.8.9 and Higher) #####
+#---------------------------------------------------------------------------------#
+
+if(${CMAKE_VERSION} VERSION_GREATER 2.8.8)
+
+  if(EXISTS ${VISTA_BINARY_DIR}/gtm_coverage.mcov)
+    file(REMOVE ${VISTA_BINARY_DIR}/gtm_coverage.mcov)
+  elseif(EXISTS ${VISTA_BINARY_DIR}/cache_coverage.cmcov)
+    file(REMOVE ${VISTA_BINARY_DIR}/cache_coverage.cmcov)
+  endif()
+
+  option(USE_COVERAGE "Create a coverage map of VistA based off the testing" OFF)
+  if(USE_COVERAGE)
+    message(WARNING "Selecting the coverage option may cause the tests to run slower as there are more tasks to perform during a given test.
+    This will also create new text files during the run.")
+    file(MAKE_DIRECTORY "${TEST_RESULTS_DIR}/Coverage")
+    if (ccontrol)
+      message(WARNING "
+      Before running, check that gmHeap ( Configuration -> Advanced Memory Settings) is set to a proper value.
+      The 'Memory Check' option from the main menu of ^%SYS.MONLBL will tell you if enough memory has allocated.  The value used during testing was 85000")
+      file(WRITE ${VISTA_BINARY_DIR}/cache_coverage.cmcov "packages:${OSEHRA_PATH}/Packages\r\ncoverage_dir:${TEST_RESULTS_DIR}/Coverage")
+    elseif(GTMPROFILE)
+      file(WRITE ${VISTA_BINARY_DIR}/gtm_coverage.mcov "packages:${OSEHRA_PATH}/Packages\r\ncoverage_dir:${TEST_RESULTS_DIR}/Coverage")
+    endif()
+  endif()
 endif()
 
 #-----------------------------------------------------------------------------#
@@ -355,14 +358,13 @@ if(AUTOMATED_UNIT_TESTING)
   endif()
   foreach(package ${PACKAGES})
     get_filename_component(package_name ${package} NAME)
-
     if(IS_DIRECTORY ${package})
-      file(GLOB routines "${package}/*.m")
+      file(STRINGS "${package}/TestList" routines )
       set(send_commands "")
       foreach(routine ${routines})
         get_filename_component(routine_name ${routine} NAME_WE)
-          set(send_commands "${send_commands}VistA.write('D ^${routine_name}')\n")
-          set(send_commands "${send_commands}VistA.wait(PROMPT)\n")
+        set(send_commands "${send_commands}VistA.write('D ^${routine_name}')\n")
+        set(send_commands "${send_commands}VistA.wait(PROMPT)\n")
       endforeach()
       string(REPLACE  " " "_" package_file_name "${package_name}")
       #Configures the python script with the name of the routine
