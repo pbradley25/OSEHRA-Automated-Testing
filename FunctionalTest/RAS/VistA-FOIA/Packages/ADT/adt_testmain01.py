@@ -53,6 +53,9 @@ def main():
         ADT_Suite001.setup_ward(resultlog, args.resultdir)
         ADT_Suite001.adt_test001(resultlog, args.resultdir)
         ADT_Suite001.adt_test002(resultlog, args.resultdir)
+        ADT_Suite001.adt_test003(resultlog, args.resultdir)
+        ADT_Suite001.adt_test004(resultlog, args.resultdir)
+        ADT_Suite001.adt_logflow(resultlog, args.resultdir)
         ADT_Suite001.stopmon(resultlog, args.resultdir)
     except Exception, e:
         resultlog.write('\nADT TEST EXCEPTION ERROR:' + str(e))

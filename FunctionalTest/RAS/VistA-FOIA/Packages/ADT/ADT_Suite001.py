@@ -19,13 +19,13 @@ def adt_test001(resultlog, result_dir):
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir)
         adt = ADTActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         adt.signon()
         adt.admit_a_patient(ssn='888776666', bed='1-A')
         adt.roster_list(vlist=['TWO,PATIENT B', '1-A'])
         adt.admit_a_patient(ssn='656451234', bed='1-B')
-        adt.roster_list(vlist=['SIX,PATIENT F', '1-B'])        
+        adt.roster_list(vlist=['SIX,PATIENT F', '1-B'])
         adt.admit_a_patient(ssn='656771234', bed='2-A')
         adt.roster_list(vlist=['SEVEN,PATIENT G', '2-A'])
         adt.admit_a_patient(ssn='444678924', bed='2-B')
@@ -48,7 +48,7 @@ def adt_test002(resultlog, result_dir):
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir)
         adt = ADTActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         adt.signon()
         adt.admit_a_patient(ssn='888776666', bed='1-A')
@@ -67,6 +67,67 @@ def adt_test002(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
+def adt_test003(resultlog, result_dir):
+    ''' Wait list testing '''
+    testname = sys._getframe().f_code.co_name
+    resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    try:
+        VistA1 = connect_VistA(testname, result_dir)
+        adt = ADTActions(VistA1)
+        adt.signon()
+        adt.waiting_list_entry(ssn='323554567')
+        adt.signon()
+        adt.waiting_list_entry(ssn='123455678')
+        adt.signon()
+        adt.waiting_list_output(vlist=['TWENTYFOUR,PATIENT', 'TWENTYTHREE,PATIENT'])
+        adt.signon()
+        adt.delete_waiting_list_entry(ssn='323554567')
+        adt.signon()
+        adt.delete_waiting_list_entry(ssn='123455678')
+        adt.signoff()
+    except TestHelper.TestError, e:
+        resultlog.write(e.value)
+        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+    else:
+        resultlog.write('Pass\n')
+
+def adt_test004(resultlog, result_dir):
+    ''' Lodger checkin / checkout testing '''
+    testname = sys._getframe().f_code.co_name
+    resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    try:
+        VistA1 = connect_VistA(testname, result_dir)
+        adt = ADTActions(VistA1, user='fakedoc1', code='1Doc!@#$')
+        adt.signon()
+        adt.checkin_lodger(ssn='323554567', bed='1-A')
+        adt.checkin_lodger(ssn='123455678', bed='1-B')
+        time.sleep(10)
+        adt.lodger_checkout(ssn='323554567')
+        adt.lodger_checkout(ssn='123455678')
+        adt.signoff()
+    except TestHelper.TestError, e:
+        resultlog.write(e.value)
+        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+    else:
+        resultlog.write('Pass\n')
+
+def adt_logflow(resultlog, result_dir):
+    ''' Use XTFCR to log flow to file '''
+    testname = sys._getframe().f_code.co_name
+    resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    try:
+        VistA1 = connect_VistA(testname, result_dir)
+        adt = ADTActions(VistA1)
+        adt.logflow(['DGPMV', 'DGSWITCH'])
+    except TestHelper.TestError, e:
+        resultlog.write(e.value)
+        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+    else:
+        resultlog.write('Pass\n')
+
 
 def setup_ward(resultlog, result_dir):
     ''' Set up ward for ADT testing '''
@@ -74,7 +135,7 @@ def setup_ward(resultlog, result_dir):
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir)
         adt = ADTActions(VistA1)
         adt.signon()
         adt.adt_setup()
@@ -88,18 +149,18 @@ def setup_ward(resultlog, result_dir):
 
 def startmon(resultlog, result_dir):
     '''Starts Coverage Monitor'''
-    testname=sys._getframe().f_code.co_name
+    testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     print "startmon1"
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir)
         print "startmon2"
         VistA1.startCoverage(routines=['DGPMV', 'DGSWITCH', 'DGSCHAD', 'DGPMEX', 'DGWAIT', 'DGSILL'])
     except TestHelper.TestError, e:
         resultlog.write(e.value)
-        logging.error(testname+ ' EXCEPTION ERROR: Unexpected test result')
+        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
     finally:
         '''
         Close Vista
@@ -115,7 +176,7 @@ def stopmon (resultlog, result_dir):
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
         # Connect to VistA
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir)
         VistA1.stopCoverage(path=(result_dir + '/' + 'ADT_coverage.txt'))
     except TestHelper.TestError, e:
         resultlog.write(e.value)
@@ -133,15 +194,13 @@ def timeStamped(fname, fmt='%Y-%m-%d-%H-%M-%S_{fname}'):
 
 def connect_VistA(testname, result_dir):
     # Connect to VistA
-    print "connect_VistA"
     logging.debug('Connect_VistA')
-    from OSEHRAHelper import ConnectToMUMPS,PROMPT
+    from OSEHRAHelper import ConnectToMUMPS, PROMPT
     VistA = ConnectToMUMPS(logfile=result_dir + '/' + timeStamped(testname + '.txt'), instance='', namespace='')
-    if VistA.type=='cache':
+    if VistA.type == 'cache':
         try:
-            print "connect_VistA1"
             VistA.ZN('VISTA')
-        except IndexError,no_namechange:
+        except IndexError, no_namechange:
             pass
     VistA.wait(PROMPT)
     return VistA

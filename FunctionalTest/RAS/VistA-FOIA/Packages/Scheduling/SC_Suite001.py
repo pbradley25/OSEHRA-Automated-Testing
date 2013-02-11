@@ -330,7 +330,7 @@ def startmon(resultlog, result_dir):
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir)
         VistA1.startCoverage(routines=['SC*', 'SD*'])
     except TestHelper.TestError, e:
         resultlog.write(e.value)

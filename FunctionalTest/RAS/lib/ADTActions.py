@@ -6,7 +6,7 @@ Created on November 2012
 @author: pbradley
 '''
 import time
-#import TestHelper
+# import TestHelper
 from Actions import Actions
 import logging
 
@@ -162,7 +162,7 @@ class ADTActions (Actions):
         self.VistA.write('')
         self.VistA.wait('VISTA>')
         self.VistA.write('D ^XUP')
-        # ADD ENTRY TO FILE 395 
+        # ADD ENTRY TO FILE 395
         self.VistA.wait('NAME:')
         self.VistA.write('ZZFILEMAN')
         self.VistA.wait('FileMan')
@@ -327,7 +327,7 @@ class ADTActions (Actions):
         self.VistA.write('NO')
         self.VistA.wait('ADMITTING REGULATION:')
         self.VistA.write('OBSERVATION')
-        rval = self.VistA.multiwait(['CONDITION','ADMISSION'])
+        rval = self.VistA.multiwait(['CONDITION', 'ADMISSION'])
         if rval == 0:
             self.VistA.write('NO')
             self.VistA.wait('ADMISSION:')
@@ -356,7 +356,7 @@ class ADTActions (Actions):
         self.VistA.write('')
         self.VistA.wait('Select Bed Control Menu Option:')
         self.VistA.write('')
-        
+
     def roster_list(self, vlist):
         self.VistA.wait('Option:')
         self.VistA.write('ADT Outputs Menu')
@@ -372,8 +372,8 @@ class ADTActions (Actions):
         self.VistA.write('LAST')
         self.VistA.wait('PRINT WITH WARD BREAKOUT')
         self.VistA.write('NO')
-        #self.VistA.wait('PRINT WITH DRG BREAKOUT')
-        #self.VistA.write('YES')
+        # self.VistA.wait('PRINT WITH DRG BREAKOUT')
+        # self.VistA.write('YES')
         self.VistA.wait('DEVICE')
         self.VistA.write('HOME')
         self.VistA.wait('Right Margin')
@@ -406,7 +406,7 @@ class ADTActions (Actions):
         self.VistA.write('')
         self.VistA.wait('Option:')
         self.VistA.write('')
-                
+
     def scheduled_admit_list(self, vlist):
         self.VistA.wait('Option:')
         self.VistA.write('adt outputs menu')
@@ -427,8 +427,8 @@ class ADTActions (Actions):
         self.VistA.wait('Option:')
         self.VistA.write('')
 
-                
-    def transfer_patient(self,ssn):
+
+    def transfer_patient(self, ssn):
         self.VistA.wait('Option:')
         self.VistA.write('bed control menu')
         self.VistA.wait('Option:')
@@ -453,7 +453,7 @@ class ADTActions (Actions):
         self.VistA.write('')
         self.VistA.wait('Option:')
         self.VistA.write('')
-                
+
     def schedule_admission(self, ssn):
         self.VistA.wait('Option:')
         self.VistA.write('bed control menu')
@@ -487,7 +487,7 @@ class ADTActions (Actions):
         self.VistA.write('')
         self.VistA.wait('Option:')
         self.VistA.write('')
-        
+
     def cancel_scheduled_admission(self, ssn):
         self.VistA.wait('Option:')
         self.VistA.write('bed control menu')
@@ -508,3 +508,244 @@ class ADTActions (Actions):
         self.VistA.wait('Option:')
         self.VistA.write('')
 
+    def checkin_lodger(self, ssn, bed):
+        self.VistA.wait('Option:')
+        self.VistA.write('bed control menu')
+        self.VistA.wait('Option:')
+        self.VistA.write('Check-in Lodger')
+        self.VistA.wait('Check-in PATIENT')
+        self.VistA.write(ssn)
+        self.VistA.wait('CONTINUE//')
+        self.VistA.write('')
+        self.VistA.wait('Select LODGER CHECK-IN DATE')
+        self.VistA.write('now')
+        self.VistA.wait('CHECK-IN DATE')
+        self.VistA.write('yes')
+        self.VistA.wait('CHECK-IN TYPE')
+        self.VistA.write('43')
+        self.VistA.wait('WARD LOCATION')
+        self.VistA.write('TESTWARD1')
+        self.VistA.wait('ROOM-BED')
+        self.VistA.write(bed)
+        self.VistA.wait('REASON FOR LODGING')
+        self.VistA.write('early')
+        self.VistA.wait('LODGING COMMENTS')
+        self.VistA.write('testing 1...2...3')
+        self.VistA.wait('Check-in PATIENT')
+        self.VistA.write(ssn)
+        self.VistA.wait(bed)  # verify bed
+        self.VistA.wait('CONTINUE//')
+        self.VistA.write('Quit')
+        self.VistA.wait('Check-in PATIENT')
+        self.VistA.write('')
+        self.VistA.wait('Select Bed Control Menu Option')
+        self.VistA.write('Admit a Patient')
+        self.VistA.wait('PATIENT')
+        self.VistA.write(ssn)
+        self.VistA.wait('Patient is a lodger...you can not add an admission')  # verify lodger can't be admitted
+        self.VistA.wait('Press RETURN to continue')
+        self.VistA.write('')
+        self.VistA.wait('Select Bed Control Menu Option')
+        self.VistA.write('')
+
+    def lodger_checkout(self, ssn):
+        self.VistA.wait('Option:')
+        self.VistA.write('bed control menu')
+        self.VistA.wait('Option:')
+        self.VistA.write('Lodger Check-out')
+        self.VistA.wait('Check-out PATIENT')
+        self.VistA.write(ssn)
+        self.VistA.wait('CONTINUE//')
+        self.VistA.write('')
+        self.VistA.wait('CHECK-OUT LODGER DATE')
+        self.VistA.write('now+10')
+        self.VistA.wait('DISPOSITION')
+        self.VistA.write('DISMISSED')
+        self.VistA.wait('Check-out PATIENT')
+        self.VistA.write('')
+        self.VistA.wait('Select Bed Control Menu Option')
+        self.VistA.write('')
+
+    def waiting_list_entry(self, ssn):
+        ''' waiting list entry, via XUP  '''
+        self.VistA.wait('Select OPTION NAME')
+        self.VistA.write('ADT MANAGER MENU')
+        self.VistA.wait('continue')
+        self.VistA.write('')
+        self.VistA.wait('Option:')
+        self.VistA.write('bed control menu')
+        self.VistA.wait('Option:')
+        self.VistA.write('Waiting List Entry')
+        self.VistA.wait('Select WAIT LIST DIVISION')
+        self.VistA.write('VISTA MEDICAL CENTER')
+        rval = self.VistA.multiwait(['as a new WAIT LIST', '...OK'])
+        if rval == 0:
+            self.VistA.write('Yes')
+        elif rval == 1:
+            self.VistA.write('yes')
+        else:
+            self.VistA.wait('SPECIALERROR')
+        self.VistA.wait('Select PATIENT')
+        self.VistA.write(ssn)
+        self.VistA.wait('TIME OF APPLICATION')
+        self.VistA.write('now')
+        self.VistA.wait('TIME OF APPLICATION')
+        self.VistA.write('now')
+        self.VistA.wait('NHCU APPLICATION')
+        self.VistA.write('hospital')
+        self.VistA.wait('CATEGORY OF NEED')
+        self.VistA.write('GENERAL')
+        self.VistA.wait('BEDSECTION APPLYING TO')
+        self.VistA.write('MEDICINE')
+        self.VistA.wait('TREATING SPECIALTY')
+        self.VistA.write('MEDICAL OBSERVATION')
+        self.VistA.wait('IN ANOTHER HOSPITAL')
+        self.VistA.write('NO')
+        self.VistA.wait('ACTION')
+        self.VistA.write('PENDING')
+        self.VistA.wait('PRIORITY GROUPING')
+        self.VistA.write('11')
+        self.VistA.wait('COMMENTS')
+        self.VistA.write('testing 1.2.3\r')
+        self.VistA.wait('EDIT Option')
+        self.VistA.write('')
+        self.VistA.wait('Select PATIENT')
+        self.VistA.write('')
+        self.VistA.wait('Select WAIT LIST DIVISION')
+        self.VistA.write('')
+        self.VistA.wait('Select Bed Control Menu Option')
+        self.VistA.write('')
+        self.VistA.wait('Option')
+        self.VistA.write('\r')
+
+
+    def waiting_list_output(self, vlist):
+        ''' show wait list, via XUP '''
+        self.VistA.wait('Select OPTION NAME')
+        self.VistA.write('ADT MANAGER MENU')
+        self.VistA.wait('continue')
+        self.VistA.write('')
+        self.VistA.wait('Option:')
+        self.VistA.write('adt outputs menu')
+        self.VistA.wait('Select ADT Outputs Menu Option')
+        self.VistA.write('Waiting List Output')
+        self.VistA.wait('DEVICE')
+        self.VistA.write('')
+        self.VistA.wait('Right Margin')
+        self.VistA.write('')
+        for vitem in vlist:
+            self.VistA.wait(vitem)
+        self.VistA.wait('Select ADT Outputs Menu Option')
+        self.VistA.write('')
+        self.VistA.wait('Option')
+        self.VistA.write('\r')
+
+
+    def delete_waiting_list_entry(self, ssn):
+        ''' delete wait list entry, via XUP  '''
+        self.VistA.wait('Select OPTION NAME')
+        self.VistA.write('ADT MANAGER MENU')
+        self.VistA.wait('continue')
+        self.VistA.write('')
+        self.VistA.wait('Option:')
+        self.VistA.write('bed control menu')
+        self.VistA.wait('Option:')
+        self.VistA.write('Delete Waiting List Entry')
+        self.VistA.wait('Delete WAITING LIST entry from which DIVISION')
+        self.VistA.write('VISTA MEDICAL CENTER')
+        self.VistA.wait('Delete WAITING LIST entry for which patient')
+        self.VistA.write(ssn)
+        self.VistA.wait('OK to delete')
+        self.VistA.write('yes')
+        self.VistA.wait('Select Bed Control Menu Option')
+        self.VistA.write('')
+        self.VistA.wait('Option')
+        self.VistA.write('\r')
+
+
+    def adt_menu_smoke(self, patient, vlist, vlist2):
+        self.VistA.wait('Option:')
+        self.VistA.write('adt outputs menu')
+        self.VistA.wait('Select ADT Outputs Menu Option')
+        # Veteran ID Card
+        self.VistA.write('veteran id card menu')
+        self.VistA.wait('Select Veteran ID Card Menu Option')
+        self.VistA.write('single patient download request')
+        self.VistA.wait('Select PATIENT NAME')
+        self.VistA.write(patient)
+        self.VistA.wait('Do you still wish to download data')
+        self.VistA.write('yes')
+        for vitem in vlist:
+            self.VistA.wait(vitem)
+        #
+        self.VistA.wait('Select PAITENT NAME')
+        self.VistA.write('')
+        self.VistA.wait('Select Veteran ID Card Menu Option')
+        self.VistA.write('Problem List Mgt Menu')
+        self.VistA.wait('Select Problem List Mgt Menu Option')
+        self.VistA.write('Patient Problem List')
+        self.VistA.wait('Select Patient')
+        self.VistA.write(patient)
+        for vitem in vlist2:
+            self.VistA.wait(vitem)
+        self.VistA.wait('Select Action')
+        self.VistA.write('Quit')
+        self.VistA.wait('Select Problem List Mgt Menu Option')
+        self.VistA.write('')
+        self.VistA.wait('Select Veteran ID Card Menu Option')
+        self.VistA.write('')
+        # ADT Outputs
+        self.VistA.wait('Select ADT Manager Menu Option')
+        self.VistA.write('ADT Outputs Menu')
+        self.VistA.wait('Select ADT Outputs Menu Option')
+        self.VistA.write('10-10')
+        self.VistA.wait('Select PATIENT NAME')
+        self.VistA.write(patient)
+        self.VistA.wait('PRINT 10-10EZ')
+        self.VistA.write('yes')
+        self.VistA.wait('DEVICE')
+        self.VistA.write('HOME')
+        self.VistA.wait('Right Margin')
+        self.VistA.write('80')
+        self.VistA.wait('VA FORM 10-10EZ')
+        self.VistA.wait('PAGE 4')
+        self.VistA.wait('Select PATIENT NAME')
+        self.VistA.write('')
+        self.VistA.wait('Select ADT Outputs Menu Option')
+        self.VistA.write('ADT Third Party Output Menu')
+        self.VistA.wait('Select ADT Third Party Output Menu Option')
+        self.VistA.write('Patient Review Document')
+        self.VistA.wait('Select PATIENT NAME')
+        self.VistA.write(patient)
+        self.VistA.wait('No scheduled admissions on file')
+        self.VistA.wait('Select ADT Third Party Output Menu Option')
+        self.VistA.write('Review Document')
+        self.VistA.wait('START WITH DATE')
+        self.VistA.write('')
+        self.VistA.wait('DEVICE')
+        self.VistA.write('')
+        self.VistA.wait('Right Margin')
+        self.VistA.write('')
+        self.VistA.wait('NO RECORDS TO PRINT')
+        self.VistA.wait('Select ADT Third Party Output Menu Option')
+        self.VistA.write('Veteran Patient Insurance Information')
+        self.VistA.wait('Sort by Discharge or Admission')
+        self.VistA.write('')
+        self.VistA.wait('START DATE')
+        self.VistA.write('t')
+        self.VistA.wait('END DATE')
+        self.VistA.write('t+10')
+        self.VistA.wait('DEVICE')
+        self.VistA.write('')
+        self.VistA.wait('Right Margin')
+        self.VistA.write('')
+        self.VistA.wait('Select ADT Third Party Output Menu Option')
+        self.VistA.write('')
+        self.VistA.wait('Select ADT Outputs Menu Option')
+        self.VistA.write()
+        self.VistA.wait()
+        self.VistA.write()
+        self.VistA.wait()
+        self.VistA.write()
+        self.VistA.wait()
+        self.VistA.write()
