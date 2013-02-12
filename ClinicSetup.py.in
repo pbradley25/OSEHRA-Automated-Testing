@@ -15,11 +15,11 @@ sys.path = ['${VISTA_SOURCE_DIR}/lib/vista'] + sys.path
 from OSEHRAHelper import ConnectToMUMPS, PROMPT
 
 VistA = ConnectToMUMPS("${VISTA_BINARY_DIR}/Testing/Log/ClinicSetup.log","${INSTANCE}","${NAMESPACE}")
-if ('' and ''):
-  VistA.login('', '')
+if ('${USERNAME}' and '${PASSWORD}'):
+  VistA.login('${USERNAME}','${PASSWORD}')
 if VistA.type == 'cache':
   try:
-    VistA.ZN('VISTA')
+    VistA.ZN('${NAMESPACE}')
   except IndexError, no_namechange:
     pass
 VistA.wait(PROMPT, 60)

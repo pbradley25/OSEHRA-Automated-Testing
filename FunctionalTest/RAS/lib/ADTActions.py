@@ -83,7 +83,7 @@ class ADTActions (Actions):
         self.VistA.write('')
         self.VistA.wait('NAME:')
         self.VistA.write('')
-        self.VistA.wait('VISTA')
+        self.VistA.wait(self.VistA.prompt)
         self.VistA.write('D ^XUP')
         # SETUP BEDS
         self.VistA.wait('OPTION NAME:')
@@ -160,7 +160,7 @@ class ADTActions (Actions):
         self.VistA.write('')
         self.VistA.wait('YES//')
         self.VistA.write('')
-        self.VistA.wait('VISTA>')
+        self.VistA.wait(self.VistA.prompt)
         self.VistA.write('D ^XUP')
         # ADD ENTRY TO FILE 395
         self.VistA.wait('NAME:')
@@ -306,7 +306,7 @@ class ADTActions (Actions):
         self.VistA.write('')
         self.VistA.wait('OPTION:')
         self.VistA.write('')
-        self.VistA.wait('VISTA>')
+        self.VistA.wait(self.VistA.prompt)
         self.VistA.write('')
 
 
