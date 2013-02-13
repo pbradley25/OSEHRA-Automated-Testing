@@ -256,7 +256,8 @@ class SCActions (Actions):
             self.VistA.wait('')
 
 
-    def set_demographics(self, clinic, patient, datetime, dgrph, CLfirst=None):
+    def set_mademographics(self, clinic, patient, datetime, dgrph, CLfirst=None):
+        ''' This test sets demographics via MA action.  This test crashes on SAVE in gtm'''
         self.VistA.wait('Clinic name:')
         self.VistA.write(patient)  # <--- by patient
         self.VistA.wait('OK')
@@ -302,6 +303,30 @@ class SCActions (Actions):
             self.VistA.wait('Select CLINIC:')
             self.VistA.write('')
             self.VistA.wait('Select Action:')
+        self.VistA.write('Quit')
+        self.VistA.wait('')
+
+    def set_demographics(self, clinic, patient, datetime, dgrph, CLfirst=None, patidx=None):
+        self.VistA.wait('Clinic name:')
+        self.VistA.write(patient)  # <--- by patient
+        self.VistA.wait('OK')
+        self.VistA.write('Yes')
+        if CLfirst is not None:
+            self.VistA.wait('Select Action:')
+            self.VistA.write('CL')
+            self.VistA.wait('Select Clinic:')
+            self.VistA.write(clinic)
+            self.VistA.wait('Select Action:')
+            self.VistA.write('PD')
+            self.VistA.wait('Select Appointments')
+            self.VistA.write(patidx)
+        else:
+            self.VistA.wait('Select Action:')
+            self.VistA.write('PD')
+        for wwset in dgrph:
+            self.VistA.wait(wwset[0])
+            self.VistA.write(wwset[1])
+        self.VistA.wait('Select Action:')
         self.VistA.write('Quit')
         self.VistA.wait('')
 

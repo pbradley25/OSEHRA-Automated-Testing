@@ -29,7 +29,7 @@ def sc_test001(resultlog, result_dir):
         SC.signon()
         SC.checkin(clinic=tclinic, vlist=['Three', str(hour), 'CHECKED-IN:'])
         SC.signon()
-        SC.checkout(clinic=tclinic, vlist1=['Three', str(hour), 'Checked In'], 
+        SC.checkout(clinic=tclinic, vlist1=['Three', str(hour), 'Checked In'],
                     vlist2=['305.91', 'OTHER DRUG', 'RESULTING'], icd='305.91')
         SC.signoff()
     except TestHelper.TestError, e:
@@ -60,7 +60,7 @@ def sc_test002(resultlog, result_dir):
         SC.signon()
         SC.canapp(clinic=tclinic, mult='1')
         SC.signon()
-        SC.chgpatient(clinic=tclinic, patient1='345678233', patient2='345238901', 
+        SC.chgpatient(clinic=tclinic, patient1='345678233', patient2='345238901',
                       patientname1='Twelve', patientname2='Ten')
         SC.signoff()
     except TestHelper.TestError, e:
@@ -107,7 +107,7 @@ def sc_test004(resultlog, result_dir):
         SC.signon()
         SC.patdem(clinic=tclinic, name='Ten', mult='2')
         SC.signon()
-        SC.expandentry(clinic=tclinic, vlist1=['TEN', 'SCHEDULED', '30'], 
+        SC.expandentry(clinic=tclinic, vlist1=['TEN', 'SCHEDULED', '30'],
                        vlist2=['Event', 'Date', 'User', 'TESTMASTER'],
                        vlist3=['NEXT AVAILABLE', 'NO', '0'], vlist4=['1933', 'MALE', 'UNANSWERED'],
                        vlist5=['Combat Veteran:', 'No check out information'], mult='3')
@@ -138,7 +138,7 @@ def sc_test005(resultlog, result_dir):
         SC.signon()
         SC.discharge(clinic=tclinic, patient='543236666', appnum='3')
         SC.signon()
-        SC.checkout(clinic=tclinic, vlist1=['One', 'No Action'], 
+        SC.checkout(clinic=tclinic, vlist1=['One', 'No Action'],
                     vlist2=['305.91', 'RESULTING'], icd='305.91', mult='4')
         SC = SCActions(VistA, user='fakedoc1', code='1Doc!@#$')
         SC.signon()
@@ -190,12 +190,12 @@ def sc_test007(resultlog, result_dir):
         now = datetime.datetime.now()
         hour = now.hour + 1
         SC.signon()
-        SC.checkin(clinic=tclinic, vlist=['Five', str(hour), 'CHECKED-IN:'],mult='5')
+        SC.checkin(clinic=tclinic, vlist=['Five', str(hour), 'CHECKED-IN:'], mult='5')
         SC.signon()
-        SC.checkout(clinic=tclinic, vlist1=['Five', str(hour), 'Checked In'], 
+        SC.checkout(clinic=tclinic, vlist1=['Five', str(hour), 'Checked In'],
                     vlist2=['305.91', 'OTHER DRUG', 'RESULTING'], icd='305.91', mult='5')
         SC.signon()
-        SC.ver_actions(clinic=tclinic, patient='4444', 
+        SC.ver_actions(clinic=tclinic, patient='4444',
                        PRvlist=['THREE,PATIENT C', 'ALEXANDER,ROBERT'],
                        DXvlist=['305.91', 'OTHER DRUG', 'RESULTING'],
                        CPvlist=['THREE,PATIENT C'])
@@ -220,16 +220,16 @@ def sc_test008(resultlog, result_dir):
         SC.makeapp_bypat(clinic='cLiNiCx', patient='323678904', datetime='t+5@8PM')
         SC.signon()
         SC.verapp_bypat(patient='323678904', vlist=['THIRTEEN,PATIENT M', 'Clinicx', 'Future'])
-        SC.signon()        
+        SC.signon()
         SC.makeapp_bypat(clinic='cLiNiCx', patient='222559876', datetime='t+6@8PM', CLfirst='Yes')
         SC.signon()
-        SC.verapp_bypat(patient='222559876', vlist=['SIXTEEN,PATIENT P', 'Clinicx', 'Future'], 
-                        CInum=['1','1'], COnum=['1','2'])
+        SC.verapp_bypat(patient='222559876', vlist=['SIXTEEN,PATIENT P', 'Clinicx', 'Future'],
+                        CInum=['1', '1'], COnum=['1', '2'])
         SC.signon()
-        SC.verapp(clinic='cLiNiCx', 
-                  vlist=['Thirteen,Patient M', 'Future', 'Sixteen,Patient P', 'Future'], 
-                  CInum=['2','1'], COnum=['2','2'])
-        SC.signoff()        
+        SC.verapp(clinic='cLiNiCx',
+                  vlist=['Thirteen,Patient M', 'Future', 'Sixteen,Patient P', 'Future'],
+                  CInum=['2', '1'], COnum=['2', '2'])
+        SC.signoff()
     except TestHelper.TestError, e:
         resultlog.write('\nEXCEPTION ERROR:' + str(e))
         logging.error('*****exception*********' + str(e))
@@ -256,9 +256,9 @@ def sc_test009(resultlog, result_dir):
         SC.makeapp_var(clinic='CLInicA', patient='323678904', datetime='t+10@4AM', fresh='No', nextaval='No')
         SC.signon()
         SC.verapp_bypat(patient='323678904', vlist=['THIRTEEN,PATIENT M', 'Clinica', '4:00', 'Future'],
-                        ALvlist=['THIRTEEN,PATIENT M','Clinicx', 'Clinica', 'Clinica'], 
-                        EPvlist=['THIRTEEN,PATIENT M','CLINICX', '8904', 'FUTURE', 'SCHEDULED', 'REGULAR'])
-        SC.signoff()        
+                        ALvlist=['THIRTEEN,PATIENT M', 'Clinicx', 'Clinica', 'Clinica'],
+                        EPvlist=['THIRTEEN,PATIENT M', 'CLINICX', '8904', 'FUTURE', 'SCHEDULED', 'REGULAR'])
+        SC.signoff()
     except TestHelper.TestError, e:
         resultlog.write('\nEXCEPTION ERROR:' + str(e))
         logging.error('*****exception*********' + str(e))
@@ -276,56 +276,62 @@ def sc_test010(resultlog, result_dir):
         time = SC.schtime()
         SC.signon()
         tclinic = SC.getclinic()
-        SC.set_demographics(clinic='CLInicA', patient='323123456', datetime='t+7@7AM', 
-                        dgrph = [['ETHNICITY','N'],
-                                 ['RACE','Black'],
-                                 ['new RACE INFORMATION','Yes'],
-                                 ['RACE',''],
-                                 ['COUNTRY',''],
-                                 ['STREET ADDRESS','123 SMITH STREET'],
-                                 ['STREET ADDRESS',''],
-                                 ['ZIP','20005'],
-                                 ['CITY','WASHINGTON'],
-                                 ['PHONE NUMBER','2021112222'],
-                                 ['PHONE NUMBER',''],
-                                 ['BAD ADDRESS INDICATOR',''],
-                                 ['save the above changes','yes'],
-                                 ['Press ENTER to continue','']],
-                        CLfirst=None)
+        SC.set_demographics(clinic='CLInicA', patient='323123456', datetime='t+7@7AM',
+                        dgrph=[['COUNTRY', ''],
+                                 ['STREET ADDRESS', '123 SMITH STREET'],
+                                 ['STREET ADDRESS', ''],
+                                 ['ZIP', '20005'],
+                                 ['CITY', 'WASHINGTON'],
+                                 ['PHONE NUMBER', '2021112222'],
+                                 ['PHONE NUMBER', ''],
+                                 ['BAD ADDRESS INDICATOR', ''],
+                                 ['save the above changes', 'yes'],
+                                 ['Press ENTER to continue', ''],
+                                 ['SEX', 'MALE'] ,
+                                 ['Select ETHNICITY', 'N'],
+                                 ['Select RACE', 'Black'],
+                                 ['new RACE INFORMATION', 'Yes'],
+                                 ['RACE', ''],
+                                 ['MARITAL STATUS', 'MARRIED'],
+                                 ['RELIGIOUS PREFERENCE', 'CELTICISM'],
+                                 ['TEMPORARY ADDRESS ACTIVE', 'NO'],
+                                 ['PHONE NUMBER', ''],
+                                 ['PAGER NUMBER', ''],
+                                 ['EMAIL ADDRESS', '']])
         SC.signon()
         SC.get_demographics(patient='323123456',
-                        vlist = [['COUNTRY: UNITED STATES',''],
-                                 ['123 SMITH STREET','123 SMITH STREET'],
-                                 ['STREET ADDRESS',''],
-                                 ['20005',''],
-                                 ['CITY: WASHINGTON',''],
-                                 ['2021112222',''],
-                                 ['PHONE NUMBER',''],
-                                 ['BAD ADDRESS INDICATOR',''],
-                                 ['save the above changes','no'],
-                                 ['Press ENTER to continue',''],
-                                 ['SEX: MALE',''],
-                                 ['Select ETHNICITY INFORMATION: NOT HISPANIC OR LATINO',''],
-                                 ['ETHNICITY: NOT HISPANIC OR LATINO',''],
-                                 ['Select RACE INFORMATION: BLACK OR AFRICAN AMERICAN',''],
-                                 ['RACE: BLACK OR AFRICAN AMERICAN',''],
-                                 ['Select RACE INFORMATION',''],
-                                 ['MARITAL STATUS','MARRIED'],
-                                 ['RELIGIOUS PREFERENCE',''],
-                                 ['ADDRESS ACTIVE',''],
-                                 ['PHONE NUMBER',''],
-                                 ['PAGER NUMBER',''],
-                                 ['EMAIL ADDRESS','']])
-        SC.signoff()        
+                        vlist=[['COUNTRY: UNITED STATES', ''],
+                                 ['123 SMITH STREET', ''],
+                                 ['STREET ADDRESS', ''],
+                                 ['20005', ''],
+                                 ['CITY: WASHINGTON', ''],
+                                 ['2021112222', ''],
+                                 ['PHONE NUMBER', ''],
+                                 ['BAD ADDRESS INDICATOR', ''],
+                                 ['save the above changes', 'no'],
+                                 ['Press ENTER to continue', ''],
+                                 ['SEX: MALE', ''],
+                                 ['Select ETHNICITY INFORMATION: NOT HISPANIC OR LATINO', ''],
+                                 ['ETHNICITY: NOT HISPANIC OR LATINO', ''],
+                                 ['Select RACE INFORMATION: BLACK OR AFRICAN AMERICAN', ''],
+                                 ['RACE: BLACK OR AFRICAN AMERICAN', ''],
+                                 ['Select RACE INFORMATION', ''],
+                                 ['MARITAL STATUS', 'MARRIED'],
+                                 ['RELIGIOUS PREFERENCE: CELTICISM', ''],
+                                 ['ADDRESS ACTIVE', ''],
+                                 ['PHONE NUMBER', ''],
+                                 ['PAGER NUMBER', ''],
+                                 ['EMAIL ADDRESS', '']])
+        SC.signoff()
     except TestHelper.TestError, e:
         resultlog.write('\nEXCEPTION ERROR:' + str(e))
         logging.error('*****exception*********' + str(e))
     else:
         resultlog.write('Pass\n')
-                             
+
 def startmon(resultlog, result_dir):
     '''Starts Coverage Monitor'''
-    testname=sys._getframe().f_code.co_name
+    testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
@@ -334,7 +340,7 @@ def startmon(resultlog, result_dir):
         VistA1.startCoverage(routines=['SC*', 'SD*'])
     except TestHelper.TestError, e:
         resultlog.write(e.value)
-        logging.error(testname+ ' EXCEPTION ERROR: Unexpected test result')
+        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
     finally:
         '''
         Close Vista
@@ -350,7 +356,7 @@ def stopmon (resultlog, result_dir):
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
         # Connect to VistA
-        VistA1=connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir)
         VistA1.stopCoverage(path=(result_dir + '/' + 'Scheduling_coverage.txt'))
     except TestHelper.TestError, e:
         resultlog.write(e.value)
