@@ -20,7 +20,7 @@ def pl_test001(test_suite_details):
     try:
         VistA1 = test_driver.connect_VistA(test_suite_details)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
-        ''' 
+        '''
         template to use for getting A/V code from ~./ATF/roles.cfg file.
         p1 = PLActions(VistA1,
                user=TestHelper.fetch_access_code(test_suite_details, testname),

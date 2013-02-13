@@ -21,7 +21,7 @@ def adt_test001(test_suite_details):
         adt = ADTActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         adt.signon()
         adt.admit_a_patient(ssn='888776666', bed='1-B')
-        adt.roster_list(vlist=['TWO,PATIENT B    6666', '1-B'])        
+        adt.roster_list(vlist=['TWO,PATIENT B    6666', '1-B'])
         adt.admit_a_patient(ssn='333224444', bed='1-A')
         adt.roster_list(vlist=['THREE,PATIENT C    4444', '1-A'])
         adt.admit_a_patient(ssn='656771234', bed='2-A')

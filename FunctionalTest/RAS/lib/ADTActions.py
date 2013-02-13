@@ -162,7 +162,7 @@ class ADTActions (Actions):
         self.VistA.write('')
         self.VistA.wait('VISTA>')
         self.VistA.write('D ^XUP')
-        # ADD ENTRY TO FILE 395 
+        # ADD ENTRY TO FILE 395
         self.VistA.wait('NAME:')
         self.VistA.write('ZZFILEMAN')
         self.VistA.wait('FileMan')
@@ -353,7 +353,7 @@ class ADTActions (Actions):
         self.VistA.write('')
         self.VistA.wait('Option:')
         self.VistA.write('')
-        
+
     def roster_list(self, vlist):
         self.VistA.wait('OPTION NAME:')
         self.VistA.write('ADT MANAGER MENU')
@@ -408,7 +408,7 @@ class ADTActions (Actions):
         self.VistA.write('')
         self.VistA.wait('Option:')
         self.VistA.write('')
-        
+
     def scheduled_admit_list(self, vlist):
         self.VistA.wait('OPTION NAME:')
         self.VistA.write('ADT MANAGER MENU')
@@ -437,7 +437,7 @@ class ADTActions (Actions):
         self.VistA.write('')
         self.VistA.wait('Option:')
         self.VistA.write('')
-        
+
     def transfer_patient(self,ssn):
         self.VistA.wait('OPTION NAME:')
         self.VistA.write('ADT MANAGER MENU')
@@ -473,7 +473,7 @@ class ADTActions (Actions):
         self.VistA.write('')
         self.VistA.wait('Option:')
         self.VistA.write('')
-        
+
     def schedule_admission(self, ssn):
         self.VistA.wait('NAME:')
         self.VistA.write('adt manager menu')
@@ -515,7 +515,7 @@ class ADTActions (Actions):
         self.VistA.write('')
         self.VistA.wait('Option:')
         self.VistA.write('')
-        
+
     def cancel_scheduled_admission(self, ssn):
         self.VistA.wait('OPTION NAME:')
         self.VistA.write('adt manager menu')

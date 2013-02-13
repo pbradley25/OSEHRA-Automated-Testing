@@ -165,7 +165,7 @@ class SSHClientInteraction:
             self.current_output_clean = re.sub('.*' + found_pattern[0][1], '', self.current_output_clean, 0, re.DOTALL)
             # self.current_output_clean = re.sub(found_pattern[0][1] + '$', '', self.current_output_clean)
 
-            '''--jspivey the clean_output_buffer is old code, not even referenced... 
+            '''--jspivey the clean_output_buffer is old code, not even referenced...
             The real persistent output buffer is 'current_output'
             '''
             self.current_output = self.current_output_clean
@@ -248,11 +248,11 @@ class SSHClientInteraction:
         try:
             tty.setraw(sys.stdin.fileno())
             tty.setcbreak(sys.stdin.fileno())
-            
+
             # We must set the timeout to 0 so that we can bypass times when
             # there is no available text to receive
             self.channel.settimeout(0)
-            
+
             # Loop forever until the user exits (i.e. read buffer is empty)
             while True:
                 select_read, select_write, select_exception = select.select([self.channel, sys.stdin], [], [])

@@ -71,12 +71,12 @@ class TestSuiteDriver(object):
         parser.add_argument('resultdir', help='Result Directory') #perhaps a default relative directory can be given, then tests can be ran without parms
         parser.add_argument('-l', '--logging-level', help='Logging level', default='info')
         #not needed, filename should just be a default convention
-        #parser.add_argument('-f', '--logging-file', help='Logging file name') 
+        #parser.add_argument('-f', '--logging-file', help='Logging file name')
         #these parms are configured on a test suite level, therefore they are not globally scoped for an entire test run
         #parser.add_argument('-i', '--instance', help='cache instance type', choices=["TRYCACHE", "GTM"], default='')
         parser.add_argument('-n', '--namespace', help='cache namespace', default='')
         args = parser.parse_args()
- 
+
         logging_level = LOGGING_LEVELS.get(args.logging_level, logging.NOTSET)
         logging.basicConfig(level=logging_level, filename=args.resultdir+'/loggerOut.txt', format='%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
         logging.info('RESULT DIR arg: ' + str(args.resultdir)) #note, this gets printed each time a test suite runs. counter-intuitive since it is the same cli arguement each time
@@ -86,7 +86,7 @@ class TestSuiteDriver(object):
         logging.info('NAMESPACE arg: ' + str(args.namespace))
 
         package_name = self.test_file[self.test_file.rfind('Packages')+9:self.test_file.rfind(test_suite_name)-1]
-        
+
         #TODO: move config parsing setup out of here
         config = ConfigParser.RawConfigParser()
         read_files = config.read(os.path.join(os.path.dirname(self.test_file), test_suite_name + '.cfg'))
@@ -94,12 +94,12 @@ class TestSuiteDriver(object):
             raise IOError
         if config.getboolean('RemoteDetails', 'RemoteConnect'):
             remote_server = config.get('RemoteDetails', 'ServerLocation')
-            
+
             #get ssh username/password from local user's config file
             userConfig = read_suite_config_file()
             uid = userConfig.get(package_name+'-'+test_suite_name, 'SSHUsername')
             pwd = userConfig.get(package_name+'-'+test_suite_name, 'SSHPassword')
-            
+
             default_namespace = config.getboolean('RemoteDetails', 'UseDefaultNamespace')
             instance = config.get('RemoteDetails', 'Instance')
             if not default_namespace:
@@ -150,7 +150,7 @@ class TestSuiteDriver(object):
         logging.error('Exception in Test Suite \'' + test_suite_details.test_suite_name + '\'\n')
         logging.error('Exception Name: ' +str(e)+ '\n')
         logging.error(traceback.format_exc()+ '\n')
-        
+
         #This will force ctest to recognize this test as a failure by printing output to std err
         sys.stderr.write('Exception ' +str(e)+ ' in test suite \'' + test_suite_details.test_suite_name + '\'\n')
 
@@ -194,10 +194,10 @@ class TestDriver(object):
     def exception_handling(self, test_suite_details, e): #test method throw an exception
         test_suite_details.result_log.write(e.value+ '\n')
         logging.error(self.testname + ': exception \'' +str(e)+ '\' in Test \'' +self.testname +'\'')
-        
+
         #This will force ctest to recognize this test as a failure by printing output to std err
         sys.stderr.write('Exception in test \'' +self.testname+ '\' ' +str(e)+ ' in test suite \'' + test_suite_details.test_suite_name + '\'\n')
-        
+
     def try_else_handling(self, test_suite_details): #test method passed
         test_suite_details.result_log.write(' Passed\n')
 
@@ -224,20 +224,20 @@ class TestDriver(object):
         except ImportError as ex:
            print ex
            raise
-        
+
         if VistA.type is not None and VistA.type =='cache' and test_suite_details.namespace is not None:
             try:
                 VistA.ZN(test_suite_details.namespace)
             except IndexError, no_namechange:
                 pass
             VistA.wait(PROMPT)
-        
+
         if test_suite_details.remote_conn_details:
             VistA.wait('ACCESS CODE:')
             VistA.write(fetch_access_code(test_suite_details, self.testname))
             VistA.wait('VERIFY CODE:')
             VistA.write(fetch_verify_code(test_suite_details, self.testname))
-            
+
         return VistA
 
 class test_suite_details(object):
@@ -259,23 +259,21 @@ class test_suite_details(object):
         self.instance = instance
         self.namespace = namespace
         self.remote_conn_details = remote_conn_details
-        
 
 def read_suite_config_file():
     #move to a module for parsing cfg values
-    config = ConfigParser.RawConfigParser() 
+    config = ConfigParser.RawConfigParser()
     from os.path import expanduser
     read_files = config.read(expanduser("~/.ATF/roles.cfg"))
     if read_files.__len__() != 1:
         raise IOError
     return config
     #move to a module for parsing cfg values
-        
+
 def fetch_access_code(test_suite_details, testname):
     config = read_suite_config_file()
     return config.get(test_suite_details.package_name+'-'+test_suite_details.test_suite_name, testname+'_aCode')
-    
-    
+
     '''
     from os.path import expanduser
     in_test_suite = False
@@ -285,7 +283,7 @@ def fetch_access_code(test_suite_details, testname):
         if line.startswith('aCode') and in_test_suite:
             return line[line.strip().rfind("="):].strip()
     '''
-        
+
 def fetch_verify_code(test_suite_details, testname):
     config = read_suite_config_file()
     return config.get(test_suite_details.package_name+'-'+test_suite_details.test_suite_name, testname+'_vCode')
