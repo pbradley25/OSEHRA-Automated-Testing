@@ -274,9 +274,23 @@ def sc_test010(resultlog, result_dir):
         VistA = connect_VistA(testname, result_dir)
         SC = SCActions(VistA, scheduling='Scheduling')
         time = SC.schtime()
+        # this signon() and fix_demographics() is a workaround for gtm bug
+        if VistA.type == 'GTM':
+            SC.signon()
+            SC.fix_demographics(clinic='CLInicA', patient='323123456',
+                                dgrph=[['COUNTRY', ''],
+                                     ['STREET ADDRESS', ''],
+                                     ['STREET ADDRESS', ''],
+                                     ['ZIP', '20005'],
+                                     ['CITY', 'WASHINGTON'],
+                                     ['PHONE NUMBER', ''],
+                                     ['PHONE NUMBER', ''],
+                                     ['BAD ADDRESS INDICATOR', ''],
+                                     ['save the above changes', 'yes']])
+        #
         SC.signon()
         tclinic = SC.getclinic()
-        SC.set_demographics(clinic='CLInicA', patient='323123456', datetime='t+7@7AM',
+        SC.set_demographics(clinic='CLInicA', patient='323123456',
                         dgrph=[['COUNTRY', ''],
                                  ['STREET ADDRESS', '123 SMITH STREET'],
                                  ['STREET ADDRESS', ''],

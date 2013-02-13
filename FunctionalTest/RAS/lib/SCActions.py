@@ -306,7 +306,19 @@ class SCActions (Actions):
         self.VistA.write('Quit')
         self.VistA.wait('')
 
-    def set_demographics(self, clinic, patient, datetime, dgrph, CLfirst=None, patidx=None):
+    def fix_demographics(self, clinic, patient, dgrph,):
+        ''' this is a workaround for the demographic bug in gtm'''
+        self.VistA.wait('Clinic name:')
+        self.VistA.write(patient)  # <--- by patient
+        self.VistA.wait('OK')
+        self.VistA.write('Yes')
+        self.VistA.wait('Select Action:')
+        self.VistA.write('PD')
+        for wwset in dgrph:
+            self.VistA.wait(wwset[0])
+            self.VistA.write(wwset[1])
+
+    def set_demographics(self, clinic, patient, dgrph, CLfirst=None, patidx=None):
         self.VistA.wait('Clinic name:')
         self.VistA.write(patient)  # <--- by patient
         self.VistA.wait('OK')
