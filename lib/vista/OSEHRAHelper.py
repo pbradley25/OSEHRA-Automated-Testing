@@ -21,7 +21,6 @@ import TestHelper
 import time
 import re
 import logging
-import paramiko
 import socket
 
 filedir = os.path.dirname(os.path.abspath(__file__))
@@ -29,10 +28,17 @@ pexpectdir = os.path.normpath(os.path.join(filedir, "../pexpect/"))
 paramikoedir = os.path.normpath(os.path.join(filedir, "../"))
 sys.path.append(pexpectdir)
 sys.path.append(paramikoedir)
+
 try:
   import pexpect
   no_pexpect = None
 except ImportError, no_pexpect:
+  pass
+
+try:
+  import paramiko
+  no_paramiko = None
+except ImportError, no_paramiko:
   pass
 
 #---------------------------------------------------------------------------
@@ -484,6 +490,7 @@ class ConnectRemoteSSH(ConnectMUMPS):
             escaped_str = escaped_str + '\\'
         escaped_str += c
     return escaped_str
+
 def ConnectToMUMPS(logfile, instance='CACHE', namespace='VISTA', location='127.0.0.1', remote_conn_details=None):
 
     # self.namespace = namespace
@@ -491,7 +498,9 @@ def ConnectToMUMPS(logfile, instance='CACHE', namespace='VISTA', location='127.0
     # print "You are using " + sys.platform
     # remote connections
     if remote_conn_details is not None:
-        return ConnectRemoteSSH(logfile, instance, namespace, location, remote_conn_details)
+      if no_paramiko:
+        raise no_paramiko
+      return ConnectRemoteSSH(logfile, instance, namespace, location, remote_conn_details)
 
     # local connections
     if sys.platform == 'win32':

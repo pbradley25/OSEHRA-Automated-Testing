@@ -216,11 +216,15 @@ class TestDriver(object):
         else:
             location = '127.0.0.1'
         from OSEHRAHelper import ConnectToMUMPS, PROMPT
-        VistA = ConnectToMUMPS(logfile=test_suite_details.result_dir + '/' + self.testname + '.txt',
-                               instance=test_suite_details.instance, namespace=test_suite_details.namespace,
-                               location=location,
-                               remote_conn_details=test_suite_details.remote_conn_details)
-
+        try:
+            VistA = ConnectToMUMPS(logfile=test_suite_details.result_dir + '/' + self.testname + '.txt',
+                                   instance=test_suite_details.instance, namespace=test_suite_details.namespace,
+                                   location=location,
+                                   remote_conn_details=test_suite_details.remote_conn_details)
+        except ImportError as ex:
+           print ex
+           raise
+        
         if VistA.type is not None and VistA.type =='cache' and test_suite_details.namespace is not None:
             try:
                 VistA.ZN(test_suite_details.namespace)
