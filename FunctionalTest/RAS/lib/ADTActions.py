@@ -376,8 +376,9 @@ class ADTActions (Actions):
         # self.VistA.write('YES')
         self.VistA.wait('DEVICE')
         self.VistA.write('HOME')
-        self.VistA.wait('Right Margin')
-        self.VistA.write('80')
+        if self.VistA.type == 'cache':
+            self.VistA.wait('Right Margin')
+            self.VistA.write('80')
         for vitem in vlist:
             self.VistA.wait(vitem)
         self.VistA.wait('Continue')
@@ -420,10 +421,11 @@ class ADTActions (Actions):
         self.VistA.write('BOTH')
         self.VistA.wait('DEVICE')
         self.VistA.write('HOME')
-        self.VistA.wait('Right Margin')
-        self.VistA.write('80')
+        if self.VistA.type == 'cache':
+            self.VistA.wait('Right Margin')
+            self.VistA.write('80')
         for vitem in vlist:
-            self.VistA.wait(vitem)
+                self.VistA.wait(vitem)
         self.VistA.wait('Option:')
         self.VistA.write('')
 
@@ -631,8 +633,9 @@ class ADTActions (Actions):
         self.VistA.write('Waiting List Output')
         self.VistA.wait('DEVICE')
         self.VistA.write('')
-        self.VistA.wait('Right Margin')
-        self.VistA.write('')
+        if self.VistA.type == 'cache':
+            self.VistA.wait('Right Margin')
+            self.VistA.write('80')
         for vitem in vlist:
             self.VistA.wait(vitem)
         self.VistA.wait('Select ADT Outputs Menu Option')
@@ -705,8 +708,9 @@ class ADTActions (Actions):
         self.VistA.write('yes')
         self.VistA.wait('DEVICE')
         self.VistA.write('HOME')
-        self.VistA.wait('Right Margin')
-        self.VistA.write('80')
+        if self.VistA.type == 'cache':
+            self.VistA.wait('Right Margin')
+            self.VistA.write('80')
         self.VistA.wait('VA FORM 10-10EZ')
         self.VistA.wait('PAGE 4')
         self.VistA.wait('Select PATIENT NAME')
@@ -724,8 +728,9 @@ class ADTActions (Actions):
         self.VistA.write('')
         self.VistA.wait('DEVICE')
         self.VistA.write('')
-        self.VistA.wait('Right Margin')
-        self.VistA.write('')
+        if self.VistA.type == 'cache':
+            self.VistA.wait('Right Margin')
+            self.VistA.write('80')
         self.VistA.wait('NO RECORDS TO PRINT')
         self.VistA.wait('Select ADT Third Party Output Menu Option')
         self.VistA.write('Veteran Patient Insurance Information')
@@ -737,8 +742,9 @@ class ADTActions (Actions):
         self.VistA.write('t+10')
         self.VistA.wait('DEVICE')
         self.VistA.write('')
-        self.VistA.wait('Right Margin')
-        self.VistA.write('')
+        if self.VistA.type == 'cache':
+            self.VistA.wait('Right Margin')
+            self.VistA.write('')
         self.VistA.wait('Select ADT Third Party Output Menu Option')
         self.VistA.write('')
         self.VistA.wait('Select ADT Outputs Menu Option')

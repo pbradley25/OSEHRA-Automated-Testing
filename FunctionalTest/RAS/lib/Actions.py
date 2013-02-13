@@ -39,17 +39,24 @@ class Actions (object):
         self.VistA.wait('OPTION NAME')
         self.VistA.write('')
         self.VistA.write('D ^XTFCR')
-        self.VistA.wait('All Routines')
-        self.VistA.write('No')
-        for ritem in rlist:
-            self.VistA.wait('Routine:')
-            self.VistA.write(ritem)
+        rval = self.VistA.multiwait(['All Routines','Routine:'])
+        if rval == 0:
+            self.VistA.write('No')
+            for ritem in rlist:
+                self.VistA.wait('Routine:')
+                self.VistA.write(ritem)
+        elif rval == 1:
+            self.VistA.write('?')  
+            for ritem in rlist:
+                self.VistA.wait('Routine:')
+                self.VistA.write(ritem)
         self.VistA.wait('Routine:')
         self.VistA.write('')
         self.VistA.wait('DEVICE')
         self.VistA.write('')
-        self.VistA.wait('Right Margin')
-        self.VistA.write('')
+        if self.VistA.type == 'cache':
+            self.VistA.wait('Right Margin')
+            self.VistA.write('')
         while True:
             rval = self.VistA.multiwait(['to halt...', self.VistA.prompt])
             if rval == 0:
