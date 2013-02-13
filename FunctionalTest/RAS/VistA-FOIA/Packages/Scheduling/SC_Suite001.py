@@ -280,7 +280,6 @@ def sc_test010(resultlog, result_dir):
             SC.fix_demographics(clinic='CLInicA', patient='323123456',
                                 dgrph=[['COUNTRY', ''],
                                      ['STREET ADDRESS', ''],
-                                     ['STREET ADDRESS', ''],
                                      ['ZIP', '20005'],
                                      ['CITY', 'WASHINGTON'],
                                      ['PHONE NUMBER', ''],
