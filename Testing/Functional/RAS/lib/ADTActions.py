@@ -572,6 +572,150 @@ class ADTActions (Actions):
         self.VistA.wait('Option')
         self.VistA.write('\r')
 
+    def det_inpatient_inquiry(self, ssn, item, vlist):
+        ''' Detailed Inpatient Inquiry Test'''
+        self.VistA.wait('Option:')
+        self.VistA.write('bed control menu')
+        self.VistA.wait('Option:')
+        self.VistA.write('Detailed Inpatient Inquiry')
+        self.VistA.wait('Select PATIENT NAME:')
+        self.VistA.write(ssn)
+        self.VistA.wait('CHOOSE')
+        self.VistA.write(item)
+        for vitem in vlist:
+            self.VistA.wait(vitem)
+        self.VistA.wait('Select PATIENT NAME')
+        self.VistA.write('')
+        self.VistA.wait('Select Bed Control Menu Option')
+        self.VistA.write('')
+
+    def drg_calc(self, ssn, diag, dnum, sdiag, sdnu, oper, onum):
+        ''' DRG Calculation Test'''
+        self.VistA.wait('Option:')
+        self.VistA.write('bed control menu')
+        self.VistA.wait('Option:')
+        self.VistA.write('DRG Calculation')
+        self.VistA.wait('Effective Date:')
+        self.VistA.write('t')
+        self.VistA.wait('Choose Patient from PATIENT file')
+        self.VistA.write('Yes')
+        self.VistA.wait('Select PATIENT NAME:')
+        self.VistA.write(ssn)
+        self.VistA.wait('Transfer to an acute care facility')
+        self.VistA.write('No')
+        self.VistA.wait('Discharged against medical advice')
+        self.VistA.write('No')
+        self.VistA.wait('Enter PRINCIPAL diagnosis:')
+        self.VistA.write(diag)
+        self.VistA.wait('STOP or Select')
+        self.VistA.write(dnum)
+        self.VistA.wait('Enter SECONDARY diagnosis')
+        self.VistA.write(sdiag)
+        self.VistA.wait('STOP or Select')
+        self.VistA.write(sdnum)
+        self.VistA.wait('Enter SECONDARY diagnosis')
+        self.VistA.write('')
+        self.VistA.wait('Enter Operation/Procedure')
+        self.VistA.write(oper)
+        self.VistA.wait('CHOOSE')
+        self.VistA.write(onum)
+        self.VistA.wait('Enter Operation/Procedure')
+        self.VistA.write('')
+        self.VistA.wait('Effective Date')
+        self.VistA.write('')
+        self.VistA.wait('Choose Patient from PATIENT file')
+        self.VistA.write('')
+        self.VistA.wait('Select PATIENT NAME:')
+        self.VistA.write('')
+        self.VistA.wait('Select Bed Control Menu Option')
+        self.VistA.write('')
+
+    def wwgeneric(self, dlist):
+        ''' This is a generic method that receives a list of write and expect values'''
+        ''' This handles lists of lists, so that a series of expect values can be checked before writing'''
+        for wwset in dlist:
+            for writeitem in wwset[0]:
+                self.VistA.wait(writeitem)
+            for expectitem in wwset[1]:
+                self.VistA.write(expectitem)
+
+    def provider_change(self, ssn):
+        ''' Provider Change Test in Bed Control'''
+        self.VistA.wait('Option:')
+        self.VistA.write('bed control menu')
+        self.VistA.wait('Option:')
+        self.VistA.write('Provider Change')
+        self.VistA.wait('Provider Change for PATIENT:')
+        self.VistA.write(ssn)
+        self.VistA.wait('CONTINUE//')
+        self.VistA.write('')
+        self.VistA.wait('Select PROVIDER CHANGE DATE')
+        self.VistA.write('')
+        self.VistA.wait('AS A NEW PROVIDER CHANGE DATE')
+        self.VistA.write('yes')
+        self.VistA.wait('PRIMARY PHYSICIAN:')
+        self.VistA.write('smith')
+        self.VistA.wait('ATTENDING PHYSICIAN')
+        self.VistA.write('alexander')
+        self.VistA.wait('Edit')
+        self.VistA.write('no')
+        self.VistA.wait('Provider Change for PATIENT')
+        self.VistA.write(ssn)
+        self.VistA.wait('Provider')
+        self.VistA.wait('SMITH,MARY')
+        self.VistA.wait('Attending')
+        self.VistA.wait('ALEXANDER,ROBERT')
+        self.VistA.wait('CONTINUE')
+        self.VistA.write('Q')
+        self.VistA.wait('Provider Change for PATIENT:')
+        self.VistA.write('')
+        self.VistA.wait('Select Bed Control Menu Option')
+        self.VistA.write('')
+
+    def seriously_ill_list(self, ssnlist, vlist1, vlist2):
+        ''' Detailed Inpatient Inquiry Test in Bed Control'''
+        self.VistA.wait('Option:')
+        self.VistA.write('bed control menu')
+        self.VistA.wait('Option:')
+        self.VistA.write('Seriously Ill List Entry')
+        self.VistA.wait('Select PATIENT NAME:')
+        self.VistA.write('??')
+        for vitem in vlist1:
+            self.VistA.wait(vitem)
+        for i, ssnitem in enumerate(ssnlist):
+            self.VistA.wait('Select PATIENT NAME:')
+            self.VistA.write(ssnitem)
+            for vitem in vlist2[i]:
+                self.VistA.wait(vitem)
+            self.VistA.wait('//')
+            self.VistA.write('')
+            self.VistA.wait('//')
+            self.VistA.write('')
+        self.VistA.wait('Select PATIENT NAME:')
+        self.VistA.write('')
+        self.VistA.wait('Select Bed Control Menu Option:')
+        self.VistA.write('')
+
+    def switch_bed(self, ssn, bed, badbed=None):
+        ''' Switch Bed Test in Bed Control'''
+        self.VistA.wait('Option:')
+        self.VistA.write('bed control menu')
+        self.VistA.wait('Option:')
+        self.VistA.write('Switch Bed')
+        self.VistA.wait('SWITCH BED FOR PATIENT:')
+        self.VistA.write(ssn)
+        if badbed is not None:
+            self.VistA.wait('ROOM-BED:')
+            self.VistA.write(badbed)
+            self.VistA.wait('ROOM-BED:')
+            self.VistA.write(bed)
+        else:
+            self.VistA.wait('ROOM-BED:')
+            self.VistA.write(bed)
+        self.VistA.wait('SWITCH BED FOR PATIENT:')
+        self.VistA.write('')
+        self.VistA.wait('Select Bed Control Menu Option:')
+        self.VistA.write('')
 
     def adt_menu_smoke(self, patient, vlist, vlist2):
         self.VistA.wait('Option:')
