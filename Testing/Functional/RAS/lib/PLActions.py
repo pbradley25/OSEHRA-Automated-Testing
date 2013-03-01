@@ -864,3 +864,47 @@ class PLActions (Actions):
         self.VistA.write('')
         self.VistA.wait('Lists Option')
         self.VistA.write('')
+
+    def editpart1(self, ssn, probnum, itemnum, chgval):
+        # Simple edit of problem, items 1,2,4,5 or 6 only
+        self.VistA.wait('Menu Option')
+        self.VistA.write('Patient Problem List')
+        self.VistA.wait('PATIENT NAME')
+        self.VistA.write(ssn)
+        self.VistA.wait('Select Action')
+        self.VistA.write('ED')
+        self.VistA.wait('Select Problem')
+        self.VistA.write(probnum)  # which patient problem
+        self.VistA.wait('Select Item')
+        self.VistA.write(itemnum)  # select 1, 2,4,5,or6
+
+    def editpart2(self, ssn, probnum, itemnum, chgval):
+        self.VistA.wait(':')
+        self.VistA.write(chgval)
+        rval = self.VistA.multiwait(['Select Item', 'Ok?'])
+        if rval == 0:
+            self.VistA.write('SC')
+        elif rval == 1:
+            self.VistA.write('Yes')
+            self.VistA.wait('Select Item')
+            self.VistA.write('SC')
+        self.VistA.wait('Select Action')
+        self.VistA.write('QUIT')
+        self.VistA.wait('Print a new problem list')
+        self.VistA.write('N')
+
+    def badeditpart1(self, ssn, probnum, itemnum, chgval):
+        # Simple edit of problem, items 1,2,4,5 or 6 only
+        self.VistA.wait('Menu Option')
+        self.VistA.write('Patient Problem List')
+        self.VistA.wait('PATIENT NAME')
+        self.VistA.write(ssn)
+        self.VistA.wait('Select Action')
+        self.VistA.write('ED')
+        self.VistA.wait('Select Problem')
+        self.VistA.write(probnum)  # which patient problem
+        # self.VistA.wait('Select Item')
+        # self.VistA.write(itemnum)
+        self.VistA.wait('edited by another user')
+        self.VistA.write('QUIT')
+

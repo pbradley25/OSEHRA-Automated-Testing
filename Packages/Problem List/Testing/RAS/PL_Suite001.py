@@ -501,6 +501,38 @@ def pl_test014(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
+def pl_test015(resultlog, result_dir):
+    '''Tests that lock works correctly'''
+    testname=sys._getframe().f_code.co_name
+    resultlog.write('\n' + testname + ', '
+                    + str(datetime.datetime.today()) + ': ')
+    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    try:
+        VistA1=connect_VistA(testname+'_01', result_dir)
+        pl1 = PLActions(VistA1, user='fakenurse1', code='1Nur!@#$')
+        pl1.signon()
+        pl1.rem_all(ssn='656451234')
+        pl1.addcsv(ssn='656451234', pfile='./Functional/dataFiles/NISTinpatientdata0.csv')
+        pl1.verplist(ssn='656451234', vlist=['Essential Hypertension',
+                                    'Chronic airway obstruction',
+                                    'Acute myocardial',
+                                    'Congestive Heart Failure'])
+        pl1.editpart1(ssn='656451234', probnum='1', itemnum='1', chgval='786.50')
+        #
+        VistA2 = connect_VistA(testname+'_02', result_dir)
+        pl2 = PLActions(VistA2, user='fakedoc1', code='1Doc!@#$')
+        pl2.signon()
+        pl2.badeditpart1(ssn='656451234', probnum='1', itemnum='1', chgval='786.50')
+        pl2.signoff()
+        pl1.editpart2(ssn='656451234', probnum='1', itemnum='1', chgval='786.50')
+        pl1.rem_all(ssn='656451234')
+        pl1.signoff()
+    except TestHelper.TestError, e:
+        resultlog.write(e.value)
+        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+    else:
+        resultlog.write('Pass\n')
+        
 def startmon(resultlog, result_dir):
     '''Starts Coverage Monitor'''
     testname=sys._getframe().f_code.co_name

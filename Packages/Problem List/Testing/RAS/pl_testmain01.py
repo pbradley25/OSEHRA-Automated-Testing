@@ -66,6 +66,7 @@ def main():
         PL_Suite001.pl_test012(resultlog, args.resultdir)
         PL_Suite001.pl_test013(resultlog, args.resultdir)
         PL_Suite001.pl_test014(resultlog, args.resultdir)
+        PL_Suite001.pl_test015(resultlog, args.resultdir)
         PL_Suite001.stopmon(resultlog, args.resultdir, args.coverage_type)
     except Exception, e:
         resultlog.write('\nEXCEPTION ERROR:' + str(e))
