@@ -183,7 +183,7 @@ def sc_test007(resultlog, result_dir):
         time = SC.schtime()
         SC.signon()
         tclinic = SC.getclinic()
-        SC.makeapp_bypat(clinic=tclinic, patient='656454321', datetime=time)
+        SC.makeapp_bypat(clinic=tclinic, patient='656454321', datetime=time, loopnum=2)
         SC.signon()
         SC.use_sbar(clinic=tclinic, patient='656454321', fresh='No')
         time = SC.schtime(plushour=1)
