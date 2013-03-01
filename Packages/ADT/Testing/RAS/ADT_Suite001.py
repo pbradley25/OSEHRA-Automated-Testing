@@ -40,6 +40,8 @@ def adt_test001(resultlog, result_dir):
                                        ['SIX,PATIENT', '656451234'],
                                        ['SEVEN,PATIENT', '656771234'],
                                        ['FOURTEEN,PATIENT', '444678924']])
+        adt.treating_spcl_trans(ssn='888776666', spcl='CARDIAC SURGERY')
+        time.sleep(10)
         adt.discharge_patient(ssn='888776666', dtime='NOW+1')
         adt.discharge_patient(ssn='656451234', dtime='NOW+10')
         adt.discharge_patient(ssn='656771234', dtime='NOW+100')

@@ -9,6 +9,7 @@ import sys
 sys.path = ['./Functional/RAS/lib'] + ['./dataFiles'] + ['./Python/vista'] + sys.path
 from PLActions import PLActions
 from ORActions import ORActions
+from CPRSActions import CPRSActions
 import datetime
 import TestHelper
 import logging
@@ -426,7 +427,7 @@ def pl_test012(resultlog, result_dir):
         resultlog.write('Pass\n')
 
 def pl_test013(resultlog, result_dir):
-    #Tests the remainder of the selection list Build menu options
+    '''Tests the remainder of the selection list Build menu options'''
     testname=sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
                     + str(datetime.datetime.today()) + ': ')
@@ -458,6 +459,42 @@ def pl_test013(resultlog, result_dir):
         pl.sellistdl(listname='List001')
         pl.sellistdl(listname='List002')
         pl.signoff()
+    except TestHelper.TestError, e:
+        resultlog.write(e.value)
+        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+    else:
+        resultlog.write('Pass\n')
+
+def pl_test014(resultlog, result_dir):
+    ''' Test Problem List via CPRS MENU '''
+    testname = sys._getframe().f_code.co_name
+    resultlog.write('\n' + testname + ', '
+                    + str(datetime.datetime.today()) + ': ')
+    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    try:
+        VistA1 = connect_VistA(testname, result_dir)
+        pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
+        pl.signon()
+        pl.rem_all(ssn='656451234')
+        pl.addcsv(ssn='656451234', pfile='./Functional/dataFiles/NISTinpatientdata0.csv')
+        pl.verplist(ssn='656451234', vlist=['Essential Hypertension',
+                                    'Chronic airway obstruction',
+                                    'Acute myocardial',
+                                    'Congestive Heart Failure'])
+        pl.signoff()
+        VistA2 = connect_VistA(testname, result_dir)
+        cp = CPRSActions(VistA2, user='fakedoc1', code='1Doc!@#$')
+        cp.signon()
+        cp.cprs_cc_addcomment(ssn='656451234', plnum='2', comment='this is a test')
+        cp.cprs_cc_edit(ssn='656451234', plnum='2', loc='VISTA', edititem='4', editvalue='SMITH')
+        cp.cprs_cc_verify(ssn='656451234', plnum='2', vtext='Chronic airway obstruction')
+        cp.cprs_cc_detdisplay(ssn='656451234', plnum='2', vlist=['Chronic airway obstruction', 'SMITH,MARY'])
+        cp.cprs_cc_inactivate(ssn='656451234', plnum='1')
+        cp.cprs_cc_remove(ssn='656451234', plnum='4')
+        cp.cprs_cc_remove(ssn='656451234', plnum='3')
+        cp.cprs_cc_remove(ssn='656451234', plnum='2')
+        cp.cprs_cc_remove(ssn='656451234', plnum='1')
+        cp.signoff()
     except TestHelper.TestError, e:
         resultlog.write(e.value)
         logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
