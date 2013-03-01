@@ -119,7 +119,7 @@ class SCActions (Actions):
         self.VistA.write('Quit')
         self.VistA.wait('')
 
-    def makeapp_bypat(self, clinic, patient, datetime, loopnum=1, fresh=None, CLfirst=None):
+    def makeapp_bypat(self, clinic, patient, datetime, loopnum=1, fresh=None, CLfirst=None, prevCO=None):
         '''Makes Appointment for specified user at specified time'''
         self.VistA.wait('Clinic name:')
         self.VistA.write(patient)  # <--- by patient
@@ -175,14 +175,19 @@ class SCActions (Actions):
                 self.VistA.write('Yes')
                 self.VistA.wait('Press RETURN to continue:')
                 self.VistA.write('')
-            self.VistA.wait('CORRECT')
-            self.VistA.write('Yes')
-            self.VistA.wait('STOPS')
-            self.VistA.write('No')
-            self.VistA.wait('OTHER INFO:')
-            self.VistA.write('')
-            self.VistA.wait('continue:')
-            self.VistA.write('')
+            if prevCO is not None:
+                self.VistA.wait('A check out date has been entered for this appointment!')
+                self.VistA.wait('DATE/TIME:')
+                self.VistA.write('')
+            else:
+                self.VistA.wait('CORRECT')
+                self.VistA.write('Yes')
+                self.VistA.wait('STOPS')
+                self.VistA.write('No')
+                self.VistA.wait('OTHER INFO:')
+                self.VistA.write('')
+                self.VistA.wait('continue:')
+                self.VistA.write('')
             if CLfirst is not None:
                 self.VistA.wait('Select Action:')
                 self.VistA.write('?\r')

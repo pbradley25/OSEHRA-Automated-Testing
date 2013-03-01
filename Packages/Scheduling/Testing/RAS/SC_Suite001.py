@@ -31,6 +31,8 @@ def sc_test001(resultlog, result_dir):
         SC.signon()
         SC.checkout(clinic=tclinic, vlist1=['Three', str(hour), 'Checked In'],
                     vlist2=['305.91', 'OTHER DRUG', 'RESULTING'], icd='305.91')
+        SC.signon()
+        SC.makeapp_bypat(clinic=tclinic, patient='333224444', datetime=time, fresh='No', prevCO='yes')
         SC.signoff()
     except TestHelper.TestError, e:
         resultlog.write('\nEXCEPTION ERROR:' + str(e))
