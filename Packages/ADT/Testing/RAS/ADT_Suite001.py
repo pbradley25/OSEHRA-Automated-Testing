@@ -148,6 +148,24 @@ def adt_test004(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
+def adt_test005(resultlog, result_dir):
+    ''' ADT Menu Smoke Tests '''
+    testname = sys._getframe().f_code.co_name
+    resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    try:
+        VistA1 = connect_VistA(testname, result_dir)
+        adt = ADTActions(VistA1, user='fakedoc1', code='1Doc!@#$')
+        adt.signon()
+        adt.adt_menu_smoke(ssn='323554567')
+
+        adt.signoff()
+    except TestHelper.TestError, e:
+        resultlog.write(e.value)
+        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+    else:
+        resultlog.write('Pass\n')
+
 def adt_logflow(resultlog, result_dir):
     ''' Use XTFCR to log flow to file '''
     testname = sys._getframe().f_code.co_name
