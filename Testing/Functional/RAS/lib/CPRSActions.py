@@ -28,7 +28,7 @@ class CPRSActions (Actions):
             self.VistA.write('')
 
 
-    def cprs_cc_inactivate(self, ssn, plnum ):
+    def cprs_cc_inactivate(self, ssn, plnum):
         ''' Inactivate a Problem via CPRS Clinician Menu'''
         self.VistA.wait('Option:')
         self.VistA.write('CPRS MENU')
@@ -49,7 +49,7 @@ class CPRSActions (Actions):
         self.VistA.wait('Select Patient:')
         self.VistA.write('Q')
 
-    def cprs_cc_addcomment(self, ssn, plnum, comment ):
+    def cprs_cc_addcomment(self, ssn, plnum, comment):
         ''' Add a Comment to a Problem via CPRS Clinician Menu'''
         self.VistA.wait('Option:')
         self.VistA.write('CPRS MENU')
@@ -70,7 +70,7 @@ class CPRSActions (Actions):
         self.VistA.wait('Select Patient:')
         self.VistA.write('Q')
 
-    def cprs_cc_edit(self, ssn, plnum, loc, edititem, editvalue ):
+    def cprs_cc_edit(self, ssn, plnum, loc, edititem, editvalue):
         ''' Edit a Problem via CPRS Clinician Menu'''
         self.VistA.wait('Option:')
         self.VistA.write('CPRS MENU')
@@ -98,7 +98,7 @@ class CPRSActions (Actions):
         self.VistA.wait('Select Patient:')
         self.VistA.write('Q')
 
-    def cprs_cc_remove(self, ssn, plnum ):
+    def cprs_cc_remove(self, ssn, plnum):
         ''' Remove a Problem via CPRS Clinician Menu'''
         self.VistA.wait('Option:')
         self.VistA.write('CPRS MENU')
@@ -127,7 +127,7 @@ class CPRSActions (Actions):
         self.VistA.wait('Select Patient:')
         self.VistA.write('Q')
 
-    def cprs_cc_verify(self, ssn, plnum, vtext ):
+    def cprs_cc_verify(self, ssn, plnum, vtext):
         ''' Verify a Problem via CPRS Clinician Menu'''
         self.VistA.wait('Option:')
         self.VistA.write('CPRS MENU')
@@ -149,7 +149,7 @@ class CPRSActions (Actions):
         self.VistA.wait('Select Patient:')
         self.VistA.write('Q')
 
-    def cprs_cc_detdisplay(self, ssn, plnum, vlist ):
+    def cprs_cc_detdisplay(self, ssn, plnum, vlist):
         ''' Detailed Display of Problem via CPRS Clinician Menu'''
         self.VistA.wait('Option:')
         self.VistA.write('CPRS MENU')
@@ -171,5 +171,3 @@ class CPRSActions (Actions):
         self.VistA.write('Q')
         self.VistA.wait('Select Patient:')
         self.VistA.write('Q')
-
-               

@@ -1,13 +1,13 @@
 '''
 Created on November, 2012
 @author: pbradley
-This is the main test script that calls the underlying ADT functional tests
-located in ADT_Suite001.
+This is the main test script that calls the underlying REG functional tests
+located in REG_Suite001.
 '''
 import sys
 import logging
 sys.path = ['./RAS/lib'] + ['./dataFiles'] + ['../Python/vista'] + sys.path
-import ADT_Suite001
+import REG_Suite001
 import os, errno
 import argparse
 import datetime
@@ -45,23 +45,23 @@ def main():
     try:
         logging.debug('RESULTDIR: ' + args.resultdir)
         logging.debug('LOGGING:   ' + args.logging_level)
-        resfile = args.resultdir + '/' + timeStamped('ADT_results.txt')
+        resfile = args.resultdir + '/' + timeStamped('Registration_results.txt')
         if not os.path.isabs(args.resultdir):
             logging.error('EXCEPTION: Absolute Path Required for Result Directory')
             raise
         resultlog = file(resfile, 'w')
-        ADT_Suite001.startmon(resultlog, args.resultdir)
-        ADT_Suite001.setup_ward(resultlog, args.resultdir)
-        ADT_Suite001.adt_test001(resultlog, args.resultdir)
-        ADT_Suite001.adt_test002(resultlog, args.resultdir)
-        ADT_Suite001.adt_test003(resultlog, args.resultdir)
-        ADT_Suite001.adt_test004(resultlog, args.resultdir)
-        ADT_Suite001.adt_test005(resultlog, args.resultdir)
-        ADT_Suite001.adt_logflow(resultlog, args.resultdir)
-        ADT_Suite001.stopmon(resultlog, args.resultdir, args.coverage_type)
+        REG_Suite001.startmon(resultlog, args.resultdir)
+        REG_Suite001.setup_ward(resultlog, args.resultdir)
+        REG_Suite001.reg_test001(resultlog, args.resultdir)
+        REG_Suite001.reg_test002(resultlog, args.resultdir)
+        REG_Suite001.reg_test003(resultlog, args.resultdir)
+        REG_Suite001.reg_test004(resultlog, args.resultdir)
+        REG_Suite001.reg_test005(resultlog, args.resultdir)
+        REG_Suite001.reg_logflow(resultlog, args.resultdir)
+        REG_Suite001.stopmon(resultlog, args.resultdir, args.coverage_type)
     except Exception, e:
-        resultlog.write('\nADT TEST EXCEPTION ERROR:' + str(e))
-        logging.error('*****ADT test exception*********' + str(e))
+        resultlog.write('\nREGISTRATION TEST EXCEPTION ERROR:' + str(e))
+        logging.error('*****Registration test exception*********' + str(e))
     finally:
         resultlog.write('finished')
 

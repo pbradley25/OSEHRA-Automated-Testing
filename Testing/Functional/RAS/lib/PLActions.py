@@ -907,4 +907,3 @@ class PLActions (Actions):
         # self.VistA.write(itemnum)
         self.VistA.wait('edited by another user')
         self.VistA.write('QUIT')
-

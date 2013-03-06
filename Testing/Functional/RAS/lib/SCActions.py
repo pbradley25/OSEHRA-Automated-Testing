@@ -146,7 +146,7 @@ class SCActions (Actions):
                 self.VistA.write('Yes')
             elif _ >= 1:
                 self.VistA.wait('APPOINTMENTS:')
-                self.VistA.write('Yes')                
+                self.VistA.write('Yes')
             self.VistA.wait('ETHNICITY:')
             self.VistA.write('')
             self.VistA.wait('RACE:')

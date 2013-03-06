@@ -267,14 +267,14 @@ if(VISTA_SETUP_SITE)
 endif()
 if((SIK_SYSTEM_TESTING OR RAS_SYSTEM_TESTING) AND VISTA_SETUP_SITE)
   add_subdirectory(Functional)
+  # Coverage reports will be in human readable form for functional tests, by default
+  option(TEST_VISTA_READABLE_COVERAGE "On Cache, output the coverage report in a summary table" ON)
+  file(MAKE_DIRECTORY "${TEST_RESULTS_DIR}/Coverage")
 endif()
 
 #---------------------------------------------------------------------------------#
 ##### SECTION TO GENERATE FILES FOR COVERAGE (Using CMake V 2.8.9 and Higher) #####
 #---------------------------------------------------------------------------------#
-
-option(TEST_VISTA_READABLE_COVERAGE "On Cache, output the coverage report in a summary table" OFF)
-file(MAKE_DIRECTORY "${TEST_RESULTS_DIR}/Coverage")
 
 if(${CMAKE_VERSION} VERSION_GREATER 2.8.8)
 

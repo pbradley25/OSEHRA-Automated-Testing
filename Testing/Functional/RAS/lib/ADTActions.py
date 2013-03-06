@@ -1,7 +1,7 @@
 '''
-
-
 Created on November 2012
+
+ADT Manager Menu Actions for Registration package testing
 
 @author: pbradley
 '''
