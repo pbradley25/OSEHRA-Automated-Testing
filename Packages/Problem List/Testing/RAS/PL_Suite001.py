@@ -14,13 +14,13 @@ import datetime
 import TestHelper
 import logging
 
-def pl_test001(resultlog, result_dir):
+def pl_test001(resultlog, result_dir, namespace):
     ''' NIST Inpatient Test '''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='333224444', pfile='./Functional/dataFiles/NISTinpatientdata0.csv')
@@ -45,14 +45,14 @@ def pl_test001(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def pl_test002(resultlog, result_dir):
+def pl_test002(resultlog, result_dir, namespace):
     ''' Restore Removed Problems '''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='888776666', pfile='./Functional/dataFiles/NISTinpatientdata0.csv')
@@ -82,13 +82,13 @@ def pl_test002(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def pl_test003(resultlog, result_dir):
+def pl_test003(resultlog, result_dir, namespace):
     ''' Change Problem Data '''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='656771234',
@@ -119,13 +119,13 @@ def pl_test003(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def pl_test004(resultlog, result_dir):
+def pl_test004(resultlog, result_dir, namespace):
     ''' Create Problem Selection List, add/modify/remove categories and problems '''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         pl = PLActions(VistA1)
         pl.signon()
         pl.createsellist(listname="List001", clinic='VISTA')
@@ -162,7 +162,7 @@ def pl_test004(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def pl_test005(resultlog, result_dir):
+def pl_test005(resultlog, result_dir, namespace):
     ''' Create Problem Selection List, assign to user, and add problem '''
     '''Separate VistA Instances to allow concurrent logins in case of
     future use of tstart and trollback when these features are available'''
@@ -171,7 +171,7 @@ def pl_test005(resultlog, result_dir):
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname + '_01', result_dir)
+        VistA1 = connect_VistA(testname + '_01', result_dir, namespace)
         pl1 = PLActions(VistA1)
         pl1.signon()
         pl1.createsellist(listname="List002", clinic='')
@@ -186,7 +186,7 @@ def pl_test005(resultlog, result_dir):
         pl1.catad(listname='List002', catname='cat022', icd='304.90')
         pl1.sellistad(listname='List002', catname='cat011')
         pl1.sellistad(listname='List002', catname='cat022')
-        VistA2 = connect_VistA(testname + '_02', result_dir)
+        VistA2 = connect_VistA(testname + '_02', result_dir, namespace)
         pl2 = PLActions(VistA2, user='fakedoc1', code='1Doc!@#$')
         pl2.signon()
         pl2.versellist(ssn='354623902', clinic='',
@@ -214,14 +214,14 @@ def pl_test005(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def pl_test006 (resultlog, result_dir):
+def pl_test006 (resultlog, result_dir, namespace):
     ''' Create Selection List from IB Encounter Form'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA = connect_VistA(testname, result_dir)
+        VistA = connect_VistA(testname, result_dir, namespace)
         pl = PLActions(VistA, user='fakenurse1', code='1Nur!@#$')
         pl.signon()
         pl.createibform('LAB', 'FORM1', 'Group1', ['428.0', '410.90', '401.9'])
@@ -245,14 +245,14 @@ def pl_test006 (resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def pl_test007 (resultlog, result_dir):
+def pl_test007 (resultlog, result_dir, namespace):
     ''' Add problems and View Patients by Problems (PL menu items 4 & 5)'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='655447777', pfile='./Functional/dataFiles/NISTinpatientdata0.csv')
@@ -271,7 +271,7 @@ def pl_test007 (resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def pl_test008 (resultlog, result_dir):
+def pl_test008 (resultlog, result_dir, namespace):
     ''' Add problem via data entry as clerk and change as doctor'''
     '''Multiple VistA instances to allow concurrent logins for when
     tstart and trollback become available and implemented'''
@@ -280,14 +280,14 @@ def pl_test008 (resultlog, result_dir):
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname + '_01', result_dir)
+        VistA1 = connect_VistA(testname + '_01', result_dir, namespace)
         pl1 = PLActions(VistA1, user='fakeclerk1', code='1Cle!@#$')
         pl1.signon()
         pl1.dataentry(ssn='666551234', provider='Alexander', clinic='', problem='chest pain',
                       comment='test', onsetdate='t', status='Active', acutechronic='A',
                       service='N')
         pl1.signoff()
-        VistA2 = connect_VistA(testname + '_02', result_dir)
+        VistA2 = connect_VistA(testname + '_02', result_dir, namespace)
         pl2 = PLActions(VistA2, user='fakedoc1', code='1Doc!@#$')
         pl2.signon()
         pl2.editsimple(ssn='666551234', probnum='1', itemnum='1', chgval='786.50')
@@ -300,7 +300,7 @@ def pl_test008 (resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def pl_test009 (resultlog, result_dir):
+def pl_test009 (resultlog, result_dir, namespace):
     ''' Verify Problem List through Order Entry package'''
     '''Multiple VistA instances to allow concurrent logins for when
     tstart and trollback become available and implemented'''
@@ -309,7 +309,7 @@ def pl_test009 (resultlog, result_dir):
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname + '_01', result_dir)
+        VistA1 = connect_VistA(testname + '_01', result_dir, namespace)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='323678904', pfile='./Functional/dataFiles/NISTinpatientdata0.csv')
@@ -318,7 +318,7 @@ def pl_test009 (resultlog, result_dir):
                                             'Acute myocardial',
                                             'Congestive Heart Failure'])
         pl.signoff()
-        VistA2 = connect_VistA(testname + '_02', result_dir)
+        VistA2 = connect_VistA(testname + '_02', result_dir, namespace)
         oentry = ORActions(VistA2)
         oentry.signon()
         oentry.verproblems(ssn='323678904', vlist=['Essential Hypertension',
@@ -326,7 +326,7 @@ def pl_test009 (resultlog, result_dir):
                                             'Acute myocardial',
                                             'Congestive Heart Failure'])
         oentry.signoff()
-        VistA3 = connect_VistA(testname + '_03', result_dir)
+        VistA3 = connect_VistA(testname + '_03', result_dir, namespace)
         pl = PLActions(VistA3, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         for i in range(4):
@@ -338,14 +338,14 @@ def pl_test009 (resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def pl_test010(resultlog, result_dir):
+def pl_test010(resultlog, result_dir, namespace):
     ''' Add problems to Problem List and then Remove them. '''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='323123456', pfile='./Functional/dataFiles/probdata0.csv')
@@ -360,14 +360,14 @@ def pl_test010(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def pl_test011(resultlog, result_dir):
+def pl_test011(resultlog, result_dir, namespace):
     ''' Add a problem, add comments, and then remove to/from Problem List. '''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='656451234', pfile='./Functional/dataFiles/probdata0.csv')
@@ -383,14 +383,14 @@ def pl_test011(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def pl_test012(resultlog, result_dir):
+def pl_test012(resultlog, result_dir, namespace):
     '''Problem List Menu Testing'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname + '_01', result_dir)
+        VistA1 = connect_VistA(testname + '_01', result_dir, namespace)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.addcsv(ssn='656451234', pfile='./Functional/dataFiles/probdata0.csv')
@@ -399,22 +399,22 @@ def pl_test012(resultlog, result_dir):
         pl.rem(ssn='656451234')
         pl.checkempty(ssn='656451234')
         pl.signoff()
-        VistA2 = connect_VistA(testname + '_02', result_dir)
+        VistA2 = connect_VistA(testname + '_02', result_dir, namespace)
         p2 = PLActions(VistA2, user='fakeclerk1', code='1Cle!@#$')
         p2.signon()
         p2.dataentry(ssn='656451234', provider='Alexander', clinic='', problem='305.91', comment='Test', onsetdate='t', status='a', acutechronic='A', service='n')
         p2.signoff()
-        VistA3 = connect_VistA(testname + '_03', result_dir)
+        VistA3 = connect_VistA(testname + '_03', result_dir, namespace)
         p3 = PLActions(VistA3, user='fakedoc1', code='1Doc!@#$')
         p3.signon()
         p3.verifyproblem(ssn='656451234', problem='305.91')
         p3.signoff()
-        VistA4 = connect_VistA(testname + '_04', result_dir)
+        VistA4 = connect_VistA(testname + '_04', result_dir, namespace)
         p4 = PLActions(VistA4, user='fakedoc1', code='1Doc!@#$')
         p4.signon()
         p4.selectnewpatient(ssn1='656451234', name1='SIX,', ss2='323123456', name2='NINE,')
         p4.signoff()
-        VistA5 = connect_VistA(testname + '_05', result_dir)
+        VistA5 = connect_VistA(testname + '_05', result_dir, namespace)
         p5 = PLActions(VistA5, user='fakedoc1', code='1Doc!@#$')
         p5.signon()
         p5.addcsv(ssn='656451234', pfile='./Functional/dataFiles/probdata0.csv')
@@ -426,14 +426,14 @@ def pl_test012(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def pl_test013(resultlog, result_dir):
+def pl_test013(resultlog, result_dir, namespace):
     '''Tests the remainder of the selection list Build menu options'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.createsellist(listname="List001", clinic='VISTA')
@@ -465,14 +465,14 @@ def pl_test013(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def pl_test014(resultlog, result_dir):
+def pl_test014(resultlog, result_dir, namespace):
     ''' Test Problem List via CPRS MENU '''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         pl.signon()
         pl.rem_all(ssn='656451234')
@@ -482,7 +482,7 @@ def pl_test014(resultlog, result_dir):
                                     'Acute myocardial',
                                     'Congestive Heart Failure'])
         pl.signoff()
-        VistA2 = connect_VistA(testname, result_dir)
+        VistA2 = connect_VistA(testname, result_dir, namespace)
         cp = CPRSActions(VistA2, user='fakedoc1', code='1Doc!@#$')
         cp.signon()
         cp.cprs_cc_addcomment(ssn='656451234', plnum='2', comment='this is a test')
@@ -501,14 +501,14 @@ def pl_test014(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def pl_test015(resultlog, result_dir):
+def pl_test015(resultlog, result_dir, namespace):
     '''Tests that lock works correctly'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname + '_01', result_dir)
+        VistA1 = connect_VistA(testname + '_01', result_dir, namespace)
         pl1 = PLActions(VistA1, user='fakenurse1', code='1Nur!@#$')
         pl1.signon()
         pl1.rem_all(ssn='656451234')
@@ -519,7 +519,7 @@ def pl_test015(resultlog, result_dir):
                                     'Congestive Heart Failure'])
         pl1.editpart1(ssn='656451234', probnum='1', itemnum='1', chgval='786.50')
         #
-        VistA2 = connect_VistA(testname + '_02', result_dir)
+        VistA2 = connect_VistA(testname + '_02', result_dir, namespace)
         pl2 = PLActions(VistA2, user='fakedoc1', code='1Doc!@#$')
         pl2.signon()
         pl2.badeditpart1(ssn='656451234', probnum='1', itemnum='1', chgval='786.50')
@@ -533,14 +533,14 @@ def pl_test015(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def startmon(resultlog, result_dir):
+def startmon(resultlog, result_dir, namespace):
     '''Starts Coverage Monitor'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         VistA1.startCoverage(routines=['GMPL*'])
     except TestHelper.TestError, e:
         resultlog.write(e.value)
@@ -552,7 +552,7 @@ def startmon(resultlog, result_dir):
         VistA1.write('^\r^\r^\r')
         VistA1.write('h\r')
 
-def stopmon (resultlog, result_dir, humanreadable):
+def stopmon (resultlog, result_dir, humanreadable, namespace):
     ''' STOP MONITOR'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
@@ -560,7 +560,7 @@ def stopmon (resultlog, result_dir, humanreadable):
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
         # Connect to VistA
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         path = (result_dir + '/' + timeStamped('ProblemList_coverage.txt'))
         VistA1.stopCoverage(path, humanreadable)
     except TestHelper.TestError, e:
@@ -576,14 +576,14 @@ def stopmon (resultlog, result_dir, humanreadable):
 def timeStamped(fname, fmt='%Y-%m-%d-%H-%M-%S_{fname}'):
     return datetime.datetime.now().strftime(fmt).format(fname=fname)
 
-def connect_VistA(testname, result_dir):
+def connect_VistA(testname, result_dir, namespace):
     # Connect to VistA
-    logging.debug('Connect_VistA')
+    logging.debug('Connect_VistA' + ', Namespace: ' + namespace)
     from OSEHRAHelper import ConnectToMUMPS, PROMPT
-    VistA = ConnectToMUMPS(logfile=result_dir + '/' + timeStamped(testname + '.txt'), instance='', namespace='')
+    VistA = ConnectToMUMPS(logfile=result_dir + '/' + timeStamped(testname + '.txt'), instance='', namespace=namespace)
     if VistA.type == 'cache':
         try:
-            VistA.ZN('VISTA')
+            VistA.ZN(namespace)
         except IndexError, no_namechange:
             pass
     VistA.wait(PROMPT)

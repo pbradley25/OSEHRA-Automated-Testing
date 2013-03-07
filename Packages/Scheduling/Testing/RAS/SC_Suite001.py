@@ -10,14 +10,14 @@ import TestHelper
 import datetime
 import logging
 
-def sc_test001(resultlog, result_dir):
+def sc_test001(resultlog, result_dir, namespace):
     '''Basic appointment managment options
     Make an Appointment, Check in, Check Out'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA = connect_VistA(testname, result_dir)
+        VistA = connect_VistA(testname, result_dir, namespace)
         SC = SCActions(VistA, scheduling='Scheduling')
         time = SC.schtime()
         SC.signon()
@@ -40,7 +40,7 @@ def sc_test001(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def sc_test002(resultlog, result_dir):
+def sc_test002(resultlog, result_dir, namespace):
     '''Basic appointment managment options
     Make an Appointment (Scheduled and Unscheduled),
     record a No-Show, Cancel an appointment and change patients'''
@@ -48,7 +48,7 @@ def sc_test002(resultlog, result_dir):
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA = connect_VistA(testname, result_dir)
+        VistA = connect_VistA(testname, result_dir, namespace)
         SC = SCActions(VistA, scheduling='Scheduling')
         time = SC.schtime()
         SC.signon()
@@ -71,14 +71,14 @@ def sc_test002(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def sc_test003(resultlog, result_dir):
+def sc_test003(resultlog, result_dir, namespace):
     '''This tests clinic features such as change clinic, change daterange,
      expand the entry, add and edit, and Patient demographics'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA = connect_VistA(testname, result_dir)
+        VistA = connect_VistA(testname, result_dir, namespace)
         SC = SCActions(VistA, scheduling='Scheduling')
         SC.signon()
         tclinic = SC.getclinic()
@@ -94,13 +94,13 @@ def sc_test003(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def sc_test004(resultlog, result_dir):
+def sc_test004(resultlog, result_dir, namespace):
     '''This tests clinic features such as expand the entry, add and edit, and Patient demographics'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA = connect_VistA(testname, result_dir)
+        VistA = connect_VistA(testname, result_dir, namespace)
         SC = SCActions(VistA, scheduling='Scheduling')
         time = SC.schtime(plushour=1)
         SC.signon()
@@ -122,13 +122,13 @@ def sc_test004(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def sc_test005(resultlog, result_dir):
+def sc_test005(resultlog, result_dir, namespace):
     '''This test checks a patient into a clinic, then discharges him, then deletes his checkout'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA = connect_VistA(testname, result_dir)
+        VistA = connect_VistA(testname, result_dir, namespace)
         SC = SCActions(VistA)
         SC.signon()
         tclinic = SC.getclinic()
@@ -152,13 +152,13 @@ def sc_test005(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def sc_test006(resultlog, result_dir):
+def sc_test006(resultlog, result_dir, namespace):
     '''This test will exercise the wait list functionality'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA = connect_VistA(testname, result_dir)
+        VistA = connect_VistA(testname, result_dir, namespace)
         SC = SCActions(VistA, user='fakedoc1', code='1Doc!@#$')
         SC.signon()
         tclinic = SC.getclinic()
@@ -172,7 +172,7 @@ def sc_test006(resultlog, result_dir):
         resultlog.write('Pass\n')
 
 
-def sc_test007(resultlog, result_dir):
+def sc_test007(resultlog, result_dir, namespace):
     '''Basic Apptments, similar to sc_test001 but specifying patient name not clinic at first prompt
        This test will also use the space-bar to check recall feature works
         Make an Appointment, Check in, Check Out'''
@@ -180,7 +180,7 @@ def sc_test007(resultlog, result_dir):
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA = connect_VistA(testname, result_dir)
+        VistA = connect_VistA(testname, result_dir, namespace)
         SC = SCActions(VistA, scheduling='Scheduling')
         time = SC.schtime()
         SC.signon()
@@ -208,13 +208,13 @@ def sc_test007(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def sc_test008(resultlog, result_dir):
+def sc_test008(resultlog, result_dir, namespace):
     '''Make future appointments and verify, and use CLINICX and check use of case sensitivity (cLiNiCx, ClInIcX, etc.)'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA = connect_VistA(testname, result_dir)
+        VistA = connect_VistA(testname, result_dir, namespace)
         SC = SCActions(VistA, scheduling='Scheduling')
         time = SC.schtime()
         SC.signon()
@@ -238,13 +238,13 @@ def sc_test008(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def sc_test009(resultlog, result_dir):
+def sc_test009(resultlog, result_dir, namespace):
     '''Make appts with variable length. Make appt in distant future for EWL'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA = connect_VistA(testname, result_dir)
+        VistA = connect_VistA(testname, result_dir, namespace)
         SC = SCActions(VistA, scheduling='Scheduling')
         time = SC.schtime()
         SC.signon()
@@ -267,13 +267,13 @@ def sc_test009(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def sc_test010(resultlog, result_dir):
+def sc_test010(resultlog, result_dir, namespace):
     '''Make appts and save demographics'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA = connect_VistA(testname, result_dir)
+        VistA = connect_VistA(testname, result_dir, namespace)
         SC = SCActions(VistA, scheduling='Scheduling')
         time = SC.schtime()
         # this signon() and fix_demographics() is a workaround for gtm bug
@@ -344,14 +344,14 @@ def sc_test010(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def startmon(resultlog, result_dir):
+def startmon(resultlog, result_dir, namespace):
     '''Starts Coverage Monitor'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
                     + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         VistA1.startCoverage(routines=['SC*', 'SD*'])
     except TestHelper.TestError, e:
         resultlog.write(e.value)
@@ -363,7 +363,7 @@ def startmon(resultlog, result_dir):
         VistA1.write('^\r^\r^\r')
         VistA1.write('h\r')
 
-def stopmon (resultlog, result_dir, humanreadable):
+def stopmon (resultlog, result_dir, humanreadable, namespace):
     ''' STOP MONITOR'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
@@ -371,7 +371,7 @@ def stopmon (resultlog, result_dir, humanreadable):
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
         # Connect to VistA
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         path = (result_dir + '/' + timeStamped('Scheduling_coverage.txt'))
         VistA1.stopCoverage(path, humanreadable)
     except TestHelper.TestError, e:
@@ -387,13 +387,14 @@ def stopmon (resultlog, result_dir, humanreadable):
 def timeStamped(fname, fmt='%Y-%m-%d-%H-%M-%S_{fname}'):
     return datetime.datetime.now().strftime(fmt).format(fname=fname)
 
-def connect_VistA(testname, result_dir):
+def connect_VistA(testname, result_dir, namespace):
     # Connect to VistA
+    logging.debug('Connect_VistA' + ', Namespace: ' + namespace)
     from OSEHRAHelper import ConnectToMUMPS, PROMPT
-    VistA = ConnectToMUMPS(logfile=result_dir + '/' + timeStamped(testname + '.txt'), instance='', namespace='')
+    VistA = ConnectToMUMPS(logfile=result_dir + '/' + timeStamped(testname + '.txt'), instance='', namespace=namespace)
     if VistA.type == 'cache':
         try:
-            VistA.ZN('VISTA')
+            VistA.ZN(namespace)
         except IndexError, no_namechange:
             pass
     VistA.wait(PROMPT)

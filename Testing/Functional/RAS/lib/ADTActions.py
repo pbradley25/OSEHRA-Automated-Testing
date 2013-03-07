@@ -878,34 +878,37 @@ class ADTActions (Actions):
         if self.VistA.type == 'cache':
             self.VistA.wait('Right Margin')
             self.VistA.write('')
-        self.VistA.wait('CARTER,DAVID JR')
+        self.VistA.wait('-------------------------')
         self.VistA.wait('Select Disposition Outputs Menu Option')
         self.VistA.write('Disposition')
-        self.VistA.wait('EARLIEST REGISTRATION ON FILE IS')
-        self.VistA.wait('Start with REGISTRATION DATE:')
-        self.VistA.write('')
-        self.VistA.wait('Select Disposition Outputs Menu Option')
-        self.VistA.write('Summary')
-        self.VistA.wait('START DATE:')
-        self.VistA.write('t-100')
-        self.VistA.wait('END DATE')
-        self.VistA.write('t')
-        self.VistA.wait('DEVICE')
-        self.VistA.write('HOME')
         if self.VistA.type == 'cache':
-            self.VistA.wait('Right Margin')
+            self.VistA.wait('EARLIEST REGISTRATION ON FILE IS')
+            self.VistA.wait('Start with REGISTRATION DATE:')
             self.VistA.write('')
-        for vitem in ['REGISTRATION DISPOSITION SUMMARY', 'ADMIT', 'SCHEDULED ADMISSION', 'SCHEDULE FUTURE APPOINTMENT', 'INELIGIBLE']:
-            self.VistA.wait(vitem)
-        self.VistA.write('')
-        for vitem in ['REGISTRATION DISPOSITION SUMMARY', 'DEAD ON ARRIVAL', 'FEE BASIS REFERAL', 'COMMUNITY RESOURCES', 'LOW PRIORITY-DISP COMMUNITY']:
-            self.VistA.wait(vitem)
-        self.VistA.write('')
-        for vitem in ['REGISTRATION DISPOSITION SUMMARY', 'LOW PRIORITY-DISP OTHER VA', 'HOSPITAL ADMISSION', 'CANCEL WITHOUT EXAM']:
-            self.VistA.wait(vitem)
-        self.VistA.write('')
-        for vitem in ['REGISTRATION DISPOSITION SUMMARY', 'TOTAL']:
-            self.VistA.wait(vitem)
+            self.VistA.wait('Select Disposition Outputs Menu Option')
+            self.VistA.write('Summary')
+            self.VistA.wait('START DATE:')
+            self.VistA.write('t-100')
+            self.VistA.wait('END DATE')
+            self.VistA.write('t')
+            self.VistA.wait('DEVICE')
+            self.VistA.write('HOME')
+            if self.VistA.type == 'cache':
+                self.VistA.wait('Right Margin')
+                self.VistA.write('')
+            for vitem in ['REGISTRATION DISPOSITION SUMMARY', 'ADMIT', 'SCHEDULED ADMISSION', 'SCHEDULE FUTURE APPOINTMENT', 'INELIGIBLE']:
+                self.VistA.wait(vitem)
+            self.VistA.write('')
+            for vitem in ['REGISTRATION DISPOSITION SUMMARY', 'DEAD ON ARRIVAL', 'FEE BASIS REFERAL', 'COMMUNITY RESOURCES', 'LOW PRIORITY-DISP COMMUNITY']:
+                self.VistA.wait(vitem)
+            self.VistA.write('')
+            for vitem in ['REGISTRATION DISPOSITION SUMMARY', 'LOW PRIORITY-DISP OTHER VA', 'HOSPITAL ADMISSION', 'CANCEL WITHOUT EXAM']:
+                self.VistA.wait(vitem)
+            self.VistA.write('')
+            for vitem in ['REGISTRATION DISPOSITION SUMMARY', 'TOTAL']:
+                self.VistA.wait(vitem)
+        else:
+            self.VistA.wait('NO REGISTRATIONS ON FILE TO START WITH')
         self.VistA.wait('Select Disposition Outputs Menu Option')
         self.VistA.write('')
         # Enrollment Reports

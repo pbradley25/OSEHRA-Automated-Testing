@@ -13,13 +13,13 @@ import time
 import TestHelper
 import logging
 
-def reg_test001(resultlog, result_dir):
+def reg_test001(resultlog, result_dir, namespace):
     ''' Admit 4 patients, verify, then discharge them '''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         reg = ADTActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         reg.signon()
         reg.admit_a_patient(ssn='888776666', bed='1-A')
@@ -53,13 +53,13 @@ def reg_test001(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def reg_test002(resultlog, result_dir):
+def reg_test002(resultlog, result_dir, namespace):
     ''' Schedule, Unschedule, Transfer Patient '''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         reg = ADTActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         reg.signon()
         reg.admit_a_patient(ssn='888776666', bed='1-A')
@@ -81,13 +81,13 @@ def reg_test002(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def reg_test003(resultlog, result_dir):
+def reg_test003(resultlog, result_dir, namespace):
     ''' Wait list testing '''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         reg = ADTActions(VistA1)
         reg.signon()
         reg.waiting_list_entry(ssn='323554567')
@@ -106,13 +106,13 @@ def reg_test003(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def reg_test004(resultlog, result_dir):
+def reg_test004(resultlog, result_dir, namespace):
     ''' Lodger checkin / checkout testing '''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         reg = ADTActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         reg.signon()
         reg.checkin_lodger(ssn='323554567', bed='1-A')
@@ -148,13 +148,13 @@ def reg_test004(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def reg_test005(resultlog, result_dir):
+def reg_test005(resultlog, result_dir, namespace):
     ''' ADT Menu Smoke Tests '''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         reg = ADTActions(VistA1, user='fakedoc1', code='1Doc!@#$')
         reg.signon()
         reg.adt_menu_smoke(ssn='323554567')
@@ -166,13 +166,13 @@ def reg_test005(resultlog, result_dir):
     else:
         resultlog.write('Pass\n')
 
-def reg_logflow(resultlog, result_dir):
+def reg_logflow(resultlog, result_dir, namespace):
     ''' Use XTFCR to log flow to file '''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         reg = ADTActions(VistA1)
         reg.logflow(['DGPMV', 'DGSWITCH'])
     except TestHelper.TestError, e:
@@ -182,13 +182,13 @@ def reg_logflow(resultlog, result_dir):
         resultlog.write('Pass\n')
 
 
-def setup_ward(resultlog, result_dir):
+def setup_ward(resultlog, result_dir, namespace):
     ''' Set up ward for ADT testing '''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         reg = ADTActions(VistA1)
         reg.signon()
         reg.adt_setup()
@@ -200,7 +200,7 @@ def setup_ward(resultlog, result_dir):
         resultlog.write('Pass\n')
 
 
-def startmon(resultlog, result_dir):
+def startmon(resultlog, result_dir, namespace):
     '''Starts Coverage Monitor'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
@@ -208,7 +208,7 @@ def startmon(resultlog, result_dir):
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     print "startmon1"
     try:
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         print "startmon2"
         VistA1.startCoverage(routines=['DGPMV', 'DGSWITCH', 'DGSCHAD', 'DGPMEX', 'DGWAIT', 'DGSILL'])
     except TestHelper.TestError, e:
@@ -221,7 +221,7 @@ def startmon(resultlog, result_dir):
         VistA1.write('^\r^\r^\r')
         VistA1.write('h\r')
 
-def stopmon (resultlog, result_dir, humanreadable):
+def stopmon (resultlog, result_dir, humanreadable, namespace):
     ''' STOP MONITOR'''
     testname = sys._getframe().f_code.co_name
     resultlog.write('\n' + testname + ', '
@@ -229,7 +229,7 @@ def stopmon (resultlog, result_dir, humanreadable):
     logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
     try:
         # Connect to VistA
-        VistA1 = connect_VistA(testname, result_dir)
+        VistA1 = connect_VistA(testname, result_dir, namespace)
         path = (result_dir + '/' + timeStamped('ADT_coverage.txt'))
         VistA1.stopCoverage(path, humanreadable)
     except TestHelper.TestError, e:
@@ -245,15 +245,14 @@ def stopmon (resultlog, result_dir, humanreadable):
 def timeStamped(fname, fmt='%Y-%m-%d-%H-%M-%S_{fname}'):
     return datetime.datetime.now().strftime(fmt).format(fname=fname)
 
-
-def connect_VistA(testname, result_dir):
+def connect_VistA(testname, result_dir, namespace):
     # Connect to VistA
-    logging.debug('Connect_VistA')
+    logging.debug('Connect_VistA' + ', Namespace: ' + namespace)
     from OSEHRAHelper import ConnectToMUMPS, PROMPT
-    VistA = ConnectToMUMPS(logfile=result_dir + '/' + timeStamped(testname + '.txt'), instance='', namespace='')
+    VistA = ConnectToMUMPS(logfile=result_dir + '/' + timeStamped(testname + '.txt'), instance='', namespace=namespace)
     if VistA.type == 'cache':
         try:
-            VistA.ZN('VISTA')
+            VistA.ZN(namespace)
         except IndexError, no_namechange:
             pass
     VistA.wait(PROMPT)
