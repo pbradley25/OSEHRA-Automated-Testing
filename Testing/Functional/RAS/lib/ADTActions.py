@@ -921,9 +921,12 @@ class ADTActions (Actions):
         if self.VistA.type == 'cache':
             self.VistA.wait('Right Margin')
             self.VistA.write('')
-        for vitem in ['Enrolled Veterans Report', 'CURRENTLY ENROLLED', 'In Process', 'Total', 'Total']:
+        for vitem in ['Enrolled Veterans Report', 'CURRENTLY ENROLLED', 'In Process', 'Total']:
             self.VistA.wait(vitem)
-        self.VistA.wait('Select Enrollment Reports Option:')
+        rval = self.VistA.multiwait(['Enter RETURN to continue','Select Enrollment Reports Option:'])
+        if rval == 0:
+            self.VistA.write('^')
+            self.VistA.wait('Select Enrollment Reports Option:')
         self.VistA.write('Pending Applications')
         self.VistA.wait('Enter Beginning Date:')
         self.VistA.write('t-100')
