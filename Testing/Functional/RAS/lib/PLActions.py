@@ -86,7 +86,7 @@ class PLActions (Actions):
             self.VistA.write('N')
 
     def add(self, ssn, clinic, comment, onsetdate, status, acutechronic,
-              service, probnum=None, icd=None, evalue=None):
+              service, probnum=None, icd=None, evalue=None, verchknum=None):
     # Add a problem using clinic or user with assigned selection list
         self.VistA.wait('Menu Option')
         self.VistA.write('Patient Problem List')
@@ -128,9 +128,24 @@ class PLActions (Actions):
             self.VistA.write('Save')
         elif rval == 1:
             self.VistA.write('Save')
-        self.VistA.wait('Select Item')
-        self.VistA.write('')
+        #
+        if probnum == 'skip':
+            self.VistA.wait('PROBLEM')
+            self.VistA.write('')
+        elif probnum is None:
+            self.VistA.wait('PROBLEM')
+            self.VistA.write('')
+        else:
+            self.VistA.wait('Select Item')
+            self.VistA.write('')
         self.VistA.wait('Select Action')
+        # optionally, check to make sure user entering the data can't also verify it
+        if verchknum is not None:
+            self.VistA.write('$')
+            self.VistA.wait('Select Problem')
+            self.VistA.write(verchknum)
+            self.VistA.wait('does not require verification')
+            self.VistA.wait('Select Action')
         self.VistA.write('QUIT')
         self.VistA.wait('Print a new problem list')
         self.VistA.write('N')
@@ -728,6 +743,8 @@ class PLActions (Actions):
         self.VistA.write('1')
         self.VistA.wait('PATIENT NAME:')
         self.VistA.write(ssn)
+        self.VistA.wait('$')  # check for $ verify mark
+        self.VistA.wait(problem)  # check for $ verify mark
         self.VistA.wait('Select Action:')
         self.VistA.write('DT')
         self.VistA.wait('Select Problem')
@@ -742,11 +759,13 @@ class PLActions (Actions):
         self.VistA.wait('Select Problem')
         self.VistA.write('')
         self.VistA.wait('Select Action:')
-        self.VistA.write('')
-        self.VistA.wait('Action:')
-        self.VistA.write('')
-        # TODO:Check this out, possibly jamming together two things not meant together
+        self.VistA.write('Q')
+        # verify again and confirm previous verification worked
         self.VistA.wait('Select Action:')
+        self.VistA.write('$')
+        self.VistA.wait('Select Problem')
+        self.VistA.write('')
+        self.VistA.wait('does not require verification')
         self.VistA.write('Q')
 
     def selectnewpatient(self, ssn1, name1, ss2, name2):

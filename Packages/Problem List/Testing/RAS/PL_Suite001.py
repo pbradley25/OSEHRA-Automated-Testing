@@ -402,12 +402,16 @@ def pl_test012(resultlog, result_dir, namespace):
         VistA2 = connect_VistA(testname + '_02', result_dir, namespace)
         p2 = PLActions(VistA2, user='fakeclerk1', code='1Cle!@#$')
         p2.signon()
-        p2.dataentry(ssn='656451234', provider='Alexander', clinic='', problem='305.91', comment='Test', onsetdate='t', status='a', acutechronic='A', service='n')
+        p2.dataentry(ssn='656451234', provider='Alexander', clinic='', problem='305.91',
+                     comment='Test', onsetdate='t', status='a', acutechronic='A', service='n')
         p2.signoff()
         VistA3 = connect_VistA(testname + '_03', result_dir, namespace)
         p3 = PLActions(VistA3, user='fakedoc1', code='1Doc!@#$')
         p3.signon()
         p3.verifyproblem(ssn='656451234', problem='305.91')
+        p3.add(ssn='656451234', clinic='Clinic1', comment='this is a test',
+               onsetdate='t', status='Active', acutechronic='A', service='N',
+               icd='786.2', verchknum='2')
         p3.signoff()
         VistA4 = connect_VistA(testname + '_04', result_dir, namespace)
         p4 = PLActions(VistA4, user='fakedoc1', code='1Doc!@#$')
