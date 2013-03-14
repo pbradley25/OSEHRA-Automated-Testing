@@ -150,6 +150,55 @@ class PLActions (Actions):
         self.VistA.wait('Print a new problem list')
         self.VistA.write('N')
 
+    def addspec(self, ssn, clinic, comment, onsetdate, status, acutechronic,
+              service, icd, prompt='yes', uselex='yes', screendups='yes', isdup=None, prob=None, vlist=None):
+        ''' add problems with checks for the PL site parameters'''
+        self.VistA.wait('Menu Option')
+        self.VistA.write('Patient Problem List')
+        self.VistA.wait('PATIENT NAME')
+        self.VistA.write(ssn)
+        self.VistA.wait('Select Action')
+        self.VistA.write('AD')
+        self.VistA.wait('Clinic')
+        self.VistA.write(clinic)
+        self.VistA.wait('PROBLEM')
+        self.VistA.write(icd)
+        if uselex is 'yes':
+            self.VistA.wait('Ok?')
+            self.VistA.write('YES')
+        if screendups == isdup == 'yes':
+            self.VistA.wait('>>>  ' + prob)
+            self.VistA.wait('     is already an')
+            self.VistA.wait('Are you sure you want to continue')
+            self.VistA.write('Yes')
+        self.VistA.wait('COMMENT')
+        self.VistA.write(comment)
+        self.VistA.wait('ANOTHER COMMENT')
+        self.VistA.write('')
+        self.VistA.wait('DATE OF ONSET')
+        self.VistA.write(onsetdate)
+        self.VistA.wait('STATUS')
+        self.VistA.write(status)
+        self.VistA.wait('hronic')
+        self.VistA.write(acutechronic)
+        rval = self.VistA.multiwait(['service-connected condition', 'uit w/o saving'])
+        if rval == 0:
+            self.VistA.write(service)
+            self.VistA.wait('uit w/o saving')
+            self.VistA.write('Save')
+        elif rval == 1:
+            self.VistA.write('Save')
+        self.VistA.wait('PROBLEM')
+        self.VistA.write('')
+        if vlist is not None:
+            for vitem in vlist:
+                self.VistA.wait(vitem)
+        self.VistA.wait('Select Action')
+        self.VistA.write('QUIT')
+        if prompt == 'yes':
+            self.VistA.wait('Print a new problem list')
+            self.VistA.write('N')
+
     def dataentry(self, ssn, provider, clinic, problem, comment, onsetdate, status, acutechronic,
               service, probnum=None, icd=None, evalue=None):
     # Add a problem (via data entry) using description or selection list
@@ -913,7 +962,7 @@ class PLActions (Actions):
         self.VistA.write('N')
 
     def badeditpart1(self, ssn, probnum, itemnum, chgval):
-        # Simple edit of problem, items 1,2,4,5 or 6 only
+        ''' Simple edit of problem, items 1,2,4,5 or 6 only'''
         self.VistA.wait('Menu Option')
         self.VistA.write('Patient Problem List')
         self.VistA.wait('PATIENT NAME')
@@ -926,3 +975,31 @@ class PLActions (Actions):
         # self.VistA.write(itemnum)
         self.VistA.wait('edited by another user')
         self.VistA.write('QUIT')
+
+    def editPLsite(self, ver, prompt, uselex, order, screendups):
+        '''Simple edit of problem, items 1,2,4,5 or 6 only'''
+        self.VistA.wait('Menu Option')
+        self.VistA.write('Edit PL Site Parameters')
+        self.VistA.wait('VERIFY TRANSCRIBED PROBLEMS:')
+        self.VistA.write(ver)
+        self.VistA.wait('PROMPT FOR CHART COPY:')
+        self.VistA.write(prompt)
+        self.VistA.wait('USE CLINICAL LEXICON:')
+        self.VistA.write(uselex)
+        self.VistA.wait('DISPLAY ORDER:')
+        self.VistA.write(order)
+        self.VistA.wait('SCREEN DUPLICATE ENTRIES:')
+        self.VistA.write(screendups)
+
+    def checkVerplsetting(self, ssn):
+        ''' Check Verify PL site setting'''
+        self.VistA.wait('Menu Option')
+        self.VistA.write('Patient Problem List')
+        self.VistA.wait('PATIENT NAME')
+        self.VistA.write(ssn)
+        self.VistA.wait('Select Action')
+        self.VistA.write('$')
+        self.VistA.wait('$ is not a valid selection')
+        self.VistA.wait('Select Action')
+        self.VistA.write('Q')
+

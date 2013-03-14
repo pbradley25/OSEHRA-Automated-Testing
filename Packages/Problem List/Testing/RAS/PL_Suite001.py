@@ -537,6 +537,46 @@ def pl_test015(resultlog, result_dir, namespace):
     else:
         resultlog.write('Pass\n')
 
+def pl_test016(resultlog, result_dir, namespace):
+    '''Tests PL Site Parameters '''
+    testname = sys._getframe().f_code.co_name
+    resultlog.write('\n' + testname + ', '
+                    + str(datetime.datetime.today()) + ': ')
+    logging.debug('\n' + testname + ', ' + str(datetime.datetime.today()) + ': ')
+    try:
+        VistA1 = connect_VistA(testname, result_dir, namespace)
+        pl = PLActions(VistA1, user='fakedoc1', code='1Doc!@#$')
+        pl.signon()
+        # check verify pl setting
+        pl.editPLsite(ver='no', prompt='no', uselex='yes', order='CHRONO', screendups='yes')
+        pl.checkVerplsetting(ssn='656451234')
+        # check lexicon pl setting and prompt setting
+        pl.editPLsite(ver='yes', prompt='no', uselex='no', order='CHRONO', screendups='yes')
+        pl.addspec(ssn='656451234', clinic='Clinic1', comment='this is a test',
+               onsetdate='t-1', status='Active', acutechronic='A', service='N',
+               icd='785.2', prompt='no', uselex='no', screendups='yes', isdup='no')
+        # check chronology pl setting
+        pl.addspec(ssn='656451234', clinic='Clinic1', comment='this is a test',
+               onsetdate='t', status='Active', acutechronic='A', service='N',
+               icd='786.2', prompt='no', uselex='no', screendups='yes', isdup='no')
+        pl.verplist(ssn='656451234', vlist=['785.2', '786.2'])
+        pl.editPLsite(ver='yes', prompt='yes', uselex='yes', order='REVERSE', screendups='yes')
+        pl.addspec(ssn='656451234', clinic='Clinic1', comment='this is a test',
+               onsetdate='t', status='Active', acutechronic='A', service='N',
+               icd='787.1', prompt='yes', uselex='yes', screendups='yes', isdup='no',
+               vlist=['Heartburn', '785.2', '786.2'])
+        # check screen dups pl setting
+        pl.editPLsite(ver='yes', prompt='yes', uselex='yes', order='REVERSE', screendups='yes')
+        pl.addspec(ssn='656451234', clinic='Clinic1', comment='this is a test',
+                   onsetdate='t', status='Active', acutechronic='A', service='N',
+                   icd='787.1', prompt='yes', uselex='yes', screendups='yes', isdup='yes', prob='Heartburn')
+        pl.signoff()
+    except TestHelper.TestError, e:
+        resultlog.write(e.value)
+        logging.error(testname + ' EXCEPTION ERROR: Unexpected test result')
+    else:
+        resultlog.write('Pass\n')
+
 def startmon(resultlog, result_dir, namespace):
     '''Starts Coverage Monitor'''
     testname = sys._getframe().f_code.co_name
