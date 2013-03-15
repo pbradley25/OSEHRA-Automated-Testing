@@ -155,6 +155,7 @@ def pl_test004(resultlog, result_dir, namespace):
         pl.catdl(listname='List001', catname='cat002')
         pl.sellistrfu(listname='List001', username='Alexander')
         pl.sellistdl(listname='List001')
+        pl.checkRMsellist(ssn='656454321', clinic='VISTA')
         pl.signoff()
     except TestHelper.TestError, e:
         resultlog.write(e.value)
