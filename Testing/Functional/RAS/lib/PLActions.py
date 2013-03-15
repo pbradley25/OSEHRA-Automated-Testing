@@ -481,7 +481,7 @@ class PLActions (Actions):
         self.VistA.wait('Lists Option:')
         self.VistA.write('')
 
-    def catad (self, listname, catname, icd):
+    def catad (self, listname, catname, icd, spec='', dtext='', seqnum=''):
         '''Add a Problem (ICD) to a Category'''
         self.VistA.wait('Menu Option')
         self.VistA.write('Create Problem Selection Lists')
@@ -496,14 +496,38 @@ class PLActions (Actions):
         self.VistA.wait('Select Item')
         self.VistA.write('AD')
         self.VistA.wait('Select Specialty Subset')
-        self.VistA.write('')
+        self.VistA.write(spec)
         self.VistA.wait('PROBLEM')
         self.VistA.write(icd)
-        index = self.VistA.multiwait(['Ok', 'STOP or Select'])
-        if index == 1:
-          self.VistA.write('1\r\r\r\r\r')
-        else:
-          self.VistA.write('\r\r\r\r\r')
+        index = self.VistA.multiwait(['Ok', 'STOP or Select','A suitable term was not found'])
+        if index == 0:
+            self.VistA.write('')
+            self.VistA.wait('DISPLAY TEXT')
+            self.VistA.write(dtext)
+            self.VistA.wait('ICD CODE')
+            self.VistA.write(icd)
+            self.VistA.wait('...OK')
+            self.VistA.write('Yes')
+            self.VistA.wait('SEQUENCE')
+            self.VistA.write(seqnum)
+            self.VistA.wait('PROBLEM')
+            self.VistA.write('')
+        elif index == 1:
+            self.VistA.write('1')
+            self.VistA.wait('DISPLAY TEXT')
+            self.VistA.write(dtext)
+            self.VistA.wait('ICD CODE')
+            self.VistA.write(icd)
+            self.VistA.wait('...OK')
+            self.VistA.write('Yes')
+            self.VistA.wait('SEQUENCE')
+            self.VistA.write(seqnum)
+            self.VistA.wait('PROBLEM')
+            self.VistA.write('')
+        elif index == 2:
+            self.VistA.write('')
+            self.VistA.wait('PROBLEM')
+            self.VistA.write('')
         self.VistA.wait('Select Item')
         self.VistA.write('SV')
         self.VistA.wait('Select Action')
@@ -511,7 +535,7 @@ class PLActions (Actions):
         self.VistA.wait('Lists Option:')
         self.VistA.write('')
 
-    def sellistad (self, listname, catname):
+    def sellistad (self, listname, catname, hdrname='', seqnum=''):
         '''Add a Category to a Selection List'''
         self.VistA.wait('Menu Option')
         self.VistA.write('Create Problem Selection Lists')
@@ -524,9 +548,9 @@ class PLActions (Actions):
         self.VistA.wait('Select CATEGORY NAME:')
         self.VistA.write(catname)
         self.VistA.wait('HEADER')
-        self.VistA.write('')
+        self.VistA.write(hdrname)
         self.VistA.wait('SEQUENCE')
-        self.VistA.write('')
+        self.VistA.write(seqnum)
         self.VistA.wait('Select CATEGORY NAME')
         self.VistA.write('')
         self.VistA.wait('Select Action')
