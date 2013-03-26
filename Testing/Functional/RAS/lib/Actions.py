@@ -34,6 +34,14 @@ class Actions (object):
         else:
             self.VistA.write('^\r^\r^\r\r\r\r')
 
+    def zgo (self, odir):
+        self.VistA.wait('')
+        self.VistA.write('D ^ZGO')
+        self.VistA.wait('Host output directory:')
+        self.VistA.write(odir)
+        self.VistA.wait('>', 1800)
+
+
     def logflow(self, rlist):
         self.VistA.write('S DUZ=1 D ^XUP')
         self.VistA.wait('OPTION NAME')
