@@ -13,6 +13,10 @@ a. run D ^ZGO in each namespace and save the outputs in a /results subdirectory
 b. use Ownership.csv to create a list of files to compare
 c. perform diff compare on file list and place results in /results directory
 
+To run this script from /OSEHRA-Automated-Testing (example):
+
+>python Testing/Functional/RAS/lib/glb_cmp_test_01.py -l debug VISTA vistabin REFVISTA refvistabin ownership.csv 3130326
+
 '''
 import csv
 import difflib
