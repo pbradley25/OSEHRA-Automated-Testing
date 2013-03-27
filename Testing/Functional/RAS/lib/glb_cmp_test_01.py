@@ -16,7 +16,8 @@ c. perform diff compare on file list and place results in glbcmpresult.txt
 
 To run this script from /OSEHRA-Automated-Testing (example):
 
->python Testing/Functional/RAS/lib/glb_cmp_test_01.py -l debug VISTA vistabin REFVISTA refvistabin ownership.csv 3130326
+>python Testing/Functional/RAS/lib/glb_cmp_test_01.py -l debug VISTA vistabin REFVISTA refvistabin \
+ownership.csv 3130326 refactored,"problem list",scheduling
 
 '''
 import csv
@@ -84,6 +85,7 @@ def main():
     parser.add_argument('bin2dir', help='Name of namespace2 bin directory')
     parser.add_argument('oshipfile', help='Ownership File')
     parser.add_argument('today', help='VistA Date')
+    parser.add_argument('pkglist', help='[list of packages to test]')
     parser.add_argument('-l', '--logging-level', help='Logging level')
     parser.add_argument('-f', '--logging-file', help='Logging file name')
     args = parser.parse_args()
@@ -134,7 +136,8 @@ def main():
         f = open(args.oshipfile, 'rt')
         reader = csv.reader(f)
         for row in reader:
-            if row[4].upper() == 'REGISTRATION' or  row[4].upper() == 'SCHEDULING':
+            for pkg in [i for i in args.pkglist.split(',') if row[4].upper() == i.upper()]:
+            # if row[4].upper() == 'REGISTRATION' or  row[4].upper() == 'SCHEDULING':
                 fnamelist.append(row[0] + '+' + row[1] + '.zwr')
         f.close()
 
