@@ -62,7 +62,8 @@ def zgo_rem_time(filename, today):
     key = today + '.'
     for line in lines:
         index = line.find(key)
-        if index >= 0:
+        newline = line
+        while index >= 0:
             index = index + 7
             i = index + 1
             while i < len(line) and line[i].isdigit():
@@ -71,8 +72,7 @@ def zgo_rem_time(filename, today):
                 newline = line[:index] + line[i:]
             else:
                 newline = line
-        else:
-            newline = line
+            index = newline.find(key)
         f.write("%s" % newline)
     f.close()
 
