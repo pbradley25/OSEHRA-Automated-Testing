@@ -30,7 +30,7 @@ class Actions (object):
 
     def signoff (self):
         if self.acode is None:
-            self.VistA.write('^\r^\r^\rh\r')
+            self.VistA.write('^\r^\r^\r\r\rh\r')
         else:
             self.VistA.write('^\r^\r^\r\r\r\r')
 
@@ -39,7 +39,7 @@ class Actions (object):
         self.VistA.write('D ^ZGO')
         self.VistA.wait('Host output directory:')
         self.VistA.write(odir)
-        self.VistA.wait('>', 1800)
+        self.VistA.wait('>', 3600)
 
 
     def logflow(self, rlist):

@@ -78,9 +78,9 @@ def main():
     usage = "usage: %prog [options] arg arg arg arg arg"
     parser = argparse.ArgumentParser()
     parser.add_argument('namespace1', help='Namespace 1')
-    parser.add_argument('res1dir', help='Name of namespace1 result directory')
+    parser.add_argument('bin1dir', help='Name of namespace1 bin directory')
     parser.add_argument('namespace2', help='Namespace 2')
-    parser.add_argument('res2dir', help='Name of namespace2 result directory')
+    parser.add_argument('bin2dir', help='Name of namespace2 bin directory')
     parser.add_argument('oshipfile', help='Ownership File')
     parser.add_argument('today', help='VistA Date')
     parser.add_argument('-l', '--logging-level', help='Logging level')
@@ -91,25 +91,17 @@ def main():
                       filename=args.logging_file,
                       format='%(asctime)s %(levelname)s: %(message)s',
                       datefmt='%Y-%m-%d %H:%M:%S')
-
-
     # Create zgo 1 directory
     try:
-        # os.chdir(args.res1dir)
-        zgo1dir = os.path.join(os.getcwd(), args.res1dir, 'results', 'zgoA')
-        logging.debug('ZGO1: ' + zgo1dir)
-        logging.debug('foo')
+        # os.chdir(args.bin1dir)
+        zgo1dir = os.path.join(os.getcwd(), args.bin1dir, 'results', 'zgoA')
         os.makedirs(zgo1dir)
-        logging.debug('CWD: ' + os.getcwd())
-
     except OSError, e:
         if e.errno != errno.EEXIST:
             raise
-
     # Create zgo 2 directory
     try:
-        # os.chdir(args.res2dir)
-        zgo2dir = os.path.join(os.getcwd(), args.res2dir, 'results', 'zgoA')
+        zgo2dir = os.path.join(os.getcwd(), args.bin2dir, 'results', 'zgoA')
         os.makedirs(zgo2dir)
     except OSError, e:
         if e.errno != errno.EEXIST:
@@ -118,13 +110,20 @@ def main():
     try:
         fnamelist = []
 
-        # TODO: run cmake and ctest here
+        # run cmake and ctest for each namespace
+        os.chdir(args.bin1dir)
+        os.system('cmake -P ImportRG.cmake')
+        os.system('ctest -R RAS_')
+        time.sleep(10)
+        os.chdir('../' + args.bin2dir)
+        os.system('cmake -P ImportRG.cmake')
+        os.system('ctest -R RAS_')
+        os.chdir('../')
 
-        # Do D ^ZGO
+        # Do D ^ZGO for each namespace
         VistA1 = connect_VistA('zgo1log.txt', os.getcwd(), args.namespace1)
         foo1 = Actions(VistA1)
         foo1.zgo(zgo1dir + '\\')
-
         VistA2 = connect_VistA('zgo2log.txt', os.getcwd(), args.namespace2)
         foo2 = Actions(VistA2)
         foo2.zgo(zgo2dir + '\\')
@@ -140,8 +139,8 @@ def main():
 
         # loop on list and perform diff
         for afile in fnamelist:
-            file1 = os.path.join(args.res1dir, 'results', 'zgoA', afile)
-            file2 = os.path.join(args.res2dir, 'results', 'zgoA', afile)
+            file1 = os.path.join(args.bin1dir, 'results', 'zgoA', afile)
+            file2 = os.path.join(args.bin2dir, 'results', 'zgoA', afile)
             if os.path.isfile(file1):
                 zgo_rem_time(file1, args.today)
             else:
