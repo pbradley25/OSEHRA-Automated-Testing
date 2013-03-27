@@ -39,7 +39,7 @@ class Actions (object):
         self.VistA.write('D ^ZGO')
         self.VistA.wait('Host output directory:')
         self.VistA.write(odir)
-        self.VistA.wait('>', 3600)
+        self.VistA.wait(self.VistA.prompt, 3600)
 
 
     def logflow(self, rlist):

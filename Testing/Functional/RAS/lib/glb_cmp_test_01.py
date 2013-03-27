@@ -5,13 +5,14 @@ This test automates the process of creating and comparing global output files be
 refactored code and non-refactored code.
 
 The pre-requsits of this script include:
-1. The two namespaces exist in Cache
-2. The ctest function tests have been executed
+1. The two namespaces exist in Cache (ex. "VISTA" and "REFVISTA"
+
 
 This script will do the following:
+a. run "cmake -P ImportRG.cmake" and "ctest -R RAS_" for each namespace
 a. run D ^ZGO in each namespace and save the outputs in a /results subdirectory
 b. use Ownership.csv to create a list of files to compare
-c. perform diff compare on file list and place results in /results directory
+c. perform diff compare on file list and place results in glbcmpresult.txt
 
 To run this script from /OSEHRA-Automated-Testing (example):
 
