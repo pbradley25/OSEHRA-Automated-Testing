@@ -9,7 +9,7 @@ import logging
 import sys
 import os
 sys.path = ['./RAS/lib'] + ['./dataFiles'] + ['../Python/vista'] + sys.path
-import SC_Suite001
+import SC_Suite001, SC_Suite002
 import argparse
 import datetime
 
@@ -62,6 +62,12 @@ def main():
         SC_Suite001.sc_test008(resultlog, args.resultdir, args.namespace)
         SC_Suite001.sc_test009(resultlog, args.resultdir, args.namespace)
         SC_Suite001.sc_test010(resultlog, args.resultdir, args.namespace)
+        SC_Suite002.comp_sc_test001(resultlog, args.resultdir, args.namespace)
+        SC_Suite002.comp_sc_test002(resultlog, args.resultdir, args.namespace)
+        SC_Suite002.comp_sc_test003(resultlog, args.resultdir, args.namespace)
+        SC_Suite002.comp_sc_test004(resultlog, args.resultdir, args.namespace)
+        SC_Suite002.comp_sc_test005(resultlog, args.resultdir, args.namespace)
+        SC_Suite002.comp_sc_test007(resultlog, args.resultdir, args.namespace)
         SC_Suite001.stopmon(resultlog, args.resultdir, args.coveragetype, args.namespace)
         resultlog.write('finished')
     except Exception, e:
