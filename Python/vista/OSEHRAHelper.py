@@ -131,11 +131,12 @@ class ConnectWinCache(ConnectMUMPS):
   def wait_re(self, command, timeout=30):
     if command is PROMPT:
       command = self.prompt
-    output = self.connection.expect(command, None)
+    output = self.connection.expect(command, timeout)
     self.match = output[1]
     self.before = output[2]
     if output[0] == -1 and output[1] == None:
-      raise Exception("Timed out")
+        logging.debug('Timeout - ERROR: expected: ' + str(command))
+        raise TestHelper.TestError('Timeout - ERROR: expected: ' + str(command))
     if output[2]:
       self.log.write(output[2])
       self.log.flush()
