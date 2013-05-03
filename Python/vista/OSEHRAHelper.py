@@ -219,14 +219,13 @@ class ConnectLinuxCache(ConnectMUMPS):
     else:
         return 1
 
-  def wait_re(self, command, timeout=None):
+  def wait_re(self, command, timeout=20):
     if command is PROMPT:
       command = self.prompt
-    if timeout is None:
-      timeout = 20  
+    if not timeout: timeout = -1
     output = self.connection.expect(command, timeout)
-    self.match = output[1]
-    self.before = output[2]
+    #self.match = output[1]
+    #self.before = output[2]
     if output[0] == -1 and output[1] == None:
         logging.debug('Timeout - ERROR: expected: ' + str(command))
         raise TestHelper.TestError('Timeout - ERROR: expected: ' + str(command))
@@ -314,14 +313,13 @@ class ConnectLinuxGTM(ConnectMUMPS):
     else:
         return 1
 
-  def wait_re(self, command, timeout=None):
+  def wait_re(self, command, timeout=20):
     if command is PROMPT:
       command = self.prompt
-    if timeout is None:
-      timeout = 20
+    if not timeout: timeout = -1
     output = self.connection.expect(command, timeout)
-    self.match = output[1]
-    self.before = output[2]
+    #self.match = output[1]
+    #self.before = output[2]
     if output[0] == -1 and output[1] == None:
         logging.debug('Timeout - ERROR: expected: ' + str(command))
         raise TestHelper.TestError('Timeout - ERROR: expected: ' + str(command))
