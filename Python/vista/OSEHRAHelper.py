@@ -219,9 +219,11 @@ class ConnectLinuxCache(ConnectMUMPS):
     else:
         return 1
 
-  def wait_re(self, command, timeout=20):
+  def wait_re(self, command, timeout=None):
     if command is PROMPT:
       command = self.prompt
+    if timeout is None:
+      timeout = 20  
     output = self.connection.expect(command, timeout)
     self.match = output[1]
     self.before = output[2]
@@ -312,9 +314,11 @@ class ConnectLinuxGTM(ConnectMUMPS):
     else:
         return 1
 
-  def wait_re(self, command, timeout=20):
+  def wait_re(self, command, timeout=None):
     if command is PROMPT:
       command = self.prompt
+    if timeout is None:
+      timeout = 20
     output = self.connection.expect(command, timeout)
     self.match = output[1]
     self.before = output[2]
