@@ -1230,14 +1230,27 @@ class spawn (object):
 
         return compiled_pattern_list
 
-    def expect(self, pattern, timeout= -1, searchwindowsize=None):
+    def expect(self, pattern, timeout= -1, searchwindowsize=None, returnAll=None):
 
         """This seeks through the stream until a pattern is matched. The
         pattern is overloaded and may take several types. The pattern can be a
         StringType, EOF, a compiled re, or a list of any of those types.
-        Strings will be compiled to re types. This returns the index into the
+        Strings will be compiled to re types. 
+        
+        If returnAll is None, this returns the index into the
         pattern list. If the pattern was not a list this returns index 0 on a
-        successful match. This may raise exceptions for EOF or TIMEOUT. To
+        successful match. 
+
+        If returnAll is Not None, this returns a tuple of three items: 
+        the index in the list of the first regular expression that matches; the match object
+        returned; and the text read up till and including the match.
+
+        If EOF is read and no text was read, raise EOFError.
+        Otherwise, when nothing matches, return (-1, None, text) where
+        text is the text received so far (may be the empty string if a
+        timeout happened).
+        
+        This may raise exceptions for EOF or TIMEOUT. To
         avoid the EOF or TIMEOUT exceptions add EOF or TIMEOUT to the pattern
         list. That will cause expect to match an EOF or TIMEOUT condition
         instead of raising an exception.
@@ -1308,9 +1321,9 @@ class spawn (object):
         """
 
         compiled_pattern_list = self.compile_pattern_list(pattern)
-        return self.expect_list(compiled_pattern_list, timeout, searchwindowsize)
-
-    def expect_list(self, pattern_list, timeout= -1, searchwindowsize= -1):
+        return self.expect_list(compiled_pattern_list, timeout, searchwindowsize, returnAll)
+    
+    def expect_list(self, pattern_list, timeout= -1, searchwindowsize= -1, returnAll=None):
 
         """This takes a list of compiled regular expressions and returns the
         index into the pattern_list that matched the child output. The list may
@@ -1322,9 +1335,10 @@ class spawn (object):
         the self.timeout value is used. If searchwindowsize==-1 then the
         self.searchwindowsize value is used. """
 
-        return self.expect_loop(searcher_re(pattern_list), timeout, searchwindowsize)
+        return self.expect_loop(searcher_re(pattern_list), timeout, searchwindowsize, returnAll)
 
-    def expect_exact(self, pattern_list, timeout= -1, searchwindowsize= -1):
+    
+    def expect_exact(self, pattern_list, timeout= -1, searchwindowsize= -1, returnAll=None):
 
         """This is similar to expect(), but uses plain string matching instead
         of compiled regular expressions in 'pattern_list'. The 'pattern_list'
@@ -1340,9 +1354,9 @@ class spawn (object):
 
         if type(pattern_list) in types.StringTypes or pattern_list in (TIMEOUT, EOF):
             pattern_list = [pattern_list]
-        return self.expect_loop(searcher_string(pattern_list), timeout, searchwindowsize)
+        return self.expect_loop(searcher_string(pattern_list), timeout, searchwindowsize,returnAll)
 
-    def expect_loop(self, searcher, timeout= -1, searchwindowsize= -1):
+    def expect_loop(self, searcher, timeout= -1, searchwindowsize= -1, returnAll=None):
 
         """This is the common loop used inside expect. The 'searcher' should be
         an instance of searcher_re or searcher_string, which describes how and what
@@ -1370,7 +1384,10 @@ class spawn (object):
                     self.after = incoming[searcher.start : searcher.end]
                     self.match = searcher.match
                     self.match_index = index
-                    return self.match_index
+                    if returnAll is None:
+                        return self.match_index
+                    else:
+                        return (self.match_index, self.match, str(incoming[ : searcher.end]))
                 # No match at this point
                 if timeout < 0 and timeout is not None:
                     raise TIMEOUT ('Timeout exceeded in expect_any().')
@@ -1389,7 +1406,10 @@ class spawn (object):
             if index >= 0:
                 self.match = EOF
                 self.match_index = index
-                return self.match_index
+                if returnAll is None:
+                    return self.match_index
+                else:
+                    return (self.match_index, None, str(self.before))
             else:
                 self.match = None
                 self.match_index = None
@@ -1402,7 +1422,10 @@ class spawn (object):
             if index >= 0:
                 self.match = TIMEOUT
                 self.match_index = index
-                return self.match_index
+                if returnAll is None:
+                    return self.match_index
+                else:
+                    return (self.match_index, None, str(self.before))
             else:
                 self.match = None
                 self.match_index = None
@@ -1413,7 +1436,7 @@ class spawn (object):
             self.match = None
             self.match_index = None
             raise
-
+        
     def getwinsize(self):
 
         """This returns the terminal window size of the child tty. The return
