@@ -9,7 +9,7 @@ import datetime
 from datetime import timedelta, time
 import sys
 import logging
-import tkMessageBox
+#import tkMessageBox
 
 class CompSCActions (SCActions):
     # Object for different Option types
@@ -156,7 +156,7 @@ class CompSCActions (SCActions):
         self.VistA.write('CALIFORNIA VA HEALTH CARE SYS')
         self.VistA.wait('Select ASSOCIATIONS:')
         self.VistA.write('2')
-        self.VistA.wait('INSTITUTION)?')
+        self.VistA.wait('TUTION)?')
         self.VistA.write('y')
         self.VistA.wait('PARENT OF ASSOCIATION:')
         self.VistA.write('CALIFORNIA VA OUTPAT CLIN\r\r')
@@ -167,11 +167,11 @@ class CompSCActions (SCActions):
         self.VistA.wait('Select a number (1 - 5):')
         self.VistA.write('1')
         while True:           
-            output = self.VistA.wait_re(['LOCAL SERVICE','VISTA>'])
+            output = self.VistA.wait_re(['LOCAL SERVICE','VISTA>','GTM>'])
             currentIndex = output[0]
             currentText = output[2]
             currentMatch = output[1]            
-            if currentIndex == 1:
+            if currentIndex == 1 or currentIndex == 2:
                 break
             elif "\nMEDICINE\r" in currentText or "\nPSYCHIATRY\r" in currentText or "\nSURGERY\r" in currentText:
                 self.VistA.write('YES')
@@ -357,7 +357,7 @@ class CompSCActions (SCActions):
     
     def deactivateClinic(self, clinic):
         '''Deactivates a clinic for Scheduling Competition'''
-        self.VistA.wait('Menu Option:')
+        self.VistA.wait('Option:')
         self.VistA.write('Inactivate')
         self.VistA.wait('CLINIC NAME:')
         self.VistA.write(clinic)
@@ -368,7 +368,7 @@ class CompSCActions (SCActions):
         
     def reactivateClinic(self, clinic):
         '''Reactivates a clinic for Scheduling Competition'''
-        self.VistA.wait('Menu Option:')
+        self.VistA.wait('Option:')
         self.VistA.write('Reactivate')    
         self.VistA.wait('CLINIC NAME:')
         self.VistA.write(clinic)
@@ -543,7 +543,7 @@ class CompSCActions (SCActions):
     
     def blockApp(self, clinic, date, note, strTime=None, endTime=None, multi=None):
         '''Blocks Appointment for specified user at specified time or full day'''
-        self.VistA.wait('Menu Option:')
+        self.VistA.wait('Option:')
         self.VistA.write('cancel clinic')    
         self.VistA.wait('CLINIC NAME:')
         self.VistA.write(clinic)
@@ -551,7 +551,7 @@ class CompSCActions (SCActions):
         self.VistA.write(date)        
         rval = self.VistA.multiwait(['WHOLE DAY?', 'DEVICE:'])
         if rval == 1:
-            self.VistA.write('\r')
+            self.VistA.write('') # for windows ('\r') linux-('')
             option = self.VistA.multiwait(['WHOLE DAY?', 'exit:'])
             if option == 1:
                 self.VistA.write('^')
@@ -591,7 +591,7 @@ class CompSCActions (SCActions):
     
     def restoreApp(self, clinic, date, period=None, multi=None):
         '''restores Blocked Appointment for specified user at specified time or full day'''
-        self.VistA.wait('Menu Option:')
+        self.VistA.wait('Option:')
         self.VistA.write('restore clinic')    
         self.VistA.wait('CLINIC NAME:')
         self.VistA.write(clinic)
