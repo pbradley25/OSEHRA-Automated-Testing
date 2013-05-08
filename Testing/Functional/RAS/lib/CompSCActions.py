@@ -15,6 +15,7 @@ class CompSCActions (SCActions):
     # Object for different Option types
     options = {'Holiday': 'SDHOLIDAY', 'Services': 'ECTP LOCAL SERVICES', 'Clinic Setup': 'SDBUILD', 'Supervisor': 'SDSUP', 'Register a Patient': 'Register a Patient'}
     clinics = []
+    isWindows = True if sys.platform == 'win32' else False
     
     def __init__(self, VistAconn, scheduling=None, user=None, code=None):
         SCActions.__init__(self, VistAconn, scheduling, user, code)
@@ -551,7 +552,8 @@ class CompSCActions (SCActions):
         self.VistA.write(date)        
         rval = self.VistA.multiwait(['WHOLE DAY?', 'DEVICE:'])
         if rval == 1:
-            self.VistA.write('') # for windows ('\r') linux-('')
+            text = '\r' if self.isWindows else ''
+            self.VistA.write(text) # for windows ('\r') linux-('')
             option = self.VistA.multiwait(['WHOLE DAY?', 'exit:'])
             if option == 1:
                 self.VistA.write('^')
