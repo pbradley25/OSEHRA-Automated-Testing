@@ -1,7 +1,31 @@
-'''
-Created on Jun 14, 2012
+#---------------------------------------------------------------------------
+# Copyright 2013 PwC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#---------------------------------------------------------------------------
 
-@author: afequiere
+
+## @class CompSCActions
+## Scheduling/Competition Scheduling Actions
+
+
+'''
+Scheduling/Competition Scheduling Actions class. Extends SCActions
+
+Created on April 2013
+@author: afequ871
+@copyright: http://www.apache.org/licenses/LICENSE-2.0
+
 '''
 from SCActions import SCActions
 import TestHelper
@@ -12,6 +36,10 @@ import logging
 #import tkMessageBox
 
 class CompSCActions (SCActions):
+    '''
+    This class extends the SCActions class with methods specific to actions performed
+    through the Roll and Scroll interface for the Competition Scheduling in the Scheduling package.
+    '''
     # Object for different Option types
     options = {'Holiday': 'SDHOLIDAY', 'Services': 'ECTP LOCAL SERVICES', 'Clinic Setup': 'SDBUILD', 'Supervisor': 'SDSUP', 'Register a Patient': 'Register a Patient'}
     clinics = []
@@ -21,6 +49,8 @@ class CompSCActions (SCActions):
         SCActions.__init__(self, VistAconn, scheduling, user, code)
 
     def signon (self, isFileman=None, optionType=None):
+        ''' This provides a signon via ^XUP or S XUMF=1 D Q^DI based on isFileMan option.
+        Also signon via ^ZU depending on the value of acode'''
         if self.acode is None:
             if isFileman is None:
                 self.VistA.wait('')

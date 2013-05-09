@@ -1,7 +1,38 @@
-'''
-Created on Mar 27, 2013
+#---------------------------------------------------------------------------
+# Copyright 2013 PwC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#---------------------------------------------------------------------------
 
-@author: afequiere
+
+## @package SC_Suite002
+## Scheduling Competition Test (Suite)
+
+'''
+These are the Scheduling Competition package Suite002 tests, implemented as Python functions.
+
+Each test has a unique name derived from the test method name.
+Each test has a unique result log with a filename derived from the testname and a datestamp.
+There is a parent resultlog that is also used for pass/fail logging.
+In general each test establishes a connection to the target application (VistA),
+signs on as a user, provider, or programmer and then performs a set of test functions.
+When testing is complete the connection is closed and a pass/fail indicate is written
+to the resultlog.
+
+Created on April 2013
+@author: afequ871
+@copyright: http://www.apache.org/licenses/LICENSE-2.0
+
 '''
 import sys
 sys.path = ['./Functional/RAS/lib'] + ['./dataFiles'] + ['./Python/vista'] + sys.path
@@ -253,7 +284,7 @@ def timeStamped(fname, fmt='%Y-%m-%d-%H-%M-%S_{fname}'):
     return datetime.datetime.now().strftime(fmt).format(fname=fname)
 
 def connect_VistA(testname, result_dir, namespace):
-    # Connect to VistA
+    '''Connect to VistA'''
     logging.debug('Connect_VistA' + ', Namespace: ' + namespace)
     from OSEHRAHelper import ConnectToMUMPS, PROMPT
     VistA = ConnectToMUMPS(logfile=result_dir + '/' + timeStamped(testname + '.txt'), instance='', namespace=namespace)
